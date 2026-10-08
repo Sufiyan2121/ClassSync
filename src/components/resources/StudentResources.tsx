@@ -11,6 +11,7 @@ export function StudentResources() {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [materials, setMaterials] = useState<Material[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeSubject, setActiveSubject] = useState<string | null>(null);
 
   useEffect(() => {
     // Fetch Subjects
