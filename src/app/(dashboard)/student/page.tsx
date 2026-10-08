@@ -59,7 +59,7 @@ export default function StudentDashboard() {
           <NotificationBell />
           <Link href="/student/resources" className="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-100 transition-all shadow-sm">
             <FolderOpen size={16} />
-            <span>Resources</span>
+            <span>All Subjects</span>
           </Link>
           <button 
             onClick={logout}
