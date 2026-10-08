@@ -32,7 +32,7 @@ export default function AdminDashboard() {
   );
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto min-h-screen">
+    <div className="p-4 md:p-8 max-w-7xl mx-auto min-h-screen overflow-x-hidden w-full">
       {/* Header with Glassmorphism */}
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 glass px-6 py-4 rounded-3xl shadow-sm border border-slate-200/50">
         <div className="flex items-center gap-4">
