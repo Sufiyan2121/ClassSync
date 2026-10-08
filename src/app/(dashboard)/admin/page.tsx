@@ -62,14 +62,14 @@ export default function AdminDashboard() {
           <NotificationBell />
           <Link href="/admin/resources" className="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-100 transition-all shadow-sm">
             <FolderOpen size={16} />
-            <span className="hidden sm:inline">Resources</span>
+            <span>Resources</span>
           </Link>
           <button 
             onClick={logout}
             className="flex items-center gap-2 bg-white/80 text-slate-600 px-4 py-2.5 rounded-xl font-semibold text-sm hover:bg-red-50 hover:text-red-600 transition-all border border-slate-200 shadow-sm hover:shadow-md ml-auto md:ml-0"
           >
             <LogOut size={16} />
-            <span className="hidden sm:inline">Sign Out</span>
+            <span>Sign Out</span>
           </button>
         </div>
       </header>

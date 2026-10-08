@@ -30,7 +30,7 @@ export function NotificationBell() {
       title={isEnabled ? "Reminders ON (Click to turn off)" : "Reminders OFF (Click to turn on)"}
     >
       {isEnabled ? <BellRing size={16} /> : <BellOff size={16} />}
-      <span className="hidden sm:inline">{isEnabled ? "Alerts On" : "Alerts Off"}</span>
+      <span>{isEnabled ? "Alerts On" : "Alerts Off"}</span>
     </button>
   );
 }
