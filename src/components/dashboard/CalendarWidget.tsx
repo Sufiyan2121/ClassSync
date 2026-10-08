@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, isToday } from "date-fns";
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from "lucide-react";
 import { Post } from "@/types";
@@ -10,7 +10,14 @@ interface CalendarWidgetProps {
 }
 
 export function CalendarWidget({ posts }: CalendarWidgetProps) {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [currentMonth, setCurrentMonth] = useState<Date | null>(null);
+
+
+  useEffect(() => {
+    setCurrentMonth(new Date());
+  }, []);
+
+  if (!currentMonth) return <div className="animate-pulse bg-white/60 backdrop-blur-md h-72 rounded-3xl border border-slate-100"></div>;
 
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(currentMonth);
