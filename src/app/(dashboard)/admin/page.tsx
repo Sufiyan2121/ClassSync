@@ -35,11 +35,14 @@ export default function AdminDashboard() {
     <div className="p-4 md:p-8 max-w-7xl mx-auto min-h-screen overflow-x-hidden w-full">
       
       {/* Top Branding Logo */}
-      <div className="flex items-center gap-3 mb-6 animate-in fade-in slide-in-from-top-4 duration-500">
-        <div className="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
-          <BookOpen size={20} strokeWidth={2.5} />
+      <div className="flex flex-col items-center justify-center text-center gap-3 mb-8 mt-2 animate-in fade-in slide-in-from-top-4 duration-500">
+        <div className="w-14 h-14 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-blue-500/30 ring-4 ring-white">
+          <BookOpen size={28} strokeWidth={2.5} />
         </div>
-        <span className="text-2xl font-extrabold text-slate-900 tracking-tight">ClassSync</span>
+        <div>
+          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight drop-shadow-sm">ClassSync</h2>
+          <p className="text-slate-500 text-sm font-medium mt-1.5 max-w-sm mx-auto">Never miss a beat. Bridging the gap between classrooms and students.</p>
+        </div>
       </div>
 
       {/* Header with Glassmorphism */}
