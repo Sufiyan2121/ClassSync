@@ -42,11 +42,11 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
 
     if (dayPosts.length === 0) return null;
 
-    // Prioritize EXAM > ASSIGNMENT > ANNOUNCEMENT > RESOURCE
+    // Prioritize EXAM > ASSIGNMENT > ANNOUNCEMENT
     if (dayPosts.some(p => p.type === "EXAM")) return "bg-red-500 text-white ring-2 ring-red-200 shadow-md";
     if (dayPosts.some(p => p.type === "ASSIGNMENT")) return "bg-amber-500 text-white ring-2 ring-amber-200 shadow-md";
     if (dayPosts.some(p => p.type === "ANNOUNCEMENT")) return "bg-blue-500 text-white ring-2 ring-blue-200 shadow-md";
-    return "bg-emerald-500 text-white ring-2 ring-emerald-200 shadow-md";
+    return null;
   };
 
   const getDayIndicatorColor = (day: Date) => {
@@ -60,7 +60,7 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
     if (dayPosts.some(p => p.type === "EXAM")) return "bg-red-500";
     if (dayPosts.some(p => p.type === "ASSIGNMENT")) return "bg-amber-500";
     if (dayPosts.some(p => p.type === "ANNOUNCEMENT")) return "bg-blue-500";
-    return "bg-emerald-500";
+    return null;
   };
 
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -129,7 +129,6 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
         <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-red-500"></div> Exam</div>
         <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-amber-500"></div> Assignment</div>
         <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-blue-500"></div> Notice</div>
-        <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div> Resource</div>
       </div>
     </div>
   );

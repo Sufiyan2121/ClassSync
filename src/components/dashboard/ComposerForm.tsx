@@ -65,7 +65,7 @@ export function ComposerForm() {
         <div>
           <label className="block text-sm font-bold text-slate-700 mb-3">Broadcast Type</label>
           <div className="grid grid-cols-2 gap-3">
-            {(["ANNOUNCEMENT", "ASSIGNMENT", "EXAM", "RESOURCE"] as PostType[]).map((t) => (
+            {(["ANNOUNCEMENT", "ASSIGNMENT", "EXAM"] as PostType[]).map((t) => (
               <label 
                 key={t} 
                 className={`flex items-center justify-center py-3 px-2 rounded-xl border-2 cursor-pointer transition-all ${
