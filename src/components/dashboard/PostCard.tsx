@@ -66,13 +66,13 @@ export function PostCard({ post }: { post: Post }) {
       </p>
 
       {post.dueDate && (
-        <div className={`mt-6 pt-5 border-t border-slate-100 flex items-center justify-between text-sm rounded-b-xl ${isUrgent ? 'text-orange-600 font-bold bg-orange-50/30 -mx-6 px-6 -mb-6 pb-6' : 'text-slate-500 font-medium bg-slate-50/50 -mx-6 px-6 -mb-6 pb-6'}`}>
+        <div className={`mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sm rounded-b-xl ${isUrgent ? 'text-orange-600 font-bold bg-orange-50/30 -mx-6 px-6 -mb-6 pb-6' : 'text-slate-500 font-medium bg-slate-50/50 -mx-6 px-6 -mb-6 pb-6'}`}>
           <span className="flex items-center gap-2">
             <Calendar size={18} className={isUrgent ? "text-orange-500" : "text-slate-400"} />
-            Due: {format(post.dueDate.toDate(), "EEEE, MMM d 'at' h:mm a")}
+            Due: {format(post.dueDate.toDate(), "MMM d, h:mm a")}
           </span>
           {isUrgent && (
-            <span className="flex items-center gap-1.5 bg-orange-100 px-3 py-1 rounded-full text-orange-700 animate-pulse text-xs uppercase tracking-wider">
+            <span className="flex items-center gap-1.5 bg-orange-100 px-3 py-1 rounded-full text-orange-700 animate-pulse text-xs uppercase tracking-wider shrink-0">
               <AlertCircle size={14} />
               Action Required
             </span>

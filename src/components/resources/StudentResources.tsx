@@ -39,9 +39,9 @@ export function StudentResources() {
 
   return (
     <div className="p-4 md:p-8 max-w-5xl mx-auto min-h-screen">
-      <header className="flex justify-between items-center mb-8 glass px-6 py-4 rounded-3xl shadow-sm border border-slate-200/50">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 glass px-6 py-4 rounded-3xl shadow-sm border border-slate-200/50">
         <div className="flex items-center gap-4">
-          <Link href="/student" className="p-2 hover:bg-slate-100 rounded-full transition-colors">
+          <Link href="/student" className="p-2 hover:bg-slate-100 rounded-full transition-colors shrink-0">
             <ArrowLeft size={24} className="text-slate-600" />
           </Link>
           <div>

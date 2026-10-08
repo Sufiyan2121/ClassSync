@@ -33,10 +33,10 @@ export default function AdminDashboard() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto min-h-screen">
-      {/* Header with Glassmorphism (removed sticky to prevent overlap) */}
-      <header className="flex justify-between items-center mb-10 glass px-6 py-4 rounded-3xl shadow-sm border border-slate-200/50">
+      {/* Header with Glassmorphism */}
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 glass px-6 py-4 rounded-3xl shadow-sm border border-slate-200/50">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-slate-900 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-slate-900/20">
+          <div className="w-12 h-12 bg-slate-900 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-slate-900/20 shrink-0">
             <ShieldCheck size={24} />
           </div>
           <div>
@@ -46,7 +46,7 @@ export default function AdminDashboard() {
             <p className="text-slate-500 text-sm font-medium">Manage classes and broadcast updates</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
           <NotificationBell />
           <Link href="/admin/resources" className="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-100 transition-all shadow-sm">
             <FolderOpen size={16} />
@@ -54,7 +54,7 @@ export default function AdminDashboard() {
           </Link>
           <button 
             onClick={logout}
-            className="flex items-center gap-2 bg-white/80 text-slate-600 px-4 py-2.5 rounded-xl font-semibold text-sm hover:bg-red-50 hover:text-red-600 transition-all border border-slate-200 shadow-sm hover:shadow-md"
+            className="flex items-center gap-2 bg-white/80 text-slate-600 px-4 py-2.5 rounded-xl font-semibold text-sm hover:bg-red-50 hover:text-red-600 transition-all border border-slate-200 shadow-sm hover:shadow-md ml-auto md:ml-0"
           >
             <LogOut size={16} />
             <span className="hidden sm:inline">Sign Out</span>

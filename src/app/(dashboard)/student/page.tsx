@@ -32,19 +32,19 @@ export default function StudentDashboard() {
     <div className="p-4 md:p-8 max-w-5xl mx-auto min-h-screen">
       
       {/* Header with Glassmorphism */}
-      <header className="flex justify-between items-center mb-10 glass px-6 py-4 rounded-3xl shadow-sm border border-slate-200/50">
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 glass px-6 py-4 rounded-3xl shadow-sm border border-slate-200/50">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/30">
+          <div className="w-12 h-12 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/30 shrink-0">
             {userData?.displayName?.charAt(0) || "S"}
           </div>
           <div>
             <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-              Hello, {userData?.displayName?.split(" ")[0] || "Student"} <Sparkles className="text-yellow-400" size={20} />
+              Hello, {userData?.displayName?.split(" ")[0] || "Student"} <Sparkles className="text-yellow-400 shrink-0" size={20} />
             </h1>
             <p className="text-slate-500 text-sm font-medium">Your learning hub is ready</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
           <NotificationBell />
           <Link href="/student/resources" className="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-100 transition-all shadow-sm">
             <FolderOpen size={16} />
@@ -52,7 +52,7 @@ export default function StudentDashboard() {
           </Link>
           <button 
             onClick={logout}
-            className="flex items-center gap-2 bg-white/80 text-slate-600 px-4 py-2.5 rounded-xl font-semibold text-sm hover:bg-red-50 hover:text-red-600 transition-all border border-slate-200 shadow-sm hover:shadow-md"
+            className="flex items-center gap-2 bg-white/80 text-slate-600 px-4 py-2.5 rounded-xl font-semibold text-sm hover:bg-red-50 hover:text-red-600 transition-all border border-slate-200 shadow-sm hover:shadow-md ml-auto md:ml-0"
           >
             <LogOut size={16} />
             <span className="hidden sm:inline">Sign Out</span>
