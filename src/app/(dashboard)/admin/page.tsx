@@ -82,15 +82,16 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
         
         {/* Left Column: Composer */}
-        <div className="lg:col-span-5 xl:col-span-4 space-y-8">
+        <div className="lg:col-span-5 xl:col-span-4">
           <ComposerForm />
-          <div className="hidden lg:block">
-            <CalendarWidget posts={posts} />
-          </div>
         </div>
         
         {/* Right Column: Live Feed (Student Panel Preview) */}
         <div className="lg:col-span-7 xl:col-span-8">
+          <div className="mb-8">
+            <CalendarWidget posts={posts} />
+          </div>
+          
           <div className="glass rounded-3xl shadow-sm border border-slate-200/50 p-6 sm:p-8 min-h-[600px]">
             
             <div className="flex justify-between items-center mb-6">
