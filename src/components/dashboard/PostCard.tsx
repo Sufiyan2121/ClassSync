@@ -2,9 +2,15 @@
 
 import { Post } from "@/types";
 import { format, formatDistanceToNow } from "date-fns";
-import { Calendar, Clock, Bell, BookOpen, AlertCircle, ChevronRight, FileText } from "lucide-react";
+import { Edit2, Trash2, Calendar, Clock, Bell, BookOpen, AlertCircle } from "lucide-react";
 
-export function PostCard({ post }: { post: Post }) {
+interface PostCardProps {
+  post: Post;
+  onEdit?: (post: Post) => void;
+  onDelete?: (postId: string) => void;
+}
+
+export function PostCard({ post, onEdit, onDelete }: PostCardProps) {
   const isUrgent = 
     (post.type === "ASSIGNMENT" || post.type === "EXAM") && 
     post.dueDate && 
@@ -15,7 +21,6 @@ export function PostCard({ post }: { post: Post }) {
       case "ASSIGNMENT": return <BookOpen size={22} className="text-orange-500" />;
       case "EXAM": return <AlertCircle size={22} className="text-red-500" />;
       case "ANNOUNCEMENT": return <Bell size={22} className="text-blue-500" />;
-      case "RESOURCE": return <FileText size={22} className="text-emerald-500" />;
     }
   };
 
@@ -24,7 +29,6 @@ export function PostCard({ post }: { post: Post }) {
       case "ASSIGNMENT": return "bg-orange-50/80 text-orange-600 ring-1 ring-orange-500/20";
       case "EXAM": return "bg-red-50/80 text-red-600 ring-1 ring-red-500/20";
       case "ANNOUNCEMENT": return "bg-blue-50/80 text-blue-600 ring-1 ring-blue-500/20";
-      case "RESOURCE": return "bg-emerald-50/80 text-emerald-600 ring-1 ring-emerald-500/20";
     }
   };
 
@@ -33,7 +37,6 @@ export function PostCard({ post }: { post: Post }) {
       case "ASSIGNMENT": return "bg-orange-50";
       case "EXAM": return "bg-red-50";
       case "ANNOUNCEMENT": return "bg-blue-50";
-      case "RESOURCE": return "bg-emerald-50";
     }
   };
 
@@ -56,9 +59,21 @@ export function PostCard({ post }: { post: Post }) {
             </span>
           </div>
         </div>
-        <span className={`text-[10px] sm:text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm ${getBadgeColor()}`}>
-          {post.type}
-        </span>
+        <div className="flex items-center gap-2">
+          {onEdit && (
+            <button onClick={() => onEdit(post)} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Edit Post">
+              <Edit2 size={16} />
+            </button>
+          )}
+          {onDelete && (
+            <button onClick={() => onDelete(post.id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete Post">
+              <Trash2 size={16} />
+            </button>
+          )}
+          <span className={`text-[10px] sm:text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm ${getBadgeColor()}`}>
+            {post.type}
+          </span>
+        </div>
       </div>
 
       <p className="text-slate-600 text-[15px] whitespace-pre-wrap mt-5 leading-relaxed">

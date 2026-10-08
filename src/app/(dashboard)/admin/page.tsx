@@ -6,11 +6,14 @@ import { useAuth } from "@/components/providers/AuthProvider";
 import { ComposerForm } from "@/components/dashboard/ComposerForm";
 import { PostCard } from "@/components/dashboard/PostCard";
 import { usePosts } from "@/hooks/usePosts";
-import { PostType } from "@/types";
+import { Post, PostType } from "@/types";
 import Link from "next/link";
 import { ShieldCheck, LogOut, Radio, LayoutGrid, FolderOpen, BookOpen, Calendar } from "lucide-react";
 import { NotificationBell } from "@/components/dashboard/NotificationBell";
 import { CalendarWidget } from "@/components/dashboard/CalendarWidget";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "@/lib/firebase/clientApp";
+import toast from "react-hot-toast";
 
 export default function AdminDashboard() {
   const { userData, logout, loading: authLoading } = useAuth();
@@ -19,6 +22,7 @@ export default function AdminDashboard() {
   
   // Added filter state so Admins can preview the student view exactly as it is
   const [filter, setFilter] = useState<PostType | "ALL">("ALL");
+  const [editingPost, setEditingPost] = useState<Post | null>(null);
 
   useEffect(() => {
     if (!authLoading && userData?.role === "STUDENT") {
@@ -31,6 +35,25 @@ export default function AdminDashboard() {
   const filteredPosts = posts.filter(
     post => filter === "ALL" || post.type === filter
   );
+
+  const handleEdit = (post: Post) => {
+    setEditingPost(post);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleDelete = async (postId: string) => {
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
+    try {
+      await deleteDoc(doc(db, "posts", postId));
+      toast.success("Post deleted successfully");
+      if (editingPost?.id === postId) {
+        setEditingPost(null);
+      }
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      toast.error("Failed to delete post");
+    }
+  };
 
   return (
     <div className="p-3 md:p-8 max-w-7xl mx-auto min-h-screen overflow-x-hidden w-full">
@@ -83,7 +106,7 @@ export default function AdminDashboard() {
         
         {/* Left Column: Composer */}
         <div className="lg:col-span-5 xl:col-span-4">
-          <ComposerForm />
+          <ComposerForm editingPost={editingPost} onCancelEdit={() => setEditingPost(null)} />
         </div>
         
         {/* Right Column: Live Feed (Student Panel Preview) */}
@@ -144,7 +167,12 @@ export default function AdminDashboard() {
             ) : (
               <div className="grid gap-6 md:grid-cols-2">
                 {filteredPosts.map(post => (
-                  <PostCard key={post.id} post={post} />
+                  <PostCard 
+                    key={post.id} 
+                    post={post} 
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
                 ))}
               </div>
             )}

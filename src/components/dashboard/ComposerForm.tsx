@@ -1,20 +1,45 @@
 "use client";
 
-import { useState } from "react";
-import { collection, addDoc, serverTimestamp, Timestamp } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import { collection, addDoc, updateDoc, doc, serverTimestamp, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase/clientApp";
 import { useAuth } from "@/components/providers/AuthProvider";
-import { PostType } from "@/types";
+import { Post, PostType } from "@/types";
 import toast from "react-hot-toast";
-import { Send, Calendar as CalendarIcon, Type, AlignLeft } from "lucide-react";
+import { Send, Calendar as CalendarIcon, Type, AlignLeft, X, Save } from "lucide-react";
+import { format } from "date-fns";
 
-export function ComposerForm() {
+interface ComposerFormProps {
+  editingPost?: Post | null;
+  onCancelEdit?: () => void;
+}
+
+export function ComposerForm({ editingPost, onCancelEdit }: ComposerFormProps) {
   const { userData, user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState<PostType>("ANNOUNCEMENT");
   const [dueDate, setDueDate] = useState("");
+
+  useEffect(() => {
+    if (editingPost) {
+      setTitle(editingPost.title);
+      setDescription(editingPost.description);
+      setType(editingPost.type);
+      if (editingPost.dueDate) {
+        // Format to YYYY-MM-DDThh:mm for datetime-local input
+        setDueDate(format(editingPost.dueDate.toDate(), "yyyy-MM-dd'T'HH:mm"));
+      } else {
+        setDueDate("");
+      }
+    } else {
+      setTitle("");
+      setDescription("");
+      setType("ANNOUNCEMENT");
+      setDueDate("");
+    }
+  }, [editingPost]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,23 +57,33 @@ export function ComposerForm() {
         firestoreDueDate = Timestamp.fromDate(new Date(dueDate));
       }
 
-      await addDoc(collection(db, "posts"), {
-        title: title.trim(),
-        description: description.trim(),
-        type,
-        dueDate: firestoreDueDate,
-        createdAt: serverTimestamp(),
-        createdBy: user.uid,
-        status: "ACTIVE"
-      });
-
-      toast.success("Post broadcasted successfully!");
-      setTitle("");
-      setDescription("");
-      setType("ANNOUNCEMENT");
-      setDueDate("");
+      if (editingPost) {
+        await updateDoc(doc(db, "posts", editingPost.id), {
+          title: title.trim(),
+          description: description.trim(),
+          type,
+          dueDate: firestoreDueDate
+        });
+        toast.success("Post updated successfully!");
+        if (onCancelEdit) onCancelEdit();
+      } else {
+        await addDoc(collection(db, "posts"), {
+          title: title.trim(),
+          description: description.trim(),
+          type,
+          dueDate: firestoreDueDate,
+          createdAt: serverTimestamp(),
+          createdBy: user.uid,
+          status: "ACTIVE"
+        });
+        toast.success("Post broadcasted successfully!");
+        setTitle("");
+        setDescription("");
+        setType("ANNOUNCEMENT");
+        setDueDate("");
+      }
     } catch (error: any) {
-      console.error("Error creating post:", error);
+      console.error("Error creating/updating post:", error);
       toast.error(error.message || "Failed to broadcast.");
     } finally {
       setLoading(false);
@@ -59,7 +94,19 @@ export function ComposerForm() {
     <div className="glass rounded-3xl shadow-sm border border-slate-200/50 p-6 sm:p-8 mb-8 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
       
-      <h2 className="text-2xl font-bold text-slate-900 mb-6 tracking-tight">Create Broadcast</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+          {editingPost ? "Edit Broadcast" : "Create Broadcast"}
+        </h2>
+        {editingPost && (
+          <button 
+            onClick={onCancelEdit}
+            className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
+          >
+            <X size={20} />
+          </button>
+        )}
+      </div>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
@@ -145,8 +192,8 @@ export function ComposerForm() {
           >
             {loading ? "Broadcasting..." : (
               <>
-                <Send size={18} />
-                Broadcast to Class
+                {editingPost ? <Save size={18} /> : <Send size={18} />}
+                {editingPost ? "Save Changes" : "Broadcast to Class"}
               </>
             )}
           </button>
