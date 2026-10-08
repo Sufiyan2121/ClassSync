@@ -103,6 +103,7 @@ export default function AdminDashboard() {
 
             {/* Filter Tabs identical to Student View */}
             <div className="mb-6">
+              <h3 className="text-lg font-bold text-slate-800 mb-3 px-2">Live Feed</h3>
               <div className="flex flex-wrap items-center gap-2 bg-white/50 backdrop-blur p-2 rounded-3xl border border-slate-200/60 shadow-sm">
                 {(["ALL", "ANNOUNCEMENT", "ASSIGNMENT", "EXAM", "RESOURCE"] as const).map((type) => (
                   <button
