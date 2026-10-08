@@ -61,13 +61,13 @@ export default function StudentDashboard() {
       </header>
 
       {/* Modern Filter Tabs */}
-      <div className="flex items-center gap-3 overflow-x-auto pb-6 mb-2 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
-        <div className="flex items-center gap-2 bg-white/50 backdrop-blur p-1.5 rounded-full border border-slate-200/60 shadow-sm min-w-max">
+      <div className="mb-6">
+        <div className="flex flex-wrap items-center gap-2 bg-white/50 backdrop-blur p-2 rounded-3xl border border-slate-200/60 shadow-sm">
           {(["ALL", "ANNOUNCEMENT", "ASSIGNMENT", "EXAM", "RESOURCE"] as const).map((type) => (
             <button
               key={type}
               onClick={() => setFilter(type as any)}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 ${
+              className={`flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-semibold text-xs sm:text-sm transition-all duration-300 ${
                 filter === type
                   ? "bg-slate-900 text-white shadow-md scale-100"
                   : "text-slate-600 hover:bg-slate-200/50 hover:text-slate-900 scale-95 hover:scale-100"
