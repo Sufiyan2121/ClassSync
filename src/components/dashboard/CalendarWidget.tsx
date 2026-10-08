@@ -70,25 +70,25 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
   const paddingDays = Array.from({ length: firstDayIndex }).map((_, i) => i);
 
   return (
-    <div className="glass rounded-3xl shadow-sm border border-slate-200/50 p-6 overflow-hidden">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-          <CalendarIcon className="text-blue-500" size={20} />
+    <div className="glass rounded-3xl shadow-sm border border-slate-200/50 p-4 sm:p-5 overflow-hidden">
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="font-extrabold text-slate-900 tracking-tight flex items-center gap-2 text-sm sm:text-base">
+          <CalendarIcon className="text-blue-500" size={18} />
           {format(currentMonth, "MMMM yyyy")}
         </h3>
-        <div className="flex gap-2">
-          <button onClick={prevMonth} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-600 transition-colors">
-            <ChevronLeft size={20} />
+        <div className="flex gap-1">
+          <button onClick={prevMonth} className="p-1 rounded-lg hover:bg-slate-100 text-slate-600 transition-colors">
+            <ChevronLeft size={18} />
           </button>
-          <button onClick={nextMonth} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-600 transition-colors">
-            <ChevronRight size={20} />
+          <button onClick={nextMonth} className="p-1 rounded-lg hover:bg-slate-100 text-slate-600 transition-colors">
+            <ChevronRight size={18} />
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 text-center mb-2">
+      <div className="grid grid-cols-7 gap-1 text-center mb-1">
         {dayNames.map(day => (
-          <div key={day} className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+          <div key={day} className="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-wider">
             {day}
           </div>
         ))}
@@ -107,7 +107,7 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
           return (
             <div 
               key={day.toISOString()} 
-              className={`aspect-square flex flex-col items-center justify-center rounded-xl text-sm font-bold transition-all relative group
+              className={`aspect-square flex flex-col items-center justify-center rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all relative group
                 ${!isCurrentMonth ? "text-slate-300" : "text-slate-700"}
                 ${colorClass ? colorClass : "hover:bg-slate-100"}
                 ${isDayToday && !colorClass ? "bg-slate-900 text-white shadow-md" : ""}
@@ -117,7 +117,7 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
               
               {/* Tooltip on hover if there are events */}
               {indicatorClass && (
-                <div className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-white shadow-sm" />
+                <div className="absolute top-0.5 right-0.5 w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-white shadow-sm" />
               )}
             </div>
           );
@@ -125,7 +125,7 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
       </div>
 
       {/* Legend */}
-      <div className="mt-6 pt-4 border-t border-slate-100 grid grid-cols-2 gap-2 text-xs font-bold text-slate-500">
+      <div className="mt-3 pt-3 border-t border-slate-100 grid grid-cols-2 gap-1.5 text-[10px] sm:text-xs font-bold text-slate-500">
         <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-red-500"></div> Exam</div>
         <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-amber-500"></div> Assignment</div>
         <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-blue-500"></div> Notice</div>

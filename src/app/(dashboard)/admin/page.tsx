@@ -33,47 +33,47 @@ export default function AdminDashboard() {
   );
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto min-h-screen overflow-x-hidden w-full">
+    <div className="p-3 md:p-8 max-w-7xl mx-auto min-h-screen overflow-x-hidden w-full">
       
       {/* Top Branding Logo */}
-      <div className="flex flex-col items-center justify-center text-center mb-8 mt-2 animate-in fade-in slide-in-from-top-4 duration-500">
-        <div className="flex items-center justify-center gap-4 mb-2">
-          <div className="w-12 h-12 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-blue-500/30 ring-4 ring-white">
-            <BookOpen size={24} strokeWidth={2.5} />
+      <div className="flex flex-col items-center justify-center text-center mb-4 mt-1 animate-in fade-in slide-in-from-top-4 duration-500">
+        <div className="flex items-center justify-center gap-3 mb-1">
+          <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-xl shadow-blue-500/30 ring-4 ring-white">
+            <BookOpen size={20} strokeWidth={2.5} />
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight drop-shadow-sm">ClassSync</h2>
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight drop-shadow-sm">ClassSync</h2>
         </div>
-        <p className="text-slate-500 text-sm font-medium mt-1 max-w-sm mx-auto">Bridging the gap between classrooms and students.</p>
+        <p className="text-slate-500 text-xs sm:text-sm font-medium mt-1 max-w-sm mx-auto">Bridging the gap between classrooms and students.</p>
       </div>
 
       {/* Header with Glassmorphism */}
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 glass px-6 py-4 rounded-3xl shadow-sm border border-slate-200/50">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-slate-900 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-slate-900/20 shrink-0">
-            <ShieldCheck size={24} />
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5 glass px-4 py-3 md:px-6 md:py-4 rounded-3xl shadow-sm border border-slate-200/50">
+        <div className="flex items-center gap-3 md:gap-4">
+          <div className="w-10 h-10 md:w-12 md:h-12 bg-slate-900 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-lg shadow-slate-900/20 shrink-0">
+            <ShieldCheck size={20} />
           </div>
           <div>
-            <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+            <h1 className="text-lg md:text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
               Admin Portal
             </h1>
-            <p className="text-slate-500 text-sm font-medium">Manage classes and broadcast updates</p>
+            <p className="text-slate-500 text-xs md:text-sm font-medium">Manage classes and broadcast updates</p>
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+        <div className="flex flex-wrap items-center gap-2 md:gap-3 w-full md:w-auto">
           <NotificationBell />
-          <Link href="/admin/timetable" className="flex items-center gap-2 bg-purple-50 text-purple-700 px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-purple-100 transition-all shadow-sm">
-            <Calendar size={16} />
+          <Link href="/admin/timetable" className="flex items-center gap-1.5 bg-purple-50 text-purple-700 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm hover:bg-purple-100 transition-all shadow-sm">
+            <Calendar size={14} />
             <span>Time-Table</span>
           </Link>
-          <Link href="/admin/resources" className="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-100 transition-all shadow-sm">
-            <FolderOpen size={16} />
+          <Link href="/admin/resources" className="flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm hover:bg-blue-100 transition-all shadow-sm">
+            <FolderOpen size={14} />
             <span>All Subjects</span>
           </Link>
           <button 
             onClick={logout}
-            className="flex items-center gap-2 bg-white/80 text-slate-600 px-4 py-2.5 rounded-xl font-semibold text-sm hover:bg-red-50 hover:text-red-600 transition-all border border-slate-200 shadow-sm hover:shadow-md ml-auto md:ml-0"
+            className="flex items-center gap-1.5 bg-white/80 text-slate-600 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-semibold text-xs md:text-sm hover:bg-red-50 hover:text-red-600 transition-all border border-slate-200 shadow-sm hover:shadow-md ml-auto md:ml-0"
           >
-            <LogOut size={16} />
+            <LogOut size={14} />
             <span>Sign Out</span>
           </button>
         </div>
