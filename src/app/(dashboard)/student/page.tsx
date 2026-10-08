@@ -9,6 +9,7 @@ import { PostType } from "@/types";
 import Link from "next/link";
 import { Sparkles, LayoutGrid, CheckCircle2, LogOut, FolderOpen, BookOpen, Calendar } from "lucide-react";
 import { NotificationBell } from "@/components/dashboard/NotificationBell";
+import { CalendarWidget } from "@/components/dashboard/CalendarWidget";
 
 export default function StudentDashboard() {
   const { userData, logout, loading: authLoading } = useAuth();
@@ -96,31 +97,41 @@ export default function StudentDashboard() {
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <main className="space-y-6">
-        {loading ? (
-          <div className="grid gap-6">
-            <div className="animate-pulse bg-white/60 backdrop-blur-md h-48 rounded-3xl border border-slate-100"></div>
-            <div className="animate-pulse bg-white/60 backdrop-blur-md h-48 rounded-3xl border border-slate-100"></div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+        <div className="lg:col-span-8 xl:col-span-9">
+          {/* Main Content Area */}
+          <main className="space-y-6">
+            {loading ? (
+              <div className="grid gap-6">
+                <div className="animate-pulse bg-white/60 backdrop-blur-md h-48 rounded-3xl border border-slate-100"></div>
+                <div className="animate-pulse bg-white/60 backdrop-blur-md h-48 rounded-3xl border border-slate-100"></div>
+              </div>
+            ) : filteredPosts.length === 0 ? (
+              <div className="glass rounded-3xl shadow-sm border-slate-200/50 p-16 text-center flex flex-col items-center justify-center min-h-[400px]">
+                <div className="w-24 h-24 bg-gradient-to-tr from-emerald-100 to-teal-50 rounded-full flex items-center justify-center mb-6 shadow-inner ring-8 ring-white">
+                  <CheckCircle2 className="w-12 h-12 text-emerald-500" />
+                </div>
+                <h3 className="text-2xl font-bold text-slate-900 mb-2 tracking-tight">You're all caught up!</h3>
+                <p className="text-slate-500 font-medium max-w-sm">
+                  There are no {filter !== "ALL" ? filter.toLowerCase() + "s" : "updates"} waiting for your attention right now.
+                </p>
+              </div>
+            ) : (
+              <div className="grid gap-6">
+                {filteredPosts.map(post => (
+                  <PostCard key={post.id} post={post} />
+                ))}
+              </div>
+            )}
+          </main>
+        </div>
+        
+        <div className="lg:col-span-4 xl:col-span-3">
+          <div className="sticky top-8">
+            <CalendarWidget posts={posts} />
           </div>
-        ) : filteredPosts.length === 0 ? (
-          <div className="glass rounded-3xl shadow-sm border-slate-200/50 p-16 text-center flex flex-col items-center justify-center min-h-[400px]">
-            <div className="w-24 h-24 bg-gradient-to-tr from-emerald-100 to-teal-50 rounded-full flex items-center justify-center mb-6 shadow-inner ring-8 ring-white">
-              <CheckCircle2 className="w-12 h-12 text-emerald-500" />
-            </div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-2 tracking-tight">You're all caught up!</h3>
-            <p className="text-slate-500 font-medium max-w-sm">
-              There are no {filter !== "ALL" ? filter.toLowerCase() + "s" : "updates"} waiting for your attention right now.
-            </p>
-          </div>
-        ) : (
-          <div className="grid gap-6">
-            {filteredPosts.map(post => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
-        )}
-      </main>
+        </div>
+      </div>
     </div>
   );
 }

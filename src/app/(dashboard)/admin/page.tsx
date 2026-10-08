@@ -10,6 +10,7 @@ import { PostType } from "@/types";
 import Link from "next/link";
 import { ShieldCheck, LogOut, Radio, LayoutGrid, FolderOpen, BookOpen, Calendar } from "lucide-react";
 import { NotificationBell } from "@/components/dashboard/NotificationBell";
+import { CalendarWidget } from "@/components/dashboard/CalendarWidget";
 
 export default function AdminDashboard() {
   const { userData, logout, loading: authLoading } = useAuth();
@@ -81,8 +82,11 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
         
         {/* Left Column: Composer */}
-        <div className="lg:col-span-5 xl:col-span-4">
+        <div className="lg:col-span-5 xl:col-span-4 space-y-8">
           <ComposerForm />
+          <div className="hidden lg:block">
+            <CalendarWidget posts={posts} />
+          </div>
         </div>
         
         {/* Right Column: Live Feed (Student Panel Preview) */}
