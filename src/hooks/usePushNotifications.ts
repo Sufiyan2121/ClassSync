@@ -17,8 +17,26 @@ export const usePushNotifications = () => {
     }
     if (typeof window !== 'undefined' && 'Notification' in window) {
       setPermission(Notification.permission);
+      
+      // Auto-refresh token on load if already granted and enabled
+      if (Notification.permission === 'granted' && (userData as any)?.remindersEnabled !== false && user) {
+        // We use a small timeout to let Firebase auth fully settle
+        setTimeout(() => {
+          messaging().then(msg => {
+            if (msg) {
+              getToken(msg, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY })
+                .then((token) => {
+                  if (token) {
+                    const userRef = doc(db, 'users', user.uid);
+                    updateDoc(userRef, { fcmTokens: arrayUnion(token) }).catch(console.error);
+                  }
+                }).catch(console.error);
+            }
+          });
+        }, 1000);
+      }
     }
-  }, []);
+  }, [user, userData]);
 
   const requestPermission = async () => {
     try {
