@@ -62,22 +62,6 @@ export function PostCard({ post, onEdit, onDelete }: PostCardProps) {
           </div>
         </div>
         <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2 shrink-0">
-          {(onEdit || onDelete) && (
-            <div className="flex items-center gap-1.5 bg-white rounded-lg p-1 border border-slate-200 shadow-sm">
-              {onEdit && (
-                <button onClick={() => onEdit(post)} className="flex items-center gap-1.5 px-2.5 py-1.5 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all font-semibold text-xs" title="Edit Post">
-                  <Edit2 size={14} />
-                  <span>Edit</span>
-                </button>
-              )}
-              {onDelete && (
-                <button onClick={() => onDelete(post.id)} className="flex items-center gap-1.5 px-2.5 py-1.5 text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-md transition-all font-semibold text-xs" title="Delete Post">
-                  <Trash2 size={14} />
-                  <span>Delete</span>
-                </button>
-              )}
-            </div>
-          )}
           <span className={`text-[9px] sm:text-[10px] font-bold px-2 py-1 sm:px-3 sm:py-1.5 rounded-full uppercase tracking-widest shadow-sm whitespace-nowrap ${getBadgeColor()}`}>
             {post.type}
           </span>
@@ -99,6 +83,24 @@ export function PostCard({ post, onEdit, onDelete }: PostCardProps) {
               <AlertCircle size={14} />
               Action Required
             </span>
+          )}
+        </div>
+      )}
+
+      {/* Admin Actions Footer */}
+      {(onEdit || onDelete) && (
+        <div className="mt-6 pt-5 border-t border-slate-100 flex items-center justify-end gap-3">
+          {onEdit && (
+            <button onClick={() => onEdit(post)} className="flex items-center gap-2 px-4 py-2 bg-slate-50 text-slate-700 hover:text-blue-700 hover:bg-blue-100 rounded-xl transition-all font-bold text-sm border border-slate-200 shadow-sm hover:shadow">
+              <Edit2 size={16} />
+              <span>Edit Post</span>
+            </button>
+          )}
+          {onDelete && (
+            <button onClick={() => onDelete(post.id)} className="flex items-center gap-2 px-4 py-2 bg-slate-50 text-slate-700 hover:text-red-700 hover:bg-red-100 rounded-xl transition-all font-bold text-sm border border-slate-200 shadow-sm hover:shadow">
+              <Trash2 size={16} />
+              <span>Delete</span>
+            </button>
           )}
         </div>
       )}
