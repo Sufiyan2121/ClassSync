@@ -17,27 +17,22 @@ export default function AdminTimetable() {
   const [isUploading, setIsUploading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState("");
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !file || !user) {
-      toast.error("Please provide a title and select an image.");
+    if (!title.trim() || !imageUrl.trim() || !user) {
+      toast.error("Please provide a title and an image URL.");
       return;
     }
 
     setIsUploading(true);
     try {
-      // 1. Upload image to Firebase Storage
-      const storageRef = ref(storage, `timetables/${Date.now()}_${file.name}`);
-      const snapshot = await uploadBytes(storageRef, file);
-      const imageUrl = await getDownloadURL(snapshot.ref);
-
-      // 2. Create document in Firestore
+      // Create document in Firestore directly with the provided URL
       await addDoc(collection(db, "timetables"), {
         title: title.trim(),
-        imageUrl,
-        storagePath: snapshot.ref.fullPath, // Keep track to delete later
+        imageUrl: imageUrl.trim(),
+        storagePath: null, // No longer using Firebase Storage
         createdBy: user.uid,
         createdAt: serverTimestamp(),
       });
@@ -45,10 +40,10 @@ export default function AdminTimetable() {
       toast.success("Timetable added successfully!");
       setShowModal(false);
       setTitle("");
-      setFile(null);
+      setImageUrl("");
     } catch (error: any) {
-      console.error("Error uploading timetable:", error);
-      toast.error(error.message || "Failed to upload timetable. Check storage rules.");
+      console.error("Error adding timetable:", error);
+      toast.error(error.message || "Failed to add timetable.");
     } finally {
       setIsUploading(false);
     }
@@ -61,10 +56,14 @@ export default function AdminTimetable() {
       // 1. Delete from Firestore
       await deleteDoc(doc(db, "timetables", id));
       
-      // 2. Delete from Storage if path exists
+      // 2. Delete from Storage ONLY if path exists (legacy support for any they managed to upload)
       if (storagePath) {
-        const fileRef = ref(storage, storagePath);
-        await deleteObject(fileRef).catch(e => console.error("Error deleting file:", e));
+        try {
+          const fileRef = ref(storage, storagePath);
+          await deleteObject(fileRef);
+        } catch(e) {
+          console.warn("Could not delete from storage, but removed from database.");
+        }
       }
       
       toast.success("Timetable deleted successfully!");
@@ -163,31 +162,27 @@ export default function AdminTimetable() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">Image File</label>
-                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-200 border-dashed rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors">
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <Upload className="w-8 h-8 mb-2 text-slate-400" />
-                    <p className="text-sm font-medium text-slate-600">
-                      {file ? file.name : "Click to upload image"}
-                    </p>
-                  </div>
-                  <input 
-                    type="file" 
-                    className="hidden" 
-                    accept="image/*"
-                    onChange={(e) => setFile(e.target.files?.[0] || null)}
-                    required
-                  />
-                </label>
+                <label className="block text-sm font-bold text-slate-700 mb-2">Image URL</label>
+                <input
+                  type="url"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  placeholder="https://example.com/image.png"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all font-medium text-slate-900"
+                  required
+                />
+                <p className="text-xs text-slate-500 mt-2">
+                  Since Firebase Storage requires a paid plan, simply upload your image to a free site like <a href="https://imgur.com/upload" target="_blank" rel="noreferrer" className="text-blue-500 underline">Imgur</a> or Google Drive and paste the direct image link here.
+                </p>
               </div>
 
               <div className="pt-2">
                 <button
                   type="submit"
-                  disabled={isUploading || !file || !title.trim()}
+                  disabled={isUploading || !imageUrl.trim() || !title.trim()}
                   className="w-full flex items-center justify-center gap-2 py-3.5 px-4 bg-slate-900 text-white font-bold rounded-xl shadow-lg shadow-slate-900/20 transition-all hover:bg-blue-600 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  {isUploading ? "Uploading..." : "Save Time-Table"}
+                  {isUploading ? "Saving..." : "Save Time-Table"}
                 </button>
               </div>
             </form>
