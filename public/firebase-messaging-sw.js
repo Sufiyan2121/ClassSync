@@ -31,7 +31,6 @@ messaging.onBackgroundMessage((payload) => {
     body: body,
     icon: icon,
     badge: '/icons/icon-192x192.png',
-    image: image,
     vibrate: [200, 100, 200, 100, 200],
     tag: payload.data?.postId || 'classsync-update',
     renotify: true,
