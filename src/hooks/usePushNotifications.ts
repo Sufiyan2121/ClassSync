@@ -10,6 +10,11 @@ export const usePushNotifications = () => {
   const [permission, setPermission] = useState<NotificationPermission>('default');
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/firebase-messaging-sw.js').then((reg) => {
+        reg.update();
+      });
+    }
     if (typeof window !== 'undefined' && 'Notification' in window) {
       setPermission(Notification.permission);
     }

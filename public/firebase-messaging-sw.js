@@ -37,8 +37,8 @@ messaging.onBackgroundMessage((payload) => {
     renotify: true,
     requireInteraction: true,
     actions: [
-      { action: 'open', title: '👀 View Now' },
-      { action: 'dismiss', title: '✖ Dismiss' }
+      { action: 'read', title: '📖 Read' },
+      { action: 'open', title: '🚀 Open App' }
     ],
     data: { url: payload.data?.url || '/' }
   });
