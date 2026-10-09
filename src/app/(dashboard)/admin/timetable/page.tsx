@@ -34,7 +34,8 @@ export default function AdminTimetable() {
       const driveRegex = /drive\.google\.com\/(?:file\/d\/|open\?id=)([a-zA-Z0-9_-]+)/;
       const match = finalImageUrl.match(driveRegex);
       if (match && match[1]) {
-        finalImageUrl = `https://drive.google.com/uc?export=view&id=${match[1]}`;
+        // Google Drive blocks standard hotlinking now, but the thumbnail endpoint still allows it for public files
+        finalImageUrl = `https://drive.google.com/thumbnail?id=${match[1]}&sz=w2000`;
       }
 
       // Create document in Firestore directly with the provided URL
