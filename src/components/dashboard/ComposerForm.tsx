@@ -53,7 +53,7 @@ export function ComposerForm({ editingPost, onCancelEdit }: ComposerFormProps) {
     setLoading(true);
     try {
       let firestoreDueDate: Timestamp | null = null;
-      if ((type === "ASSIGNMENT" || type === "EXAM") && dueDate) {
+      if (dueDate) {
         firestoreDueDate = Timestamp.fromDate(new Date(dueDate));
       }
 
@@ -187,21 +187,21 @@ export function ComposerForm({ editingPost, onCancelEdit }: ComposerFormProps) {
           />
         </div>
 
-        {(type === "ASSIGNMENT" || type === "EXAM") && (
-          <div className="animate-in fade-in slide-in-from-top-4 duration-300">
-            <label htmlFor="dueDate" className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-              <CalendarIcon size={16} className="text-orange-500" /> Due Date / Exam Date
-            </label>
-            <input
-              id="dueDate"
-              type="datetime-local"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-              className="w-full px-4 py-3 bg-white/80 backdrop-blur border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all font-medium text-slate-900 shadow-sm"
-              required
-            />
-          </div>
-        )}
+        <div className="animate-in fade-in slide-in-from-top-4 duration-300">
+          <label htmlFor="dueDate" className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
+            <CalendarIcon size={16} className="text-orange-500" /> Expiry / Due Date
+            {type === "ANNOUNCEMENT" && <span className="text-slate-400 font-normal text-xs ml-1">(Optional)</span>}
+          </label>
+          <input
+            id="dueDate"
+            type="datetime-local"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+            className="w-full px-4 py-3 bg-white/80 backdrop-blur border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all font-medium text-slate-900 shadow-sm"
+            required={type !== "ANNOUNCEMENT"}
+          />
+          <p className="text-xs text-slate-500 mt-1.5 ml-1">The post will automatically disappear after this date.</p>
+        </div>
 
         <div className="pt-4">
           <button

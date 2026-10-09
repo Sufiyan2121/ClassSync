@@ -22,7 +22,15 @@ export function usePosts() {
       (snapshot) => {
         const fetchedPosts: Post[] = [];
         snapshot.forEach((doc) => {
-          fetchedPosts.push({ id: doc.id, ...doc.data() } as Post);
+          const data = doc.data();
+          const post = { id: doc.id, ...data } as Post;
+          
+          // Auto-hide posts that have expired
+          if (post.dueDate && post.dueDate.toMillis() < Date.now()) {
+            return;
+          }
+          
+          fetchedPosts.push(post);
         });
         
         // Sort posts descending by createdAt (newest first)
