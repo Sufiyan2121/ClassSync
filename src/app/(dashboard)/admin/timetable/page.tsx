@@ -7,7 +7,7 @@ const TIMETABLES = [
     id: "lecture-timetable",
     title: "Lecture Time-Table",
     type: "image", // can be "image" or "pdf"
-    fileUrl: "/Lecture Time_Table.png", // path in your public folder
+    fileUrl: "/Lecture Time-Table.jpeg", // Must EXACTLY match the file name and extension
   },
   // Example of adding another one:
   // {
