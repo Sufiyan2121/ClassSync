@@ -50,7 +50,28 @@ export function usePosts() {
       }
     );
 
-    return () => unsubscribe();
+    // Setup a timer to periodically check for expired posts in the current state
+    // so they disappear in real-time even if the user just stares at the screen.
+    const interval = setInterval(() => {
+      setPosts((currentPosts) => {
+        const now = Date.now();
+        const validPosts = currentPosts.filter(post => {
+          if (!post.dueDate) return true;
+          return post.dueDate.toMillis() >= now;
+        });
+        
+        // Only update state if something actually expired to prevent unnecessary re-renders
+        if (validPosts.length !== currentPosts.length) {
+          return validPosts;
+        }
+        return currentPosts;
+      });
+    }, 10000); // Check every 10 seconds
+
+    return () => {
+      unsubscribe();
+      clearInterval(interval);
+    };
   }, []);
 
   return { posts, loading, error };
