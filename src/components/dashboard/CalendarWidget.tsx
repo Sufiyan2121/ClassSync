@@ -32,9 +32,7 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
   const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
   const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
 
-  // Determine colors based on post types
-  const getDayColor = (day: Date) => {
-    // Find posts happening on this day
+  const getDayEvents = (day: Date) => {
     const dayPosts = posts.filter(post => {
       const date = post.dueDate 
         ? post.dueDate.toDate() 
@@ -42,29 +40,12 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
       return isSameDay(date, day);
     });
 
-    if (dayPosts.length === 0) return null;
-
-    // Prioritize EXAM > ASSIGNMENT > ANNOUNCEMENT
-    if (dayPosts.some(p => p.type === "EXAM")) return "bg-red-500 text-white ring-2 ring-red-200 shadow-md";
-    if (dayPosts.some(p => p.type === "ASSIGNMENT")) return "bg-amber-500 text-white ring-2 ring-amber-200 shadow-md";
-    if (dayPosts.some(p => p.type === "ANNOUNCEMENT")) return "bg-blue-500 text-white ring-2 ring-blue-200 shadow-md";
-    return null;
-  };
-
-  const getDayIndicatorColor = (day: Date) => {
-    const dayPosts = posts.filter(post => {
-      const date = post.dueDate 
-        ? post.dueDate.toDate() 
-        : (post.createdAt ? post.createdAt.toDate() : new Date());
-      return isSameDay(date, day);
-    });
-
-    if (dayPosts.length === 0) return null;
-    
-    if (dayPosts.some(p => p.type === "EXAM")) return "bg-red-500";
-    if (dayPosts.some(p => p.type === "ASSIGNMENT")) return "bg-amber-500";
-    if (dayPosts.some(p => p.type === "ANNOUNCEMENT")) return "bg-blue-500";
-    return null;
+    return {
+      hasExam: dayPosts.some(p => p.type === "EXAM"),
+      hasAssignment: dayPosts.some(p => p.type === "ASSIGNMENT"),
+      hasAnnouncement: dayPosts.some(p => p.type === "ANNOUNCEMENT"),
+      count: dayPosts.length
+    };
   };
 
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -103,25 +84,32 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
           <div key={`pad-${i}`} className="aspect-square rounded-xl opacity-0" />
         ))}
         {days.map(day => {
-          const colorClass = getDayColor(day);
-          const indicatorClass = getDayIndicatorColor(day);
+          const events = getDayEvents(day);
           const isCurrentMonth = isSameMonth(day, currentMonth);
           const isDayToday = isToday(day);
+          const hasAnyEvent = events.count > 0;
 
           return (
             <div 
               key={day.toISOString()} 
               className={`aspect-square flex flex-col items-center justify-center rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all relative group
                 ${!isCurrentMonth ? "text-slate-300" : "text-slate-700"}
-                ${colorClass ? colorClass : "hover:bg-slate-100"}
-                ${isDayToday && !colorClass ? "bg-slate-900 text-white shadow-md" : ""}
+                ${!hasAnyEvent ? "hover:bg-slate-100" : "bg-slate-50"}
+                ${isDayToday ? "bg-slate-900 text-white shadow-md ring-2 ring-slate-900/20" : ""}
+                ${hasAnyEvent && !isDayToday ? "ring-1 ring-slate-200 shadow-sm" : ""}
               `}
             >
-              <span className="z-10 relative">{format(day, "d")}</span>
+              <span className={`z-10 relative ${hasAnyEvent && !isDayToday ? "text-slate-900" : ""}`}>
+                {format(day, "d")}
+              </span>
               
-              {/* Tooltip on hover if there are events */}
-              {indicatorClass && (
-                <div className="absolute top-0.5 right-0.5 w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-white shadow-sm" />
+              {/* Event indicators below the number */}
+              {hasAnyEvent && (
+                <div className="absolute bottom-1 sm:bottom-1.5 flex gap-0.5 sm:gap-1 z-10">
+                  {events.hasExam && <div className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${isDayToday ? "bg-white" : "bg-red-500"} shadow-sm`} />}
+                  {events.hasAssignment && <div className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${isDayToday ? "bg-white" : "bg-amber-500"} shadow-sm`} />}
+                  {events.hasAnnouncement && <div className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${isDayToday ? "bg-white" : "bg-blue-500"} shadow-sm`} />}
+                </div>
               )}
             </div>
           );
