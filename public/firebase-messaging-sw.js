@@ -14,9 +14,7 @@ const messaging = firebase.messaging();
 
 // Let Firebase handle the background message rendering automatically
 // using the webpush.notification payload we send from the server.
-messaging.onBackgroundMessage((payload) => {
-  console.log('[firebase-messaging-sw.js] Received background message ', payload);
-});
+// Removed onBackgroundMessage completely to allow Firebase's default background handler to natively render the webpush notification.
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
