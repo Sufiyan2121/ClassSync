@@ -13,52 +13,28 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  console.log('[firebase-messaging-sw.js] Received background message ', payload);
-  
-  const title = payload.data?.title || payload.notification?.title || 'ClassSync Update';
-  const body = payload.data?.body || payload.notification?.body || 'You have a new update.';
-  const icon = payload.data?.icon || '/icons/icon-192x192.png';
-  const image = payload.data?.image || '/icons/icon-512x512.png';
-  const url = payload.data?.url || '/';
+  const title = payload.data?.title || 'ClassSync Update';
+  const body = payload.data?.body || 'New message received.';
 
-  const notificationOptions = {
+  return self.registration.showNotification(title, {
     body: body,
-    icon: icon,
-    badge: '/icons/icon-192x192.png',
-    image: image,
-    vibrate: [200, 100, 200, 100, 200],
-    tag: payload.data?.postId || 'classsync-update',
-    renotify: true,
-    requireInteraction: true,
-    actions: [
-      { action: 'open', title: '👀 View Now' },
-      { action: 'dismiss', title: '✖ Dismiss' }
-    ],
-    data: { url: url }
-  };
-
-  return self.registration.showNotification(title, notificationOptions);
+    icon: '/icons/icon-192x192.png',
+    data: { url: payload.data?.url || '/' }
+  });
 });
+
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  
-  if (event.action === 'dismiss') {
-    return;
-  }
-
-  // Determine URL, default to root or use specific path if provided
   const urlToOpen = event.notification.data?.url || '/';
   
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
-      // Check if there is already a window/tab open with the target URL
       for (let i = 0; i < windowClients.length; i++) {
         const client = windowClients[i];
         if (client.url.includes(self.location.origin) && 'focus' in client) {
           return client.focus();
         }
       }
-      // If no window is open, open a new one
       if (clients.openWindow) {
         return clients.openWindow(urlToOpen);
       }
