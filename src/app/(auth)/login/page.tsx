@@ -2,7 +2,7 @@
 import { useAuth } from "@/components/providers/AuthProvider";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { LogIn } from "lucide-react";
+import { BookOpen } from "lucide-react";
 
 export default function LoginPage() {
   const { login, userData, user, loading } = useAuth();
@@ -43,14 +43,14 @@ export default function LoginPage() {
           <div className="relative mb-6 group cursor-default">
             <div className="absolute inset-0 bg-blue-500 rounded-3xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
             <div className="relative w-20 h-20 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-3xl flex items-center justify-center text-white shadow-xl shadow-blue-500/30 transform group-hover:scale-105 transition-transform duration-500 ring-1 ring-white/50">
-              <LogIn size={36} strokeWidth={2.5} />
+              <BookOpen size={36} strokeWidth={2.5} />
             </div>
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4 drop-shadow-sm">
             ClassSync
           </h1>
           <p className="text-lg text-slate-500 font-medium max-w-sm mx-auto">
-            The next-generation workspace for teachers and students.
+            Bridging the gap between classrooms and students.
           </p>
         </div>
 
