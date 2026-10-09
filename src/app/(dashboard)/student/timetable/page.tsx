@@ -9,6 +9,12 @@ const TIMETABLES = [
     type: "image", // can be "image" or "pdf"
     fileUrl: "/Lecture Time-Table.jpeg", // Must EXACTLY match the file name and extension
   },
+  {
+    id: "Exam Time-Table",
+    title: "Mid-Sem Time-Table",
+    type: "pdf", // can be "image" or "pdf"
+    fileUrl: "/Mid sem.pdf", // Must EXACTLY match the file name and extension
+  },
   // Example of adding another one:
   // {
   //   id: "exam-schedule",
