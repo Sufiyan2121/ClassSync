@@ -32,7 +32,7 @@ messaging.onBackgroundMessage((payload) => {
     data: payload.data
   };
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  return self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
 self.addEventListener('notificationclick', (event) => {
