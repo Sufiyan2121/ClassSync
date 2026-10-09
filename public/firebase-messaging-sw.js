@@ -15,12 +15,11 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
   
-  // Extract data with fallbacks to ensure it never renders empty
   const title = payload.data?.title || payload.notification?.title || 'ClassSync Update';
   const body = payload.data?.body || payload.notification?.body || 'You have a new update.';
   const icon = payload.data?.icon || '/icons/icon-192x192.png';
   const image = payload.data?.image || '/icons/icon-512x512.png';
-  const url = payload.data?.url || 'https://classsync-kohl.vercel.app/';
+  const url = payload.data?.url || '/';
 
   const notificationOptions = {
     body: body,
@@ -40,7 +39,6 @@ messaging.onBackgroundMessage((payload) => {
 
   return self.registration.showNotification(title, notificationOptions);
 });
-
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   
