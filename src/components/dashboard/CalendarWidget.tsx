@@ -105,10 +105,10 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
               
               {/* Event indicators below the number */}
               {hasAnyEvent && (
-                <div className="absolute bottom-1 sm:bottom-1.5 flex gap-0.5 sm:gap-1 z-10">
-                  {events.hasExam && <div className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${isDayToday ? "bg-white" : "bg-red-500"} shadow-sm`} />}
-                  {events.hasAssignment && <div className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${isDayToday ? "bg-white" : "bg-amber-500"} shadow-sm`} />}
-                  {events.hasAnnouncement && <div className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${isDayToday ? "bg-white" : "bg-blue-500"} shadow-sm`} />}
+                <div className="absolute bottom-1 sm:bottom-1.5 flex gap-1 z-10 w-full justify-center px-1">
+                  {events.hasExam && <div className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full ${isDayToday ? "bg-white" : "bg-red-500"} shadow-sm`} />}
+                  {events.hasAssignment && <div className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full ${isDayToday ? "bg-white" : "bg-amber-500"} shadow-sm`} />}
+                  {events.hasAnnouncement && <div className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full ${isDayToday ? "bg-white" : "bg-blue-500"} shadow-sm`} />}
                 </div>
               )}
             </div>
