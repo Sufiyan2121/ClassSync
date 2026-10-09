@@ -46,18 +46,13 @@ export function PostCard({ post, onEdit, onDelete }: PostCardProps) {
       {/* Decorative gradient blur behind the card */}
       <div className="absolute -inset-0.5 bg-gradient-to-r from-transparent via-transparent to-transparent group-hover:from-blue-50/50 group-hover:to-indigo-50/50 rounded-2xl z-[-1] opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
 
-      <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-4">
-        <div className="flex items-start sm:items-center gap-3 sm:gap-4 w-full sm:w-auto flex-1 min-w-0">
+      <div className="flex justify-between items-start gap-2 sm:gap-3 mb-4">
+        <div className="flex items-start sm:items-center gap-3 sm:gap-4 flex-1 min-w-0">
           <div className={`p-3 rounded-xl shadow-sm border border-white ${getIconBgColor()} group-hover:scale-110 transition-transform duration-300 shrink-0`}>
             {getIcon()}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2 mb-1 sm:hidden">
-              <span className={`text-[9px] font-bold px-2 py-1 rounded-full uppercase tracking-widest shadow-sm whitespace-nowrap ${getBadgeColor()}`}>
-                {post.type}
-              </span>
-            </div>
-            <h3 className="font-bold text-slate-900 text-base sm:text-lg leading-tight group-hover:text-blue-700 transition-colors line-clamp-2">{post.title}</h3>
+            <h3 className="font-bold text-slate-900 text-base sm:text-lg leading-tight group-hover:text-blue-700 transition-colors truncate">{post.title}</h3>
             <span className="text-xs sm:text-sm text-slate-500 flex items-center gap-1.5 mt-1 font-medium">
               <Clock size={14} className="text-slate-400 shrink-0" />
               <span className="truncate">
@@ -66,7 +61,7 @@ export function PostCard({ post, onEdit, onDelete }: PostCardProps) {
             </span>
           </div>
         </div>
-        <div className="flex flex-row items-center gap-2 shrink-0 self-end sm:self-auto mt-2 sm:mt-0">
+        <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2 shrink-0">
           {(onEdit || onDelete) && (
             <div className="flex items-center gap-1 bg-slate-50/80 rounded-lg p-0.5 border border-slate-100">
               {onEdit && (
@@ -81,7 +76,7 @@ export function PostCard({ post, onEdit, onDelete }: PostCardProps) {
               )}
             </div>
           )}
-          <span className={`hidden sm:inline-block text-[9px] sm:text-[10px] font-bold px-2 py-1 sm:px-3 sm:py-1.5 rounded-full uppercase tracking-widest shadow-sm whitespace-nowrap ${getBadgeColor()}`}>
+          <span className={`text-[9px] sm:text-[10px] font-bold px-2 py-1 sm:px-3 sm:py-1.5 rounded-full uppercase tracking-widest shadow-sm whitespace-nowrap ${getBadgeColor()}`}>
             {post.type}
           </span>
         </div>
