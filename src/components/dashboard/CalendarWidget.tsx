@@ -36,7 +36,9 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
   const getDayColor = (day: Date) => {
     // Find posts happening on this day
     const dayPosts = posts.filter(post => {
-      const date = post.dueDate ? post.dueDate.toDate() : post.createdAt.toDate();
+      const date = post.dueDate 
+        ? post.dueDate.toDate() 
+        : (post.createdAt ? post.createdAt.toDate() : new Date());
       return isSameDay(date, day);
     });
 
@@ -51,7 +53,9 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
 
   const getDayIndicatorColor = (day: Date) => {
     const dayPosts = posts.filter(post => {
-      const date = post.dueDate ? post.dueDate.toDate() : post.createdAt.toDate();
+      const date = post.dueDate 
+        ? post.dueDate.toDate() 
+        : (post.createdAt ? post.createdAt.toDate() : new Date());
       return isSameDay(date, day);
     });
 
