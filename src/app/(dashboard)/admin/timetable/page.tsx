@@ -1,105 +1,26 @@
-"use client";
-
-import { useState, useRef } from "react";
 import Link from "next/link";
-import { ArrowLeft, Calendar, Download, Plus, Trash2, X, Upload } from "lucide-react";
-import { useTimetables } from "@/hooks/useTimetables";
-import { useAuth } from "@/components/providers/AuthProvider";
-import { collection, addDoc, deleteDoc, doc, serverTimestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase/clientApp";
-import toast from "react-hot-toast";
+import { ArrowLeft, Calendar, Download, FileText } from "lucide-react";
+
+// Add your timetables and PDFs here
+const TIMETABLES = [
+  {
+    id: "lecture-timetable",
+    title: "Lecture Time-Table",
+    type: "image", // can be "image" or "pdf"
+    fileUrl: "/timetable.png", // path in your public folder
+  },
+  // Example of adding another one:
+  // {
+  //   id: "exam-schedule",
+  //   title: "Midterm Exam Schedule",
+  //   type: "pdf",
+  //   fileUrl: "/midterms.pdf",
+  // }
+];
 
 export default function AdminTimetable() {
-  const { timetables, loading } = useTimetables();
-  const { user } = useAuth();
-  
-  const [isUploading, setIsUploading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [title, setTitle] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-
-  // Compress image and convert to Base64
-  const compressImage = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        const img = new Image();
-        img.src = event.target?.result as string;
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          const MAX_WIDTH = 1000;
-          let width = img.width;
-          let height = img.height;
-
-          if (width > MAX_WIDTH) {
-            height = Math.round((height * MAX_WIDTH) / width);
-            width = MAX_WIDTH;
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-
-          const ctx = canvas.getContext("2d");
-          ctx?.drawImage(img, 0, 0, width, height);
-
-          // Compress to JPEG with 0.7 quality to keep size small for Firestore
-          const dataUrl = canvas.toDataURL("image/jpeg", 0.7);
-          resolve(dataUrl);
-        };
-        img.onerror = (error) => reject(error);
-      };
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
-  const handleUpload = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim() || !file || !user) {
-      toast.error("Please provide a title and select an image.");
-      return;
-    }
-
-    setIsUploading(true);
-    try {
-      // Compress the image to Base64 so it easily fits within Firestore's 1MB limit
-      const base64Image = await compressImage(file);
-
-      // Save directly to Firestore as a Base64 string
-      await addDoc(collection(db, "timetables"), {
-        title: title.trim(),
-        imageUrl: base64Image,
-        storagePath: null, // Base64 is stored directly in imageUrl
-        createdBy: user.uid,
-        createdAt: serverTimestamp(),
-      });
-
-      toast.success("Timetable added successfully!");
-      setShowModal(false);
-      setTitle("");
-      setFile(null);
-    } catch (error: any) {
-      console.error("Error adding timetable:", error);
-      toast.error(error.message || "Failed to add timetable.");
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    if (!window.confirm("Are you sure you want to delete this timetable?")) return;
-    
-    try {
-      await deleteDoc(doc(db, "timetables", id));
-      toast.success("Timetable deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting timetable:", error);
-      toast.error("Failed to delete timetable.");
-    }
-  };
-
   return (
-    <div className="p-4 md:p-8 max-w-5xl mx-auto min-h-screen relative">
+    <div className="p-4 md:p-8 max-w-5xl mx-auto min-h-screen">
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 glass px-6 py-4 rounded-3xl shadow-sm border border-slate-200/50">
         <div className="flex items-center gap-4">
           <Link href="/admin" className="p-2 hover:bg-slate-100 rounded-full transition-colors shrink-0">
@@ -107,117 +28,52 @@ export default function AdminTimetable() {
           </Link>
           <div>
             <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-              <Calendar className="text-purple-600" size={24} /> Manage Time-Tables
+              <Calendar className="text-purple-600" size={24} /> Class Time-Tables
             </h1>
-            <p className="text-slate-500 text-sm font-medium">Add or remove class schedules</p>
+            <p className="text-slate-500 text-sm font-medium">Schedules are managed directly in the codebase</p>
           </div>
         </div>
-        <button 
-          onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 bg-slate-900 text-white px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-800 transition-all shadow-sm ml-auto sm:ml-0"
-        >
-          <Plus size={16} />
-          <span>Add New</span>
-        </button>
       </header>
 
-      {loading ? (
-        <div className="grid gap-6">
-          <div className="animate-pulse bg-white/60 backdrop-blur-md h-64 rounded-3xl border border-slate-100"></div>
-        </div>
-      ) : timetables.length === 0 ? (
+      {TIMETABLES.length === 0 ? (
         <div className="glass rounded-3xl p-12 text-center shadow-sm border border-slate-200/50 flex flex-col items-center justify-center">
           <Calendar size={48} className="text-slate-300 mb-4" />
           <h3 className="text-xl font-bold text-slate-900 mb-2">No timetables found</h3>
-          <p className="text-slate-500">Click the "Add New" button to upload a schedule.</p>
+          <p className="text-slate-500">Add them to the TIMETABLES array in the code.</p>
         </div>
       ) : (
         <div className="grid gap-8">
-          {timetables.map((t) => (
+          {TIMETABLES.map((t) => (
             <div key={t.id} className="glass rounded-3xl overflow-hidden shadow-sm border border-slate-200/50 bg-white/40 group">
               <div className="flex justify-between items-center p-4 md:px-6 md:py-4 border-b border-slate-200/50 bg-white/60">
-                <h3 className="font-bold text-lg text-slate-900">{t.title}</h3>
-                <div className="flex items-center gap-2">
-                  <a 
-                    href={t.imageUrl} 
-                    download={`${t.title}.jpg`}
-                    className="p-2 bg-slate-100 text-slate-600 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-colors"
-                  >
-                    <Download size={18} />
-                  </a>
-                  <button 
-                    onClick={() => handleDelete(t.id)}
-                    className="p-2 bg-slate-100 text-slate-600 hover:bg-red-50 hover:text-red-600 rounded-xl transition-colors"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
+                <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2">
+                  {t.type === "pdf" ? <FileText className="text-red-500" size={20} /> : <Calendar className="text-blue-500" size={20} />}
+                  {t.title}
+                </h3>
+                <a 
+                  href={t.fileUrl} 
+                  download
+                  className="flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-slate-800 transition-all shadow-sm"
+                >
+                  <Download size={16} />
+                  <span className="hidden sm:inline">Download</span>
+                </a>
               </div>
-              <div className="p-4 md:p-6 flex items-center justify-center">
-                <img src={t.imageUrl} alt={t.title} className="w-full max-w-4xl object-contain rounded-xl shadow-sm border border-slate-100" />
+              <div className="p-4 md:p-6 flex items-center justify-center bg-slate-50/50">
+                {t.type === "image" ? (
+                  <img src={t.fileUrl} alt={t.title} className="w-full max-w-4xl object-contain rounded-xl shadow-sm border border-slate-200" />
+                ) : (
+                  <div className="py-12 text-center flex flex-col items-center">
+                    <FileText size={64} className="text-slate-300 mb-4" />
+                    <p className="text-slate-500 font-medium">This is a PDF document.</p>
+                    <a href={t.fileUrl} target="_blank" rel="noopener noreferrer" className="mt-4 text-blue-600 hover:underline font-bold">
+                      Click here to view PDF
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           ))}
-        </div>
-      )}
-
-      {/* Upload Modal */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
-            <div className="flex justify-between items-center p-6 border-b border-slate-100">
-              <h2 className="text-xl font-bold text-slate-900">Add Time-Table</h2>
-              <button onClick={() => setShowModal(false)} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
-                <X size={20} />
-              </button>
-            </div>
-            
-            <form onSubmit={handleUpload} className="p-6 space-y-5">
-              <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">Title</label>
-                <input
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="e.g. Midterm Exam Schedule"
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all font-medium text-slate-900"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">Upload Image</label>
-                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-200 border-dashed rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors">
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
-                    <Upload className="w-8 h-8 mb-2 text-slate-400" />
-                    <p className="text-sm font-medium text-slate-600 line-clamp-1">
-                      {file ? file.name : "Click to select an image from your device"}
-                    </p>
-                  </div>
-                  <input 
-                    type="file" 
-                    className="hidden" 
-                    accept="image/*"
-                    onChange={(e) => setFile(e.target.files?.[0] || null)}
-                    required
-                  />
-                </label>
-                <p className="text-xs text-slate-500 mt-2">
-                  The image will be automatically compressed to save space.
-                </p>
-              </div>
-
-              <div className="pt-2">
-                <button
-                  type="submit"
-                  disabled={isUploading || !file || !title.trim()}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 px-4 bg-slate-900 text-white font-bold rounded-xl shadow-lg shadow-slate-900/20 transition-all hover:bg-blue-600 disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                  {isUploading ? "Uploading..." : "Save Time-Table"}
-                </button>
-              </div>
-            </form>
-          </div>
         </div>
       )}
     </div>
