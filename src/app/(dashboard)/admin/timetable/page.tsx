@@ -7,7 +7,7 @@ const TIMETABLES = [
     id: "lecture-timetable",
     title: "Lecture Time-Table",
     type: "image", // can be "image" or "pdf"
-    fileUrl: "/timetable.png", // path in your public folder
+    fileUrl: "/Lecture Time_Table.png", // path in your public folder
   },
   // Example of adding another one:
   // {
@@ -50,8 +50,8 @@ export default function AdminTimetable() {
                   {t.type === "pdf" ? <FileText className="text-red-500" size={20} /> : <Calendar className="text-blue-500" size={20} />}
                   {t.title}
                 </h3>
-                <a 
-                  href={t.fileUrl} 
+                <a
+                  href={t.fileUrl}
                   download
                   className="flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-slate-800 transition-all shadow-sm"
                 >
