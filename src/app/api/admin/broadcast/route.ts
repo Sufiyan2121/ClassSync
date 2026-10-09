@@ -53,15 +53,21 @@ export async function POST(req: NextRequest) {
 
     if (uniqueTokens.length > 0) {
       const message = {
-        data: {
+        notification: {
           title: `New ${type.toLowerCase()}: ${title}`,
           body: description.length > 100 ? description.substring(0, 97) + "..." : description,
+          imageUrl: "https://classsync-kohl.vercel.app/icons/icon-192x192.png"
+        },
+        data: {
           postId: docRef.id,
-          url: "https://classsync-kohl.vercel.app/",
-          icon: "https://classsync-kohl.vercel.app/icons/icon-192x192.png",
-          image: "https://classsync-kohl.vercel.app/icons/icon-512x512.png"
+          url: "https://classsync-kohl.vercel.app/"
         },
         tokens: uniqueTokens,
+        webpush: {
+          fcmOptions: {
+            link: "https://classsync-kohl.vercel.app/"
+          }
+        }
       };
 
       // sendEachForMulticast can take up to 500 tokens at once
