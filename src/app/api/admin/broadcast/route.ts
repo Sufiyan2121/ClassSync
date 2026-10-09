@@ -55,8 +55,7 @@ export async function POST(req: NextRequest) {
       const message = {
         notification: {
           title: `New ${type.toLowerCase()}: ${title}`,
-          body: description.length > 100 ? description.substring(0, 97) + "..." : description,
-          imageUrl: "https://classsync-kohl.vercel.app/icons/icon-192x192.png"
+          body: description.length > 100 ? description.substring(0, 97) + "..." : description
         },
         data: {
           postId: docRef.id,
@@ -64,6 +63,9 @@ export async function POST(req: NextRequest) {
         },
         tokens: uniqueTokens,
         webpush: {
+          notification: {
+            icon: "https://classsync-kohl.vercel.app/icons/icon-192x192.png"
+          },
           fcmOptions: {
             link: "https://classsync-kohl.vercel.app/"
           }
