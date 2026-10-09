@@ -53,11 +53,9 @@ export async function POST(req: NextRequest) {
 
     if (uniqueTokens.length > 0) {
       const message = {
-        notification: {
+        data: {
           title: `New ${type.toLowerCase()}: ${title}`,
           body: description.length > 100 ? description.substring(0, 97) + "..." : description,
-        },
-        data: {
           postId: docRef.id,
           url: "/", // When clicked, it opens the app
         },

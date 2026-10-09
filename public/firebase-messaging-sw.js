@@ -15,9 +15,9 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
   
-  const notificationTitle = payload.notification?.title || 'ClassSync Update';
+  const notificationTitle = payload.data?.title || 'ClassSync Update';
   const notificationOptions = {
-    body: payload.notification?.body,
+    body: payload.data?.body,
     icon: '/icons/icon-192x192.png', // Primary logo
     badge: '/icons/icon-192x192.png', // Small icon in status bar
     image: '/icons/icon-512x512.png', // Large colorful image
