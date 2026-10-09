@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
       .get();
 
     const allTokens: string[] = [];
-    usersSnapshot.docs.forEach((doc) => {
+    usersSnapshot.docs.forEach((doc: any) => {
       const data = doc.data();
       if (Array.isArray(data.fcmTokens) && data.remindersEnabled !== false) {
         allTokens.push(...data.fcmTokens);
