@@ -67,16 +67,35 @@ export function ComposerForm({ editingPost, onCancelEdit }: ComposerFormProps) {
         toast.success("Post updated successfully!");
         if (onCancelEdit) onCancelEdit();
       } else {
-        await addDoc(collection(db, "posts"), {
+        // Use the backend API to create the post AND send push notifications
+        const payload = {
           title: title.trim(),
           description: description.trim(),
           type,
-          dueDate: firestoreDueDate,
-          createdAt: serverTimestamp(),
+          dueDate: dueDate ? new Date(dueDate).toISOString() : null,
           createdBy: user.uid,
-          status: "ACTIVE"
+        };
+
+        const response = await fetch("/api/admin/broadcast", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
         });
-        toast.success("Post broadcasted successfully!");
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || "Failed to broadcast");
+        }
+
+        if (result.notifications?.sent > 0) {
+          toast.success(`Broadcasted! Sent ${result.notifications.sent} notifications.`);
+        } else {
+          toast.success("Post broadcasted successfully!");
+        }
+
         setTitle("");
         setDescription("");
         setType("ANNOUNCEMENT");

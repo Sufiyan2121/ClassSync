@@ -27,7 +27,9 @@ export const usePushNotifications = () => {
       setPermission(currentPermission);
 
       if (currentPermission === 'granted' && user) {
-        const token = await getToken(msg);
+        const token = await getToken(msg, {
+          vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY
+        });
         
         if (token) {
           const userRef = doc(db, 'users', user.uid);
