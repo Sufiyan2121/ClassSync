@@ -12,6 +12,14 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
+// Force the service worker to activate immediately so updates apply instantly
+self.addEventListener('install', (event) => {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(clients.claim());
+});
 messaging.onBackgroundMessage((payload) => {
   const title = payload.data?.title || 'ClassSync Update';
   const body = payload.data?.body || 'New message received.';
