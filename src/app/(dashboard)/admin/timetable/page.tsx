@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { ArrowLeft, Calendar, Download, Plus, Trash2, X, Upload } from "lucide-react";
 import { useTimetables } from "@/hooks/useTimetables";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { collection, addDoc, deleteDoc, doc, serverTimestamp } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import { db, storage } from "@/lib/firebase/clientApp";
+import { db } from "@/lib/firebase/clientApp";
 import toast from "react-hot-toast";
 
 export default function AdminTimetable() {
@@ -17,32 +16,60 @@ export default function AdminTimetable() {
   const [isUploading, setIsUploading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+
+  // Compress image and convert to Base64
+  const compressImage = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const MAX_WIDTH = 1000;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > MAX_WIDTH) {
+            height = Math.round((height * MAX_WIDTH) / width);
+            width = MAX_WIDTH;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext("2d");
+          ctx?.drawImage(img, 0, 0, width, height);
+
+          // Compress to JPEG with 0.7 quality to keep size small for Firestore
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.7);
+          resolve(dataUrl);
+        };
+        img.onerror = (error) => reject(error);
+      };
+      reader.onerror = (error) => reject(error);
+    });
+  };
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !imageUrl.trim() || !user) {
-      toast.error("Please provide a title and an image URL.");
+    if (!title.trim() || !file || !user) {
+      toast.error("Please provide a title and select an image.");
       return;
     }
 
     setIsUploading(true);
     try {
-      let finalImageUrl = imageUrl.trim();
+      // Compress the image to Base64 so it easily fits within Firestore's 1MB limit
+      const base64Image = await compressImage(file);
 
-      // Automatically convert Google Drive links to direct image links
-      const driveRegex = /drive\.google\.com\/(?:file\/d\/|open\?id=)([a-zA-Z0-9_-]+)/;
-      const match = finalImageUrl.match(driveRegex);
-      if (match && match[1]) {
-        // Google Drive blocks standard hotlinking now, but the thumbnail endpoint still allows it for public files
-        finalImageUrl = `https://drive.google.com/thumbnail?id=${match[1]}&sz=w2000`;
-      }
-
-      // Create document in Firestore directly with the provided URL
+      // Save directly to Firestore as a Base64 string
       await addDoc(collection(db, "timetables"), {
         title: title.trim(),
-        imageUrl: finalImageUrl,
-        storagePath: null, // No longer using Firebase Storage
+        imageUrl: base64Image,
+        storagePath: null, // Base64 is stored directly in imageUrl
         createdBy: user.uid,
         createdAt: serverTimestamp(),
       });
@@ -50,7 +77,7 @@ export default function AdminTimetable() {
       toast.success("Timetable added successfully!");
       setShowModal(false);
       setTitle("");
-      setImageUrl("");
+      setFile(null);
     } catch (error: any) {
       console.error("Error adding timetable:", error);
       toast.error(error.message || "Failed to add timetable.");
@@ -59,23 +86,11 @@ export default function AdminTimetable() {
     }
   };
 
-  const handleDelete = async (id: string, storagePath?: string) => {
+  const handleDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this timetable?")) return;
     
     try {
-      // 1. Delete from Firestore
       await deleteDoc(doc(db, "timetables", id));
-      
-      // 2. Delete from Storage ONLY if path exists (legacy support for any they managed to upload)
-      if (storagePath) {
-        try {
-          const fileRef = ref(storage, storagePath);
-          await deleteObject(fileRef);
-        } catch(e) {
-          console.warn("Could not delete from storage, but removed from database.");
-        }
-      }
-      
       toast.success("Timetable deleted successfully!");
     } catch (error) {
       console.error("Error deleting timetable:", error);
@@ -125,14 +140,13 @@ export default function AdminTimetable() {
                 <div className="flex items-center gap-2">
                   <a 
                     href={t.imageUrl} 
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    download={`${t.title}.jpg`}
                     className="p-2 bg-slate-100 text-slate-600 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-colors"
                   >
                     <Download size={18} />
                   </a>
                   <button 
-                    onClick={() => handleDelete(t.id, (t as any).storagePath)}
+                    onClick={() => handleDelete(t.id)}
                     className="p-2 bg-slate-100 text-slate-600 hover:bg-red-50 hover:text-red-600 rounded-xl transition-colors"
                   >
                     <Trash2 size={18} />
@@ -172,27 +186,34 @@ export default function AdminTimetable() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">Image URL</label>
-                <input
-                  type="url"
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  placeholder="https://example.com/image.png"
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all font-medium text-slate-900"
-                  required
-                />
+                <label className="block text-sm font-bold text-slate-700 mb-2">Upload Image</label>
+                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-200 border-dashed rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors">
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                    <Upload className="w-8 h-8 mb-2 text-slate-400" />
+                    <p className="text-sm font-medium text-slate-600 line-clamp-1">
+                      {file ? file.name : "Click to select an image from your device"}
+                    </p>
+                  </div>
+                  <input 
+                    type="file" 
+                    className="hidden" 
+                    accept="image/*"
+                    onChange={(e) => setFile(e.target.files?.[0] || null)}
+                    required
+                  />
+                </label>
                 <p className="text-xs text-slate-500 mt-2">
-                  Since Firebase Storage requires a paid plan, simply upload your image to a free site like <a href="https://imgur.com/upload" target="_blank" rel="noreferrer" className="text-blue-500 underline">Imgur</a> or Google Drive and paste the direct image link here.
+                  The image will be automatically compressed to save space.
                 </p>
               </div>
 
               <div className="pt-2">
                 <button
                   type="submit"
-                  disabled={isUploading || !imageUrl.trim() || !title.trim()}
+                  disabled={isUploading || !file || !title.trim()}
                   className="w-full flex items-center justify-center gap-2 py-3.5 px-4 bg-slate-900 text-white font-bold rounded-xl shadow-lg shadow-slate-900/20 transition-all hover:bg-blue-600 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  {isUploading ? "Saving..." : "Save Time-Table"}
+                  {isUploading ? "Uploading..." : "Save Time-Table"}
                 </button>
               </div>
             </form>

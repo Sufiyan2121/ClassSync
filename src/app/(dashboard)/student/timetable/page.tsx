@@ -41,8 +41,7 @@ export default function StudentTimetable() {
                 <h3 className="font-bold text-lg text-slate-900">{t.title}</h3>
                 <a 
                   href={t.imageUrl} 
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  download={`${t.title}.jpg`}
                   className="flex items-center gap-2 bg-slate-100 text-slate-700 px-3 py-1.5 rounded-xl font-bold text-xs hover:bg-blue-50 hover:text-blue-600 transition-all shadow-sm"
                 >
                   <Download size={14} />
