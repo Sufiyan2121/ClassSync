@@ -28,10 +28,19 @@ export default function AdminTimetable() {
 
     setIsUploading(true);
     try {
+      let finalImageUrl = imageUrl.trim();
+
+      // Automatically convert Google Drive links to direct image links
+      const driveRegex = /drive\.google\.com\/(?:file\/d\/|open\?id=)([a-zA-Z0-9_-]+)/;
+      const match = finalImageUrl.match(driveRegex);
+      if (match && match[1]) {
+        finalImageUrl = `https://drive.google.com/uc?export=view&id=${match[1]}`;
+      }
+
       // Create document in Firestore directly with the provided URL
       await addDoc(collection(db, "timetables"), {
         title: title.trim(),
-        imageUrl: imageUrl.trim(),
+        imageUrl: finalImageUrl,
         storagePath: null, // No longer using Firebase Storage
         createdBy: user.uid,
         createdAt: serverTimestamp(),
