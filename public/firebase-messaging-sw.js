@@ -16,15 +16,33 @@ messaging.onBackgroundMessage((payload) => {
   const title = payload.data?.title || 'ClassSync Update';
   const body = payload.data?.body || 'New message received.';
 
+  const icon = payload.data?.icon || '/icons/icon-192x192.png';
+  const image = payload.data?.image || '/icons/icon-512x512.png';
+
   return self.registration.showNotification(title, {
     body: body,
-    icon: '/icons/icon-192x192.png',
+    icon: icon,
+    badge: '/icons/icon-192x192.png',
+    image: image,
+    vibrate: [200, 100, 200, 100, 200],
+    tag: payload.data?.postId || 'classsync-update',
+    renotify: true,
+    requireInteraction: true,
+    actions: [
+      { action: 'open', title: '👀 View Now' },
+      { action: 'dismiss', title: '✖ Dismiss' }
+    ],
     data: { url: payload.data?.url || '/' }
   });
 });
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
+  
+  if (event.action === 'dismiss') {
+    return;
+  }
+
   const urlToOpen = event.notification.data?.url || '/';
   
   event.waitUntil(
