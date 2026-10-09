@@ -14,6 +14,20 @@ export const usePushNotifications = () => {
       navigator.serviceWorker.register('/firebase-messaging-sw.js').then((reg) => {
         reg.update();
       });
+      
+      // Global foreground message listener
+      messaging().then(msg => {
+        if (msg) {
+          import('firebase/messaging').then(({ onMessage }) => {
+            onMessage(msg, (payload) => {
+              toast.success(`New: ${payload.data?.title}\n${payload.data?.body}`, {
+                duration: 6000,
+                icon: '🔔'
+              });
+            });
+          });
+        }
+      });
     }
     if (typeof window !== 'undefined' && 'Notification' in window) {
       setPermission(Notification.permission);
