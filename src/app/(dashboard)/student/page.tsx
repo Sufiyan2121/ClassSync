@@ -94,14 +94,21 @@ export default function StudentDashboard() {
             <button
               key={type}
               onClick={() => setFilter(type as any)}
-              className={`flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-semibold text-xs sm:text-sm transition-all duration-300 ${
+              className={`group flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-semibold text-xs sm:text-sm transition-all duration-300 ${
                 filter === type
                   ? "bg-slate-900 text-white shadow-md scale-100"
                   : "text-slate-600 hover:bg-slate-200/50 hover:text-slate-900 scale-95 hover:scale-100"
               }`}
             >
               {type === "ALL" && <LayoutGrid size={16} className={filter === "ALL" ? "text-blue-400" : ""} />}
-              {type === "ALL" ? "All Updates" : type.charAt(0) + type.slice(1).toLowerCase() + "s"}
+              <span>{type === "ALL" ? "All Updates" : type.charAt(0) + type.slice(1).toLowerCase() + "s"}</span>
+              <span className={`ml-1 text-[10px] font-bold py-0.5 px-2 rounded-full transition-colors ${
+                filter === type 
+                  ? "bg-white/20 text-white" 
+                  : "bg-slate-200 text-slate-500 group-hover:bg-white group-hover:text-slate-700"
+              }`}>
+                {type === "ALL" ? posts.length : posts.filter(p => p.type === type).length}
+              </span>
             </button>
           ))}
         </div>
