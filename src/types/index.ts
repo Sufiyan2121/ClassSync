@@ -46,3 +46,11 @@ export interface Material {
   createdAt: Timestamp;
   createdBy: string;
 }
+
+export interface Timetable {
+  id: string;
+  title: string;
+  imageUrl: string;
+  createdAt: Timestamp;
+  createdBy: string;
+}

@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
           notification: {
             icon: "https://classsync-kohl.vercel.app/icons/icon-192x192.png",
             actions: [
-              { action: "open_app", title: "🚀 Open App" }
+              { action: "open_app", title: "Open App" }
             ]
           },
           fcmOptions: {

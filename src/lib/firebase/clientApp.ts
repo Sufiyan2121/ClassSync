@@ -2,6 +2,7 @@ import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, setPersistence, browserLocalPersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getMessaging, isSupported } from "firebase/messaging";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -24,6 +25,7 @@ export const googleProvider = new GoogleAuthProvider();
 setPersistence(auth, browserLocalPersistence).catch(console.error);
 
 export const db = getFirestore(app);
+export const storage = getStorage(app);
 
 // Initialize messaging conditionally (only supported in browsers and secured contexts)
 export const messaging = async () => {
