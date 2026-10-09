@@ -63,15 +63,17 @@ export function PostCard({ post, onEdit, onDelete }: PostCardProps) {
         </div>
         <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2 shrink-0">
           {(onEdit || onDelete) && (
-            <div className="flex items-center gap-1 bg-slate-50/80 rounded-lg p-0.5 border border-slate-100">
+            <div className="flex items-center gap-1.5 bg-white rounded-lg p-1 border border-slate-200 shadow-sm">
               {onEdit && (
-                <button onClick={() => onEdit(post)} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-white rounded-md transition-all shadow-sm" title="Edit Post">
+                <button onClick={() => onEdit(post)} className="flex items-center gap-1.5 px-2.5 py-1.5 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all font-semibold text-xs" title="Edit Post">
                   <Edit2 size={14} />
+                  <span>Edit</span>
                 </button>
               )}
               {onDelete && (
-                <button onClick={() => onDelete(post.id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-white rounded-md transition-all shadow-sm" title="Delete Post">
+                <button onClick={() => onDelete(post.id)} className="flex items-center gap-1.5 px-2.5 py-1.5 text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-md transition-all font-semibold text-xs" title="Delete Post">
                   <Trash2 size={14} />
+                  <span>Delete</span>
                 </button>
               )}
             </div>
