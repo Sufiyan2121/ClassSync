@@ -12,9 +12,34 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-// Let Firebase handle the background message rendering automatically
-// using the webpush.notification payload we send from the server.
-// Removed onBackgroundMessage completely to allow Firebase's default background handler to natively render the webpush notification.
+messaging.onBackgroundMessage((payload) => {
+  console.log('[firebase-messaging-sw.js] Received background message ', payload);
+  
+  // Extract data with fallbacks to ensure it never renders empty
+  const title = payload.data?.title || payload.notification?.title || 'ClassSync Update';
+  const body = payload.data?.body || payload.notification?.body || 'You have a new update.';
+  const icon = payload.data?.icon || '/icons/icon-192x192.png';
+  const image = payload.data?.image || '/icons/icon-512x512.png';
+  const url = payload.data?.url || 'https://classsync-kohl.vercel.app/';
+
+  const notificationOptions = {
+    body: body,
+    icon: icon,
+    badge: '/icons/icon-192x192.png',
+    image: image,
+    vibrate: [200, 100, 200, 100, 200],
+    tag: payload.data?.postId || 'classsync-update',
+    renotify: true,
+    requireInteraction: true,
+    actions: [
+      { action: 'open', title: '👀 View Now' },
+      { action: 'dismiss', title: '✖ Dismiss' }
+    ],
+    data: { url: url }
+  };
+
+  return self.registration.showNotification(title, notificationOptions);
+});
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
