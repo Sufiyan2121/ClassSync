@@ -82,7 +82,13 @@ export default function StudentDashboard() {
 
       {/* Modern Filter Tabs */}
       <div className="mb-6">
-        <h3 className="text-lg font-bold text-slate-800 mb-3 px-2">Live Feed</h3>
+        <div className="flex items-center gap-3 mb-3 px-2">
+          <h3 className="text-lg font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-800 to-slate-600">Live Feed</h3>
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+          </span>
+        </div>
         <div className="flex flex-wrap items-center gap-2 bg-white/50 backdrop-blur p-2 rounded-3xl border border-slate-200/60 shadow-sm">
           {(["ALL", "ANNOUNCEMENT", "ASSIGNMENT", "EXAM"] as const).map((type) => (
             <button
