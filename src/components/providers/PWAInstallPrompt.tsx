@@ -8,14 +8,23 @@ export function PWAInstallPrompt() {
   const [showPrompt, setShowPrompt] = useState(false);
 
   useEffect(() => {
+    // If we're already running as an installed app, don't show the prompt
+    if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+      return;
+    }
+
+    // If they already installed it previously, don't show it
+    if (localStorage.getItem("pwa-installed") === "true") {
+      return;
+    }
+
     const handler = (e: Event) => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
       // Stash the event so it can be triggered later.
       setDeferredPrompt(e);
-      // Update UI notify the user they can install the PWA
       
-      // Check if they already dismissed it this session
+      // Check if they dismissed it this session
       const hasDismissed = sessionStorage.getItem("pwa-prompt-dismissed");
       if (!hasDismissed) {
         setShowPrompt(true);
@@ -24,10 +33,11 @@ export function PWAInstallPrompt() {
 
     window.addEventListener("beforeinstallprompt", handler);
 
-    // If app is already installed, this will be true
+    // If app gets installed successfully, hide prompt permanently
     window.addEventListener("appinstalled", () => {
       setShowPrompt(false);
       setDeferredPrompt(null);
+      localStorage.setItem("pwa-installed", "true");
     });
 
     return () => {
@@ -46,6 +56,7 @@ export function PWAInstallPrompt() {
     
     if (outcome === "accepted") {
       setShowPrompt(false);
+      localStorage.setItem("pwa-installed", "true");
     }
     
     // We've used the prompt, and can't use it again, discard it
