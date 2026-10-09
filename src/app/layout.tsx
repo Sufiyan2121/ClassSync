@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import { PWAInstallPrompt } from "@/components/providers/PWAInstallPrompt";
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
@@ -37,6 +38,7 @@ export default function RootLayout({
         
         <AuthProvider>
           {children}
+          <PWAInstallPrompt />
           <Toaster 
             position="top-center"
             toastOptions={{
