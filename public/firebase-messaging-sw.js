@@ -12,27 +12,10 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
+// Let Firebase handle the background message rendering automatically
+// using the webpush.notification payload we send from the server.
 messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] Received background message ', payload);
-  
-  const notificationTitle = payload.data?.title || 'ClassSync Update';
-  const notificationOptions = {
-    body: payload.data?.body,
-    icon: '/icons/icon-192x192.png', // Primary logo
-    badge: '/icons/icon-192x192.png', // Small icon in status bar
-    image: '/icons/icon-512x512.png', // Large colorful image
-    vibrate: [200, 100, 200, 100, 200], // Custom vibration pattern
-    tag: payload.data?.postId || 'classsync-update',
-    renotify: true,
-    requireInteraction: true, // Keeps notification on screen until user interacts
-    actions: [
-      { action: 'open', title: '👀 View Now' },
-      { action: 'dismiss', title: '✖ Dismiss' }
-    ],
-    data: payload.data
-  };
-
-  return self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
 self.addEventListener('notificationclick', (event) => {

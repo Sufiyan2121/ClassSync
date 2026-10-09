@@ -53,11 +53,26 @@ export async function POST(req: NextRequest) {
 
     if (uniqueTokens.length > 0) {
       const message = {
-        data: {
+        notification: {
           title: `New ${type.toLowerCase()}: ${title}`,
           body: description.length > 100 ? description.substring(0, 97) + "..." : description,
-          postId: docRef.id,
-          url: "/", // When clicked, it opens the app
+        },
+        webpush: {
+          notification: {
+            icon: '/icons/icon-192x192.png',
+            badge: '/icons/icon-192x192.png',
+            image: '/icons/icon-512x512.png',
+            vibrate: [200, 100, 200, 100, 200],
+            requireInteraction: true,
+            actions: [
+              { action: 'open', title: '👀 View Now' },
+              { action: 'dismiss', title: '✖ Dismiss' }
+            ],
+            data: {
+              postId: docRef.id,
+              url: "/",
+            }
+          }
         },
         tokens: uniqueTokens,
       };
