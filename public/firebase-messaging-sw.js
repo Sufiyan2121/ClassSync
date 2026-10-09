@@ -20,28 +20,11 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(clients.claim());
 });
+// The native FCM payload now automatically displays notifications in the background.
+// We no longer manually call showNotification to avoid duplicate banners.
 messaging.onBackgroundMessage((payload) => {
-  const title = payload.data?.title || 'ClassSync Update';
-  const body = payload.data?.body || 'New message received.';
-
-  const icon = payload.data?.icon || '/icons/icon-192x192.png';
-  const image = payload.data?.image || '/icons/icon-512x512.png';
-
-  return self.registration.showNotification(title, {
-    body: body,
-    icon: icon,
-    badge: '/icons/icon-192x192.png',
-    vibrate: [200, 100, 200, 100, 200],
-    tag: payload.data?.postId || 'classsync-update',
-    renotify: true,
-    requireInteraction: true,
-    actions: [
-      { action: 'open', title: '🚀 Open App' }
-    ],
-    data: { url: payload.data?.url || '/' }
-  });
+  console.log('[firebase-messaging-sw.js] Received background message, native OS will handle display.');
 });
-
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   
