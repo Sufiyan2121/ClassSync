@@ -58,9 +58,9 @@ export const usePushNotifications = () => {
       });
       if (newState) {
         toast.success('Reminders turned ON');
-        if (permission !== 'granted') {
-          requestPermission();
-        }
+        // Always request permission to ensure we get and save a fresh token,
+        // even if permission is already 'granted' in the browser.
+        requestPermission();
       } else {
         toast.success('Reminders turned OFF');
       }
