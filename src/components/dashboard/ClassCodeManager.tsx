@@ -27,6 +27,7 @@ export function ClassCodeManager() {
     classes, 
     loading, 
     updateClassConfig, 
+    modifyClass,
     createClass, 
     deleteClass,
     removeStudentFromClass 
@@ -144,9 +145,15 @@ export function ClassCodeManager() {
 
     if (!cleanCode || !cleanName) return;
 
+    // Check for collision with an existing class (excluding the one currently being edited)
+    if (cleanCode !== oldCode.trim().toUpperCase() && classes.some(c => c.code.toUpperCase() === cleanCode)) {
+      toast.error(`A class with code "${cleanCode}" already exists.`);
+      return;
+    }
+
     setActionLoading(true);
     try {
-      await updateClassConfig(cleanCode, cleanName);
+      await modifyClass(oldCode, cleanCode, cleanName);
       toast.success("Class updated!");
       setIsEditingClass(null);
       setSelectedClassCode(cleanCode);

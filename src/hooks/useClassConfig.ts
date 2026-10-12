@@ -9,6 +9,7 @@ import {
   deleteDoc, 
   getDoc,
   getDocs,
+  writeBatch,
   serverTimestamp, 
   query, 
   orderBy, 
@@ -82,34 +83,100 @@ export function useClassConfig() {
     };
   }, []);
 
-  // Update existing active class config
-  const updateClassConfig = async (newCode: string, newName?: string) => {
-    const cleanCode = newCode.trim().toUpperCase();
-    const cleanName = newName?.trim() || classConfig.className;
+  // Modify/Rename an existing class without creating duplicates
+  const modifyClass = async (oldCode: string, newCode: string, newName: string) => {
+    const rawOld = oldCode.trim();
+    const cleanOld = rawOld.toUpperCase();
+    const cleanNew = newCode.trim().toUpperCase();
+    const cleanName = newName.trim();
 
-    // Update settings/class_config
-    await setDoc(
-      doc(db, "settings", "class_config"),
-      {
-        classCode: cleanCode,
-        className: cleanName,
-        updatedAt: serverTimestamp(),
-        updatedBy: user?.uid || null,
-      },
-      { merge: true }
-    );
+    if (!cleanNew || !cleanName) return;
 
-    // Also update or insert in classes collection
-    await setDoc(
-      doc(db, "classes", cleanCode),
-      {
-        code: cleanCode,
+    if (rawOld !== cleanNew && cleanOld !== cleanNew) {
+      const batch = writeBatch(db);
+
+      // 1. Delete old class document (both raw and uppercase if different)
+      batch.delete(doc(db, "classes", rawOld));
+      if (rawOld !== cleanOld) {
+        batch.delete(doc(db, "classes", cleanOld));
+      }
+
+      // 2. Set new class document
+      const newDocRef = doc(db, "classes", cleanNew);
+      batch.set(newDocRef, {
+        code: cleanNew,
         name: cleanName,
         createdAt: serverTimestamp(),
         createdBy: user?.uid || null,
-      },
-      { merge: true }
-    );
+      });
+
+      // 3. Update settings/class_config if this was the primary/active config
+      if (classConfig.classCode === rawOld || classConfig.classCode.toUpperCase() === cleanOld) {
+        const configRef = doc(db, "settings", "class_config");
+        batch.set(configRef, {
+          classCode: cleanNew,
+          className: cleanName,
+          updatedAt: serverTimestamp(),
+          updatedBy: user?.uid || null,
+        }, { merge: true });
+      }
+
+      await batch.commit();
+
+      // 4. Migrate enrolled students from cleanOld to cleanNew
+      try {
+        const usersSnap = await getDocs(collection(db, "users"));
+        const studentBatch = writeBatch(db);
+        let count = 0;
+
+        usersSnap.forEach((uDoc) => {
+          const u = uDoc.data() as UserData;
+          let changed = false;
+          let nextActive = u.enrolledClassCode;
+          let nextClasses = u.enrolledClasses || (u.enrolledClassCode ? [u.enrolledClassCode] : []);
+
+          if (u.enrolledClassCode && (u.enrolledClassCode === rawOld || u.enrolledClassCode.toUpperCase() === cleanOld)) {
+            nextActive = cleanNew;
+            changed = true;
+          }
+
+          if (nextClasses.some(c => c === rawOld || c.toUpperCase() === cleanOld)) {
+            nextClasses = nextClasses.map(c => (c === rawOld || c.toUpperCase() === cleanOld) ? cleanNew : c);
+            changed = true;
+          }
+
+          if (changed) {
+            studentBatch.update(uDoc.ref, {
+              enrolledClassCode: nextActive,
+              enrolledClasses: Array.from(new Set(nextClasses)),
+            });
+            count++;
+          }
+        });
+
+        if (count > 0) {
+          await studentBatch.commit();
+        }
+      } catch (err) {
+        console.warn("Could not migrate students:", err);
+      }
+    } else {
+      // Same code, just updating the name
+      await setDoc(doc(db, "classes", cleanNew), {
+        name: cleanName,
+      }, { merge: true });
+
+      if (classConfig.classCode === rawOld || classConfig.classCode.toUpperCase() === cleanNew) {
+        await setDoc(doc(db, "settings", "class_config"), {
+          className: cleanName,
+        }, { merge: true });
+      }
+    }
+  };
+
+  // Update existing active class config
+  const updateClassConfig = async (newCode: string, newName?: string) => {
+    return modifyClass(classConfig.classCode, newCode, newName || classConfig.className);
   };
 
   // Create a brand new class
@@ -127,14 +194,22 @@ export function useClassConfig() {
 
   // Delete a class
   const deleteClass = async (code: string) => {
-    const cleanCode = code.trim().toUpperCase();
-    await deleteDoc(doc(db, "classes", cleanCode));
+    const raw = code.trim();
+    const cleanCode = raw.toUpperCase();
+    await deleteDoc(doc(db, "classes", raw));
+    if (raw !== cleanCode) {
+      await deleteDoc(doc(db, "classes", cleanCode));
+    }
 
     // If deleting the active classConfig, fallback to another class
-    if (classConfig.classCode === cleanCode) {
-      const remaining = classes.filter((c) => c.code !== cleanCode);
+    if (classConfig.classCode === raw || classConfig.classCode.toUpperCase() === cleanCode) {
+      const remaining = classes.filter((c) => c.code !== raw && c.code.toUpperCase() !== cleanCode);
       if (remaining.length > 0) {
-        await updateClassConfig(remaining[0].code, remaining[0].name);
+        await setDoc(doc(db, "settings", "class_config"), {
+          classCode: remaining[0].code,
+          className: remaining[0].name,
+          updatedAt: serverTimestamp(),
+        }, { merge: true });
       }
     }
   };
@@ -189,6 +264,7 @@ export function useClassConfig() {
     classes,
     loading,
     updateClassConfig,
+    modifyClass,
     createClass,
     deleteClass,
     verifyCode,
