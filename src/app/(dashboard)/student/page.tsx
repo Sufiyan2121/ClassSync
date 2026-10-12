@@ -7,16 +7,22 @@ import { usePosts } from "@/hooks/usePosts";
 import { PostCard } from "@/components/dashboard/PostCard";
 import { PostType } from "@/types";
 import Link from "next/link";
-import { Sparkles, LayoutGrid, CheckCircle2, LogOut, FolderOpen, BookOpen, Calendar } from "lucide-react";
+import { Sparkles, LayoutGrid, CheckCircle2, LogOut, FolderOpen, BookOpen, Calendar, GraduationCap } from "lucide-react";
 import { NotificationBell } from "@/components/dashboard/NotificationBell";
 import { CalendarWidget } from "@/components/dashboard/CalendarWidget";
 import { StudentClassSwitcher } from "@/components/dashboard/StudentClassSwitcher";
+import { useClassConfig } from "@/hooks/useClassConfig";
 
 export default function StudentDashboard() {
   const { userData, logout, loading: authLoading } = useAuth();
   const { posts, loading: postsLoading } = usePosts();
+  const { classes, classConfig } = useClassConfig();
   const [filter, setFilter] = useState<PostType | "ALL">("ALL");
   const router = useRouter();
+
+  const currentClassName = classes.find(c => c.code.toUpperCase() === userData?.enrolledClassCode?.toUpperCase())?.name 
+    || (classConfig.classCode.toUpperCase() === userData?.enrolledClassCode?.toUpperCase() ? classConfig.className : null) 
+    || userData?.enrolledClassCode;
 
   useEffect(() => {
     if (!authLoading) {
@@ -61,8 +67,9 @@ export default function StudentDashboard() {
             <div className="flex items-center gap-2 mt-0.5">
               <span className="text-slate-500 text-xs md:text-sm font-medium">Your learning hub</span>
               {userData?.enrolledClassCode && (
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full font-mono text-[10px] md:text-xs font-bold bg-blue-100/70 text-blue-700 border border-blue-200">
-                  Class: {userData.enrolledClassCode}
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] md:text-xs font-bold bg-blue-100/80 text-blue-800 border border-blue-200 shadow-2xs">
+                  <GraduationCap size={12} className="shrink-0" />
+                  <span className="truncate max-w-[140px] sm:max-w-none">{currentClassName}</span>
                 </span>
               )}
             </div>
