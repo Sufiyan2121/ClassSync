@@ -14,6 +14,15 @@ export const metadata: Metadata = {
   title: "ClassSync | Classroom Management",
   description: "A production-grade PWA for classroom management.",
   manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "ClassSync",
+  },
+  icons: {
+    icon: "/icons/icon-192x192.png",
+    apple: "/icons/icon-192x192.png",
+  },
 };
 
 export const viewport = {
