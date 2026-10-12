@@ -9,8 +9,16 @@ export interface UserData {
   role: UserRole;
   fcmTokens: string[];
   remindersEnabled?: boolean;
+  enrolledClassCode?: string;
   createdAt: Timestamp;
   lastActive?: Timestamp;
+}
+
+export interface ClassConfig {
+  classCode: string;
+  className: string;
+  updatedAt?: Timestamp;
+  updatedBy?: string;
 }
 
 export type PostType = "ASSIGNMENT" | "EXAM" | "ANNOUNCEMENT" | "RESOURCE";

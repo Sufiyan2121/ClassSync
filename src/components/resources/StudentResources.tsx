@@ -7,11 +7,22 @@ import { Subject, Material } from "@/types";
 import { Folder, FileText, ArrowLeft, Download } from "lucide-react";
 import Link from "next/link";
 
+import { useAuth } from "@/components/providers/AuthProvider";
+import { useRouter } from "next/navigation";
+
 export function StudentResources() {
+  const { userData, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [materials, setMaterials] = useState<Material[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeSubject, setActiveSubject] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!authLoading && userData?.role === "STUDENT" && !userData?.enrolledClassCode) {
+      router.push("/join-class");
+    }
+  }, [userData, authLoading, router]);
 
   useEffect(() => {
     // Fetch Subjects

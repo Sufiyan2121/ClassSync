@@ -18,8 +18,12 @@ export default function StudentDashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!authLoading && userData?.role === "ADMIN") {
-      router.push("/admin");
+    if (!authLoading) {
+      if (userData?.role === "ADMIN") {
+        router.push("/admin");
+      } else if (userData?.role === "STUDENT" && !userData?.enrolledClassCode) {
+        router.push("/join-class");
+      }
     }
   }, [userData, authLoading, router]);
 
@@ -53,7 +57,14 @@ export default function StudentDashboard() {
             <h1 className="text-lg md:text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
               Hello, {userData?.displayName?.split(" ")[0] || "Student"} <Sparkles className="text-yellow-400 shrink-0" size={18} />
             </h1>
-            <p className="text-slate-500 text-xs md:text-sm font-medium">Your learning hub is ready</p>
+            <div className="flex items-center gap-2 mt-0.5">
+              <span className="text-slate-500 text-xs md:text-sm font-medium">Your learning hub</span>
+              {userData?.enrolledClassCode && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full font-mono text-[10px] md:text-xs font-bold bg-blue-100/70 text-blue-700 border border-blue-200">
+                  Class: {userData.enrolledClassCode}
+                </span>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2 md:gap-3 w-full md:w-auto">

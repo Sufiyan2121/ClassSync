@@ -15,6 +15,8 @@ import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase/clientApp";
 import toast from "react-hot-toast";
 
+import { ClassCodeManager } from "@/components/dashboard/ClassCodeManager";
+
 export default function AdminDashboard() {
   const { userData, logout, loading: authLoading } = useAuth();
   const { posts, loading: postsLoading } = usePosts();
@@ -101,6 +103,9 @@ export default function AdminDashboard() {
           </button>
         </div>
       </header>
+
+      {/* Class Code Manager for Teacher */}
+      <ClassCodeManager />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
         

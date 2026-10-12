@@ -1,3 +1,8 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/providers/AuthProvider";
 import Link from "next/link";
 import { ArrowLeft, Calendar, Download, FileText } from "lucide-react";
 
@@ -25,6 +30,14 @@ const TIMETABLES = [
 ];
 
 export default function StudentTimetable() {
+  const { userData, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && userData?.role === "STUDENT" && !userData?.enrolledClassCode) {
+      router.push("/join-class");
+    }
+  }, [userData, loading, router]);
   return (
     <div className="p-4 md:p-8 max-w-5xl mx-auto min-h-screen">
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 glass px-6 py-4 rounded-3xl shadow-sm border border-slate-200/50">

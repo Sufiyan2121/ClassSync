@@ -13,7 +13,11 @@ export default function LoginPage() {
       if (userData.role === "ADMIN") {
         router.push("/admin");
       } else {
-        router.push("/student");
+        if (!userData.enrolledClassCode) {
+          router.push("/join-class");
+        } else {
+          router.push("/student");
+        }
       }
     }
   }, [user, userData, loading, router]);

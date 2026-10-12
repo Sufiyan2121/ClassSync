@@ -10,6 +10,7 @@ export interface UserData {
   role: 'ADMIN' | 'STUDENT';
   email: string;
   displayName: string;
+  enrolledClassCode?: string;
 }
 
 interface AuthContextType {
@@ -18,6 +19,8 @@ interface AuthContextType {
   loading: boolean;
   login: () => Promise<void>;
   logout: () => Promise<void>;
+  enrollInClass: (code: string) => Promise<void>;
+  refreshUserData: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -26,6 +29,8 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   login: async () => {},
   logout: async () => {},
+  enrollInClass: async () => {},
+  refreshUserData: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -81,8 +86,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     router.push('/login');
   };
 
+  const refreshUserData = async () => {
+    if (!user) return;
+    const userRef = doc(db, 'users', user.uid);
+    const snap = await getDoc(userRef);
+    if (snap.exists()) {
+      setUserData(snap.data() as UserData);
+    }
+  };
+
+  const enrollInClass = async (code: string) => {
+    if (!user) return;
+    const cleanCode = code.trim().toUpperCase();
+    const userRef = doc(db, 'users', user.uid);
+    await setDoc(userRef, { enrolledClassCode: cleanCode }, { merge: true });
+    setUserData(prev => prev ? { ...prev, enrolledClassCode: cleanCode } : null);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, userData, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, userData, loading, login, logout, enrollInClass, refreshUserData }}>
       {children}
     </AuthContext.Provider>
   );
