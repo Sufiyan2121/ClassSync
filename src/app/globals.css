@@ -23,6 +23,17 @@ html, body {
   color: var(--foreground) !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent layout breaking horizontally */
+html {
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+  min-height: 100dvh;
 }
 
 /* Hide scrollbar for clean UI but allow scrolling */

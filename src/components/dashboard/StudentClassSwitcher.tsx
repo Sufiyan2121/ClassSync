@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { useClassConfig } from "@/hooks/useClassConfig";
 import { 
@@ -18,7 +19,6 @@ import {
   ChevronUp,
   Search,
   FolderOpen,
-  ExternalLink,
   Sparkles
 } from "lucide-react";
 import { collection, query, onSnapshot } from "firebase/firestore";
@@ -33,6 +33,7 @@ export function StudentClassSwitcher() {
   const { classes, classConfig, verifyCode } = useClassConfig();
   const router = useRouter();
 
+  const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [showJoinForm, setShowJoinForm] = useState(false);
   const [joinCodeInput, setJoinCodeInput] = useState("");
@@ -45,6 +46,22 @@ export function StudentClassSwitcher() {
   const [showClassmates, setShowClassmates] = useState(false);
   const [classmateSearch, setClassmateSearch] = useState("");
   const [subjectsCount, setSubjectsCount] = useState<number>(0);
+
+  // Client mounting check for portal
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Lock body scroll when modal is open to prevent background scrolling on mobile & desktop
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen]);
 
   // Normalise enrolled classes list
   const enrolledList = Array.from(
@@ -198,20 +215,35 @@ export function StudentClassSwitcher() {
         </div>
       </button>
 
-      {/* Class Information & Management Modal */}
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden border border-slate-100 max-h-[90vh] flex flex-col">
+      {/* Class Information & Management Modal - Portaled to document.body to escape glassmorphism / stacking context traps */}
+      {mounted && isOpen && createPortal(
+        <div 
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-md overscroll-contain animate-in fade-in duration-200"
+          style={{
+            paddingTop: "max(1rem, env(safe-area-inset-top, 1rem))",
+            paddingBottom: "max(1rem, env(safe-area-inset-bottom, 1rem))",
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setIsOpen(false);
+              setShowJoinForm(false);
+              setShowClassmates(false);
+            }
+          }}
+        >
+          <div 
+            className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden border border-slate-100 max-h-[85dvh] sm:max-h-[88vh] flex flex-col my-auto relative animate-in zoom-in-95 duration-200"
+          >
             
             {/* Modal Header */}
-            <div className="flex justify-between items-center px-6 py-4 border-b border-slate-100 shrink-0 bg-slate-50/60">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-xs">
+            <div className="flex justify-between items-center px-5 py-3.5 sm:px-6 sm:py-4 border-b border-slate-100 shrink-0 bg-slate-50/70">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-xs shrink-0">
                   <GraduationCap size={18} />
                 </div>
-                <div>
-                  <h2 className="text-base font-extrabold text-slate-900 leading-tight">Classroom Information</h2>
-                  <p className="text-[11px] text-slate-500 font-medium">Class details, access code & enrolled batches</p>
+                <div className="min-w-0">
+                  <h2 className="text-base font-extrabold text-slate-900 leading-tight truncate">Classroom Information</h2>
+                  <p className="text-[11px] text-slate-500 font-medium truncate">Class details, access code & enrolled batches</p>
                 </div>
               </div>
               <button
@@ -220,7 +252,7 @@ export function StudentClassSwitcher() {
                   setShowJoinForm(false);
                   setShowClassmates(false);
                 }}
-                className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+                className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-full transition-colors shrink-0 cursor-pointer"
                 title="Close"
               >
                 <X size={18} />
@@ -228,18 +260,18 @@ export function StudentClassSwitcher() {
             </div>
 
             {/* Modal Body */}
-            <div className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-5">
+            <div className="p-4 sm:p-6 overflow-y-auto overscroll-contain flex-1 space-y-4 sm:space-y-5">
               
               {/* FEATURED: Current Active Class Information Card */}
-              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-50/90 via-indigo-50/40 to-white p-5 border border-blue-200/80 shadow-xs">
+              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-50/90 via-indigo-50/40 to-white p-4 sm:p-5 border border-blue-200/80 shadow-xs">
                 
                 {/* Top Status & Class Name */}
-                <div className="flex items-start justify-between gap-3 mb-3">
-                  <div>
+                <div className="flex items-start justify-between gap-2.5 mb-3">
+                  <div className="min-w-0">
                     <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-blue-700 bg-blue-100/80 px-2 py-0.5 rounded-full uppercase tracking-wider mb-1.5 border border-blue-200/60">
                       <Sparkles size={10} /> Active Classroom
                     </span>
-                    <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight leading-snug">
+                    <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight leading-snug break-words">
                       {activeName}
                     </h3>
                   </div>
@@ -250,16 +282,16 @@ export function StudentClassSwitcher() {
                 </div>
 
                 {/* Class Code Box with 1-Click Copy */}
-                <div className="bg-white/90 rounded-2xl p-3 border border-slate-200/80 flex items-center justify-between gap-3 shadow-xs mb-4">
+                <div className="bg-white/90 rounded-2xl p-3 border border-slate-200/80 flex items-center justify-between gap-2.5 shadow-xs mb-3.5 flex-wrap sm:flex-nowrap">
                   <div className="min-w-0">
                     <p className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Class Access Code</p>
-                    <p className="font-mono text-base sm:text-lg font-black text-slate-900 tracking-widest truncate">
+                    <p className="font-mono text-base sm:text-lg font-black text-slate-900 tracking-widest break-all">
                       {activeCode}
                     </p>
                   </div>
                   <button
                     onClick={() => handleCopyCode(activeCode)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-blue-600 text-white font-bold text-xs rounded-xl shadow-xs transition-all shrink-0 cursor-pointer"
+                    className="flex items-center justify-center gap-1.5 px-3.5 py-2 bg-slate-900 hover:bg-blue-600 text-white font-bold text-xs rounded-xl shadow-xs transition-all shrink-0 cursor-pointer w-full sm:w-auto"
                     title="Copy Class Code"
                   >
                     {copiedCode ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
@@ -268,23 +300,23 @@ export function StudentClassSwitcher() {
                 </div>
 
                 {/* Classroom Quick Stats Grid */}
-                <div className="grid grid-cols-2 gap-2.5 mb-4">
-                  <div className="bg-white/70 rounded-xl p-2.5 border border-slate-200/60">
-                    <div className="flex items-center gap-2 text-slate-500 text-[11px] font-medium mb-1">
-                      <Users size={13} className="text-blue-600" />
-                      <span>Classmates</span>
+                <div className="grid grid-cols-2 gap-2 sm:gap-2.5 mb-3.5">
+                  <div className="bg-white/80 rounded-xl p-2.5 border border-slate-200/60">
+                    <div className="flex items-center gap-1.5 text-slate-500 text-[11px] font-medium mb-0.5">
+                      <Users size={13} className="text-blue-600 shrink-0" />
+                      <span className="truncate">Classmates</span>
                     </div>
-                    <p className="text-sm font-black text-slate-900">
+                    <p className="text-sm font-black text-slate-900 truncate">
                       {classmatesLoading ? "..." : `${classmates.length} Students`}
                     </p>
                   </div>
 
-                  <div className="bg-white/70 rounded-xl p-2.5 border border-slate-200/60">
-                    <div className="flex items-center gap-2 text-slate-500 text-[11px] font-medium mb-1">
-                      <BookOpen size={13} className="text-indigo-600" />
-                      <span>Curriculum</span>
+                  <div className="bg-white/80 rounded-xl p-2.5 border border-slate-200/60">
+                    <div className="flex items-center gap-1.5 text-slate-500 text-[11px] font-medium mb-0.5">
+                      <BookOpen size={13} className="text-indigo-600 shrink-0" />
+                      <span className="truncate">Curriculum</span>
                     </div>
-                    <p className="text-sm font-black text-slate-900">
+                    <p className="text-sm font-black text-slate-900 truncate">
                       {subjectsCount} Subjects Active
                     </p>
                   </div>
@@ -295,25 +327,25 @@ export function StudentClassSwitcher() {
                   <Link
                     href="/student/resources"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-1.5 py-2 px-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all text-center"
+                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all text-center"
                   >
-                    <FolderOpen size={14} />
-                    <span>Subjects & Notes</span>
+                    <FolderOpen size={14} className="shrink-0" />
+                    <span className="truncate">Subjects & Notes</span>
                   </Link>
                   <Link
                     href="/student/timetable"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-1.5 py-2 px-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all text-center"
+                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all text-center"
                   >
-                    <Calendar size={14} />
-                    <span>Time-Table</span>
+                    <Calendar size={14} className="shrink-0" />
+                    <span className="truncate">Time-Table</span>
                   </Link>
                 </div>
 
                 {/* Toggle Classmates List */}
                 <button
                   onClick={() => setShowClassmates(!showClassmates)}
-                  className="w-full mt-3 flex items-center justify-center gap-1 text-[11px] font-bold text-blue-700 hover:text-blue-800 py-1 transition-colors"
+                  className="w-full mt-3 flex items-center justify-center gap-1 text-[11px] font-bold text-blue-700 hover:text-blue-800 py-1 transition-colors cursor-pointer"
                 >
                   <span>{showClassmates ? "Hide Classmates" : `View Enrolled Classmates (${classmates.length})`}</span>
                   {showClassmates ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
@@ -325,7 +357,7 @@ export function StudentClassSwitcher() {
                 <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-3 animate-in fade-in duration-200">
                   <div className="flex items-center justify-between gap-2">
                     <h4 className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                      <Users size={14} className="text-blue-600" />
+                      <Users size={14} className="text-blue-600 shrink-0" />
                       <span>Classmates ({classmates.length})</span>
                     </h4>
                   </div>
@@ -382,7 +414,7 @@ export function StudentClassSwitcher() {
                   {!showJoinForm && (
                     <button
                       onClick={() => setShowJoinForm(true)}
-                      className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                      className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 cursor-pointer"
                     >
                       <Plus size={13} />
                       <span>Join Another</span>
@@ -400,7 +432,7 @@ export function StudentClassSwitcher() {
                       <button 
                         type="button" 
                         onClick={() => setShowJoinForm(false)}
-                        className="text-slate-400 hover:text-slate-600"
+                        className="text-slate-400 hover:text-slate-600 cursor-pointer"
                       >
                         <X size={15} />
                       </button>
@@ -483,7 +515,8 @@ export function StudentClassSwitcher() {
 
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

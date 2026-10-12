@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useClassConfig } from "@/hooks/useClassConfig";
 import { 
   KeyRound, 
@@ -33,9 +34,24 @@ export function ClassCodeManager() {
     removeStudentFromClass 
   } = useClassConfig();
 
+  const [mounted, setMounted] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"students" | "classes">("students");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isModalOpen]);
 
   // Selected class in modal
   const [selectedClassCode, setSelectedClassCode] = useState(classConfig.classCode);
@@ -237,10 +253,19 @@ export function ClassCodeManager() {
         </div>
       </div>
 
-      {/* Full Management Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden border border-slate-100 max-h-[90vh] flex flex-col">
+      {/* Full Management Modal - Portaled to document.body */}
+      {mounted && isModalOpen && createPortal(
+        <div 
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-md overscroll-contain animate-in fade-in duration-200"
+          style={{
+            paddingTop: "max(1rem, env(safe-area-inset-top, 1rem))",
+            paddingBottom: "max(1rem, env(safe-area-inset-bottom, 1rem))",
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsModalOpen(false);
+          }}
+        >
+          <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden border border-slate-100 max-h-[85dvh] sm:max-h-[88vh] flex flex-col my-auto relative animate-in zoom-in-95 duration-200">
             
             {/* Modal Header */}
             <div className="flex justify-between items-center px-6 py-5 border-b border-slate-100 shrink-0">
@@ -555,7 +580,8 @@ export function ClassCodeManager() {
 
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
