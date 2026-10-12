@@ -11,6 +11,7 @@ export interface UserData {
   email: string;
   displayName: string;
   enrolledClassCode?: string;
+  enrolledClasses?: string[];
 }
 
 interface AuthContextType {
@@ -20,6 +21,8 @@ interface AuthContextType {
   login: () => Promise<void>;
   logout: () => Promise<void>;
   enrollInClass: (code: string) => Promise<void>;
+  leaveClass: (code: string) => Promise<void>;
+  switchClass: (code: string) => Promise<void>;
   refreshUserData: () => Promise<void>;
 }
 
@@ -30,6 +33,8 @@ const AuthContext = createContext<AuthContextType>({
   login: async () => {},
   logout: async () => {},
   enrollInClass: async () => {},
+  leaveClass: async () => {},
+  switchClass: async () => {},
   refreshUserData: async () => {},
 });
 
@@ -98,13 +103,55 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const enrollInClass = async (code: string) => {
     if (!user) return;
     const cleanCode = code.trim().toUpperCase();
+    const currentClasses = userData?.enrolledClasses || (userData?.enrolledClassCode ? [userData.enrolledClassCode] : []);
+    const updatedClasses = Array.from(new Set([...currentClasses, cleanCode]));
+
+    const userRef = doc(db, 'users', user.uid);
+    await setDoc(userRef, { 
+      enrolledClassCode: cleanCode,
+      enrolledClasses: updatedClasses
+    }, { merge: true });
+
+    setUserData(prev => prev ? { 
+      ...prev, 
+      enrolledClassCode: cleanCode,
+      enrolledClasses: updatedClasses
+    } : null);
+  };
+
+  const leaveClass = async (code: string) => {
+    if (!user) return;
+    const cleanCode = code.trim().toUpperCase();
+    const currentClasses = userData?.enrolledClasses || (userData?.enrolledClassCode ? [userData.enrolledClassCode] : []);
+    const updatedClasses = currentClasses.filter(c => c !== cleanCode);
+    
+    const nextActiveClass = userData?.enrolledClassCode === cleanCode
+      ? (updatedClasses.length > 0 ? updatedClasses[0] : null)
+      : (userData?.enrolledClassCode || null);
+
+    const userRef = doc(db, 'users', user.uid);
+    await setDoc(userRef, {
+      enrolledClassCode: nextActiveClass,
+      enrolledClasses: updatedClasses
+    }, { merge: true });
+
+    setUserData(prev => prev ? {
+      ...prev,
+      enrolledClassCode: nextActiveClass || undefined,
+      enrolledClasses: updatedClasses
+    } : null);
+  };
+
+  const switchClass = async (code: string) => {
+    if (!user) return;
+    const cleanCode = code.trim().toUpperCase();
     const userRef = doc(db, 'users', user.uid);
     await setDoc(userRef, { enrolledClassCode: cleanCode }, { merge: true });
     setUserData(prev => prev ? { ...prev, enrolledClassCode: cleanCode } : null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, userData, loading, login, logout, enrollInClass, refreshUserData }}>
+    <AuthContext.Provider value={{ user, userData, loading, login, logout, enrollInClass, leaveClass, switchClass, refreshUserData }}>
       {children}
     </AuthContext.Provider>
   );

@@ -10,6 +10,7 @@ export interface UserData {
   fcmTokens: string[];
   remindersEnabled?: boolean;
   enrolledClassCode?: string;
+  enrolledClasses?: string[];
   createdAt: Timestamp;
   lastActive?: Timestamp;
 }
@@ -19,6 +20,13 @@ export interface ClassConfig {
   className: string;
   updatedAt?: Timestamp;
   updatedBy?: string;
+}
+
+export interface ClassItem {
+  code: string;
+  name: string;
+  createdAt?: Timestamp;
+  createdBy?: string;
 }
 
 export type PostType = "ASSIGNMENT" | "EXAM" | "ANNOUNCEMENT" | "RESOURCE";

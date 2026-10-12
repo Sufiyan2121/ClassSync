@@ -45,16 +45,16 @@ export default function JoinClassPage() {
 
     setIsSubmitting(true);
     try {
-      const isValid = verifyCode(cleanCode);
+      const result = verifyCode(cleanCode);
 
-      if (!isValid) {
+      if (!result.valid) {
         toast.error("Invalid class code. Please check with your teacher.");
         setIsSubmitting(false);
         return;
       }
 
       await enrollInClass(cleanCode);
-      toast.success(`Joined ${classConfig.className || "Class"} successfully!`);
+      toast.success(`Joined ${result.classItem?.name || "Class"} successfully!`);
       router.replace("/student");
     } catch (err: any) {
       console.error("Join error:", err);
