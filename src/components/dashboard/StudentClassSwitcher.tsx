@@ -19,7 +19,9 @@ import {
   ChevronUp,
   Search,
   FolderOpen,
-  Sparkles
+  Sparkles,
+  Camera,
+  Cake
 } from "lucide-react";
 import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase/clientApp";
@@ -339,6 +341,22 @@ export function StudentClassSwitcher() {
                   >
                     <Calendar size={14} className="shrink-0" />
                     <span className="truncate">Time-Table</span>
+                  </Link>
+                  <Link
+                    href="/student/events"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all text-center"
+                  >
+                    <Camera size={14} className="shrink-0" />
+                    <span className="truncate">Events & Media</span>
+                  </Link>
+                  <Link
+                    href="/student/birthdays"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all text-center"
+                  >
+                    <Cake size={14} className="shrink-0" />
+                    <span className="truncate">Birthdays</span>
                   </Link>
                 </div>
 

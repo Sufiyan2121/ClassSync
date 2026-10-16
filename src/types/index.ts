@@ -85,3 +85,29 @@ export interface Birthday {
   createdBy?: string;
 }
 
+export type EventMediaCategory = 
+  | "ALL"
+  | "FEST" 
+  | "FUNCTION" 
+  | "SPORTS" 
+  | "FAREWELL" 
+  | "SEMINAR" 
+  | "TRIP" 
+  | "CELEBRATION" 
+  | "OTHER";
+
+export interface EventMedia {
+  id: string;
+  title: string;
+  description?: string;
+  driveUrl: string; // Google Drive folder or file link
+  eventDate?: string; // "YYYY-MM-DD" or text
+  category: EventMediaCategory;
+  classCode: string; // "ALL" or specific class e.g. "MCA2026"
+  isMasterDrive?: boolean; // Pinned master drive for all class events
+  coverImageUrl?: string;
+  createdAt?: Timestamp;
+  createdBy?: string;
+}
+
+
