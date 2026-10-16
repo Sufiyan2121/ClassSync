@@ -8,7 +8,7 @@ import { PostCard } from "@/components/dashboard/PostCard";
 import { usePosts } from "@/hooks/usePosts";
 import { Post, PostType } from "@/types";
 import Link from "next/link";
-import { ShieldCheck, LogOut, Radio, LayoutGrid, FolderOpen, BookOpen, Calendar } from "lucide-react";
+import { ShieldCheck, LogOut, Radio, LayoutGrid, FolderOpen, BookOpen, Calendar, Cake } from "lucide-react";
 import { NotificationBell } from "@/components/dashboard/NotificationBell";
 import { CalendarWidget } from "@/components/dashboard/CalendarWidget";
 import { deleteDoc, doc } from "firebase/firestore";
@@ -86,6 +86,10 @@ export default function AdminDashboard() {
         </div>
         <div className="flex flex-wrap items-center gap-2 md:gap-3 w-full md:w-auto">
           <NotificationBell />
+          <Link href="/admin/birthdays" className="flex items-center gap-1.5 bg-pink-50 text-pink-700 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm hover:bg-pink-100 transition-all shadow-sm">
+            <Cake size={14} />
+            <span>Birthdays</span>
+          </Link>
           <Link href="/admin/timetable" className="flex items-center gap-1.5 bg-purple-50 text-purple-700 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm hover:bg-purple-100 transition-all shadow-sm">
             <Calendar size={14} />
             <span>Time-Table</span>

@@ -70,3 +70,18 @@ export interface Timetable {
   createdAt: Timestamp;
   createdBy: string;
 }
+
+export interface Birthday {
+  id: string; // The Firestore document ID
+  name: string; // Student or person name
+  birthDate: string; // "YYYY-MM-DD" format
+  month: number; // 1 to 12
+  day: number; // 1 to 31
+  year?: number; // Optional birth year
+  classCode?: string; // Class code e.g. "MCA2026" or "ALL"
+  rollNo?: string; // Optional roll or PRN number
+  notes?: string; // Optional note or message
+  createdAt?: Timestamp;
+  createdBy?: string;
+}
+
