@@ -238,17 +238,17 @@ export function AdminResources() {
   const subjectMaterials = materials.filter(m => m.subjectId === activeSubject);
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto min-h-screen">
-      <header className="flex justify-between items-center mb-8 glass px-6 py-4 rounded-3xl shadow-sm border border-slate-200/50">
-        <div className="flex items-center gap-4">
-          <Link href="/admin" className="p-2 hover:bg-slate-100 rounded-full transition-colors">
-            <ArrowLeft size={24} className="text-slate-600" />
+    <div className="p-3 sm:p-6 md:p-8 max-w-7xl mx-auto min-h-screen w-full overflow-x-hidden">
+      <header className="flex justify-between items-center mb-5 sm:mb-8 glass px-4 py-3 sm:px-6 sm:py-4 rounded-3xl shadow-xs border border-slate-200/50">
+        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+          <Link href="/admin" className="p-2 hover:bg-slate-100 rounded-full transition-colors shrink-0">
+            <ArrowLeft size={22} className="text-slate-600" />
           </Link>
-          <div>
-            <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
+          <div className="min-w-0">
+            <h1 className="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight truncate">
               Resources Manager
             </h1>
-            <p className="text-slate-500 text-sm font-medium">Organize subjects, syllabus, notes, and PDFs</p>
+            <p className="text-slate-500 text-xs sm:text-sm font-medium truncate">Organize subjects, syllabus, notes, and PDFs</p>
           </div>
         </div>
       </header>
@@ -520,20 +520,20 @@ export function AdminResources() {
                   ) : (
                     // Admin Management Rendering
                     subjectMaterials.map(mat => (
-                      <div key={mat.id} className="flex items-center justify-between p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
-                        <div className="flex items-center gap-4">
-                          <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
-                            <FileText size={20} />
+                      <div key={mat.id} className="flex items-center justify-between p-3 sm:p-4 bg-white rounded-xl border border-slate-200 shadow-xs gap-3 overflow-hidden">
+                        <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+                          <div className="p-2 bg-blue-50 text-blue-600 rounded-lg shrink-0">
+                            <FileText size={18} />
                           </div>
-                          <div>
-                            <a href={mat.fileUrl} target="_blank" rel="noreferrer" className="font-semibold text-slate-900 hover:text-blue-600 transition-colors">
+                          <div className="min-w-0 flex-1">
+                            <a href={mat.fileUrl} target="_blank" rel="noreferrer" className="font-semibold text-slate-900 hover:text-blue-600 transition-colors text-xs sm:text-sm block truncate" title={mat.fileName}>
                               {mat.fileName}
                             </a>
-                            <span className="block text-xs font-bold text-slate-400 mt-0.5">{mat.category}</span>
+                            <span className="block text-[10px] font-bold text-slate-400 mt-0.5 uppercase">{mat.category}</span>
                           </div>
                         </div>
-                        <button onClick={() => handleDeleteMaterial(mat.id)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Delete Link">
-                          <Trash2 size={18} />
+                        <button onClick={() => handleDeleteMaterial(mat.id)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors shrink-0 cursor-pointer" title="Delete Link">
+                          <Trash2 size={16} />
                         </button>
                       </div>
                     ))

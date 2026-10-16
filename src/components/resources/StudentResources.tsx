@@ -16,7 +16,8 @@ export function StudentResources() {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [materials, setMaterials] = useState<Material[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeSubject, setActiveSubject] = useState<string | null>(null);
+  const [selectedSubjectFilter, setSelectedSubjectFilter] = useState<string>("ALL");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (!authLoading && userData?.role === "STUDENT" && !userData?.enrolledClassCode) {
@@ -31,9 +32,6 @@ export function StudentResources() {
       const subs: Subject[] = [];
       snap.forEach(d => subs.push({ id: d.id, ...d.data() } as Subject));
       setSubjects(subs);
-      if (subs.length > 0 && !activeSubject) {
-        setActiveSubject(subs[0].id);
-      }
       setLoading(false);
     });
 
@@ -46,78 +44,173 @@ export function StudentResources() {
     });
 
     return () => { unsub(); unsub2(); };
-  }, [activeSubject]);
+  }, []);
+
+  const filteredSubjects = subjects.filter((subject) => {
+    if (selectedSubjectFilter !== "ALL" && subject.id !== selectedSubjectFilter) {
+      return false;
+    }
+    if (!searchQuery.trim()) return true;
+    const queryLower = searchQuery.toLowerCase();
+    const subjectMatch = subject.name.toLowerCase().includes(queryLower);
+    const materialMatch = materials.some(
+      (m) => m.subjectId === subject.id && m.fileName.toLowerCase().includes(queryLower)
+    );
+    return subjectMatch || materialMatch;
+  });
 
   return (
-    <div className="p-4 md:p-8 max-w-5xl mx-auto min-h-screen">
-      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 glass px-6 py-4 rounded-3xl shadow-sm border border-slate-200/50">
-        <div className="flex items-center gap-4">
+    <div className="p-3 sm:p-6 md:p-8 max-w-5xl mx-auto min-h-screen w-full overflow-x-hidden">
+      
+      {/* Header */}
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5 glass px-4 py-3 sm:px-6 sm:py-4 rounded-3xl shadow-xs border border-slate-200/50">
+        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
           <Link href="/student" className="p-2 hover:bg-slate-100 rounded-full transition-colors shrink-0">
-            <ArrowLeft size={24} className="text-slate-600" />
+            <ArrowLeft size={22} className="text-slate-600" />
           </Link>
-          <div>
-            <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight truncate">
               Class Resources
             </h1>
-            <p className="text-slate-500 text-sm font-medium">All your subjects and materials in one place</p>
+            <p className="text-slate-500 text-xs sm:text-sm font-medium truncate">
+              All your subjects, syllabus, notes & PDFs in one place
+            </p>
           </div>
         </div>
       </header>
 
+      {/* Filter and Search Bar for Quick Navigation on Mobile & Desktop */}
+      {subjects.length > 0 && (
+        <div className="glass rounded-2xl p-3 sm:p-4 border border-slate-200/60 shadow-xs mb-5 space-y-3">
+          <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center justify-between">
+            <p className="text-xs font-bold text-slate-700">
+              Browse Subjects ({subjects.length})
+            </p>
+            <div className="relative flex-1 sm:max-w-xs">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search notes, files, subjects..."
+                className="w-full px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Quick Subject Tabs */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
+            <button
+              onClick={() => setSelectedSubjectFilter("ALL")}
+              className={`px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                selectedSubjectFilter === "ALL"
+                  ? "bg-slate-900 text-white shadow-xs"
+                  : "bg-slate-100 hover:bg-slate-200/80 text-slate-600"
+              }`}
+            >
+              All Subjects
+            </button>
+            {subjects.map((sub) => (
+              <button
+                key={sub.id}
+                onClick={() => setSelectedSubjectFilter(sub.id)}
+                className={`px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                  selectedSubjectFilter === sub.id
+                    ? "bg-blue-600 text-white shadow-xs"
+                    : "bg-slate-100 hover:bg-slate-200/80 text-slate-600"
+                }`}
+              >
+                {sub.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {loading ? (
-        <div className="space-y-8">
+        <div className="space-y-6">
           {[1, 2].map((i) => (
-             <div key={i} className="animate-pulse glass rounded-3xl p-6 h-64 w-full"></div>
+            <div key={i} className="animate-pulse glass rounded-3xl p-6 h-48 w-full"></div>
           ))}
         </div>
       ) : subjects.length === 0 ? (
-        <div className="glass rounded-3xl p-12 text-center border border-slate-200/50 flex flex-col items-center justify-center">
-          <Folder size={48} className="text-slate-300 mb-4" />
-          <h3 className="text-xl font-bold text-slate-900 mb-2">No Subjects Yet</h3>
-          <p className="text-slate-500">Your teachers haven't uploaded any resources yet.</p>
+        <div className="glass rounded-3xl p-8 sm:p-12 text-center border border-slate-200/50 flex flex-col items-center justify-center">
+          <Folder size={48} className="text-slate-300 mb-3" />
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-1">No Subjects Yet</h3>
+          <p className="text-xs sm:text-sm text-slate-500">Your teachers haven&apos;t uploaded any resources yet.</p>
+        </div>
+      ) : filteredSubjects.length === 0 ? (
+        <div className="glass rounded-3xl p-8 sm:p-12 text-center border border-slate-200/50 flex flex-col items-center justify-center">
+          <Folder size={48} className="text-slate-300 mb-3" />
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-1">No matching resources</h3>
+          <p className="text-xs sm:text-sm text-slate-500">Try adjusting your search query or subject filter.</p>
         </div>
       ) : (
-        <div className="space-y-10">
-          {subjects.map(subject => {
-            const subjectMaterials = materials.filter(m => m.subjectId === subject.id);
+        <div className="space-y-6 sm:space-y-8">
+          {filteredSubjects.map(subject => {
+            const subjectMaterials = materials.filter(m => {
+              const belongs = m.subjectId === subject.id;
+              if (!belongs) return false;
+              if (!searchQuery.trim()) return true;
+              return m.fileName.toLowerCase().includes(searchQuery.toLowerCase());
+            });
             
             return (
-              <div key={subject.id} className="glass rounded-3xl p-6 md:p-8 border border-slate-200/50">
-                <h2 className="text-2xl font-bold text-slate-900 mb-6 pb-4 border-b border-slate-100 flex items-center gap-3">
-                  <Folder size={24} className="text-blue-500"/> {subject.name}
-                </h2>
+              <div key={subject.id} className="glass rounded-3xl p-4 sm:p-6 md:p-8 border border-slate-200/50 overflow-hidden">
+                <div className="flex items-center justify-between pb-3 sm:pb-4 mb-4 sm:mb-6 border-b border-slate-100">
+                  <h2 className="text-lg sm:text-2xl font-bold text-slate-900 flex items-center gap-2.5 min-w-0">
+                    <Folder size={22} className="text-blue-500 shrink-0"/> 
+                    <span className="truncate">{subject.name}</span>
+                  </h2>
+                  <span className="text-xs bg-blue-50 text-blue-700 font-bold px-2.5 py-0.5 rounded-full shrink-0 border border-blue-100">
+                    {subjectMaterials.length} {subjectMaterials.length === 1 ? "Item" : "Items"}
+                  </span>
+                </div>
 
-                <div className="space-y-8">
+                <div className="space-y-6">
                   {subjectMaterials.length === 0 ? (
-                    <p className="text-slate-400 italic text-sm">No materials added for this subject yet.</p>
+                    <p className="text-slate-400 italic text-xs sm:text-sm py-2">
+                      {searchQuery ? "No materials match your search." : "No materials added for this subject yet."}
+                    </p>
                   ) : (
                     (["SYLLABUS", "NOTES", "PRACTICAL", "PDF"] as const).map(category => {
                       const categoryMaterials = subjectMaterials.filter(m => m.category === category);
                       if (categoryMaterials.length === 0) return null;
                       
                       return (
-                        <div key={category} className="space-y-4">
-                          <h3 className="font-bold text-slate-400 uppercase tracking-wider text-sm border-b border-slate-100 pb-2">
+                        <div key={category} className="space-y-2.5">
+                          <h3 className="font-bold text-slate-400 uppercase tracking-wider text-[11px] sm:text-xs border-b border-slate-100/80 pb-1.5">
                             {category}
                           </h3>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3">
                             {categoryMaterials.map(mat => (
-                              <div key={mat.id} className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow group">
-                                <div className="flex items-center gap-3">
-                                  <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
-                                    <FileText size={20} />
+                              <div 
+                                key={mat.id} 
+                                className="flex items-center justify-between p-3 sm:p-4 bg-white/90 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-all group gap-2.5"
+                              >
+                                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
+                                  <div className="p-2 sm:p-2.5 bg-blue-50 text-blue-600 rounded-xl shrink-0">
+                                    <FileText size={18} />
                                   </div>
-                                  <div>
-                                    <h4 className="font-bold text-slate-900 text-sm line-clamp-1" title={mat.fileName}>{mat.fileName}</h4>
+                                  <div className="min-w-0 flex-1">
+                                    <h4 
+                                      className="font-bold text-slate-900 text-xs sm:text-sm truncate" 
+                                      title={mat.fileName}
+                                    >
+                                      {mat.fileName}
+                                    </h4>
+                                    <span className="text-[10px] text-slate-400 font-medium block truncate">
+                                      {category}
+                                    </span>
                                   </div>
                                 </div>
                                 <a 
                                   href={mat.fileUrl} 
                                   target="_blank" 
                                   rel="noreferrer" 
-                                  className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 text-white text-xs font-bold rounded-lg hover:bg-blue-600 transition-colors shadow-sm shrink-0"
+                                  className="flex items-center gap-1 px-3 py-1.5 bg-slate-900 text-white text-xs font-bold rounded-xl hover:bg-blue-600 transition-colors shadow-xs shrink-0 cursor-pointer"
                                 >
-                                  <Download size={14} /> Open
+                                  <Download size={13} />
+                                  <span>Open</span>
                                 </a>
                               </div>
                             ))}

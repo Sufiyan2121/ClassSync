@@ -55,54 +55,107 @@ export default function StudentDashboard() {
       </div>
 
       {/* Header with Glassmorphism */}
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-5 glass px-4 py-3 md:px-6 md:py-4 rounded-3xl shadow-sm border border-slate-200/50">
-        <div className="flex items-center gap-3 md:gap-4">
-          <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl md:rounded-2xl flex items-center justify-center text-white font-bold text-lg md:text-xl shadow-lg shadow-blue-500/30 shrink-0">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3.5 mb-4 glass px-4 py-3 sm:px-6 sm:py-4 rounded-3xl shadow-xs border border-slate-200/50">
+        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-lg shadow-blue-500/30 shrink-0">
             {userData?.displayName?.charAt(0) || "S"}
           </div>
-          <div>
-            <h1 className="text-lg md:text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-              Hello, {userData?.displayName?.split(" ")[0] || "Student"} <Sparkles className="text-yellow-400 shrink-0" size={18} />
+          <div className="min-w-0">
+            <h1 className="text-base sm:text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-1.5 truncate">
+              <span>Hello, {userData?.displayName?.split(" ")[0] || "Student"}</span> 
+              <Sparkles className="text-yellow-400 shrink-0" size={17} />
             </h1>
-            <div className="flex items-center gap-2 mt-0.5">
-              <span className="text-slate-500 text-xs md:text-sm font-medium">Your learning hub</span>
+            <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
+              <span className="text-slate-500 text-xs sm:text-sm font-medium shrink-0">Learning hub</span>
               {userData?.enrolledClassCode && (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] md:text-xs font-bold bg-blue-100/80 text-blue-800 border border-blue-200 shadow-2xs">
-                  <GraduationCap size={12} className="shrink-0" />
-                  <span className="truncate max-w-[140px] sm:max-w-none">{currentClassName}</span>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold bg-blue-100/80 text-blue-800 border border-blue-200 truncate">
+                  <GraduationCap size={11} className="shrink-0" />
+                  <span className="truncate max-w-[120px] sm:max-w-none">{currentClassName}</span>
                 </span>
               )}
             </div>
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-2 md:gap-3 w-full md:w-auto">
+
+        {/* Header Right Actions */}
+        <div className="flex items-center gap-2 sm:gap-2.5 w-full sm:w-auto justify-between sm:justify-end shrink-0">
           <StudentClassSwitcher />
-          <NotificationBell />
-          <Link href="/student/events" className="flex items-center gap-1.5 bg-emerald-50 text-emerald-700 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm hover:bg-emerald-100 transition-all shadow-sm">
-            <Camera size={14} />
-            <span>Events & Media</span>
-          </Link>
-          <Link href="/student/birthdays" className="flex items-center gap-1.5 bg-pink-50 text-pink-700 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm hover:bg-pink-100 transition-all shadow-sm">
-            <Cake size={14} />
-            <span>Birthdays</span>
-          </Link>
-          <Link href="/student/timetable" className="flex items-center gap-1.5 bg-purple-50 text-purple-700 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm hover:bg-purple-100 transition-all shadow-sm">
-            <Calendar size={14} />
-            <span>Time-Table</span>
-          </Link>
-          <Link href="/student/resources" className="flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-bold text-xs md:text-sm hover:bg-blue-100 transition-all shadow-sm">
-            <FolderOpen size={14} />
-            <span>All Subjects</span>
-          </Link>
-          <button 
-            onClick={logout}
-            className="flex items-center gap-1.5 bg-white/80 text-slate-600 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-semibold text-xs md:text-sm hover:bg-red-50 hover:text-red-600 transition-all border border-slate-200 shadow-sm hover:shadow-md ml-auto md:ml-0"
-          >
-            <LogOut size={14} />
-            <span>Sign Out</span>
-          </button>
+          <div className="flex items-center gap-1.5">
+            <NotificationBell />
+            <button 
+              onClick={logout}
+              className="flex items-center gap-1.5 bg-white/90 text-slate-600 px-3 py-2 rounded-xl font-semibold text-xs hover:bg-red-50 hover:text-red-600 transition-all border border-slate-200 shadow-2xs hover:shadow-xs cursor-pointer"
+              title="Sign Out"
+            >
+              <LogOut size={13} />
+              <span className="hidden xs:inline">Sign Out</span>
+            </button>
+          </div>
         </div>
       </header>
+
+      {/* Responsive Quick Navigation Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5 mb-5">
+        <Link 
+          href="/student/resources" 
+          className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white/80 hover:bg-blue-50/70 border border-slate-200/80 hover:border-blue-300 shadow-2xs hover:shadow-xs transition-all group min-w-0"
+        >
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+            <FolderOpen size={16} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h4 className="font-extrabold text-xs sm:text-sm text-slate-900 group-hover:text-blue-700 truncate">
+              All Subjects
+            </h4>
+            <p className="text-[10px] text-slate-400 font-medium truncate">Notes & PDFs</p>
+          </div>
+        </Link>
+
+        <Link 
+          href="/student/timetable" 
+          className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white/80 hover:bg-purple-50/70 border border-slate-200/80 hover:border-purple-300 shadow-2xs hover:shadow-xs transition-all group min-w-0"
+        >
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+            <Calendar size={16} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h4 className="font-extrabold text-xs sm:text-sm text-slate-900 group-hover:text-purple-700 truncate">
+              Time-Table
+            </h4>
+            <p className="text-[10px] text-slate-400 font-medium truncate">Lectures & Exams</p>
+          </div>
+        </Link>
+
+        <Link 
+          href="/student/events" 
+          className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white/80 hover:bg-emerald-50/70 border border-slate-200/80 hover:border-emerald-300 shadow-2xs hover:shadow-xs transition-all group min-w-0"
+        >
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+            <Camera size={16} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h4 className="font-extrabold text-xs sm:text-sm text-slate-900 group-hover:text-emerald-700 truncate">
+              Events & Media
+            </h4>
+            <p className="text-[10px] text-slate-400 font-medium truncate">Drive Photos & Videos</p>
+          </div>
+        </Link>
+
+        <Link 
+          href="/student/birthdays" 
+          className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white/80 hover:bg-pink-50/70 border border-slate-200/80 hover:border-pink-300 shadow-2xs hover:shadow-xs transition-all group min-w-0"
+        >
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-pink-100 text-pink-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+            <Cake size={16} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h4 className="font-extrabold text-xs sm:text-sm text-slate-900 group-hover:text-pink-700 truncate">
+              Birthdays
+            </h4>
+            <p className="text-[10px] text-slate-400 font-medium truncate">Wishes & Dates</p>
+          </div>
+        </Link>
+      </div>
 
       <div className="mb-5">
         <CalendarWidget posts={posts} />

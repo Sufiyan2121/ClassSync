@@ -83,22 +83,22 @@ export default function StudentEventsMediaPage() {
   const masterDrive = events.find((e) => e.isMasterDrive && (!studentClass || e.classCode === "ALL" || e.classCode?.toUpperCase() === studentClass));
 
   return (
-    <div className="p-3 md:p-8 max-w-5xl mx-auto min-h-screen">
+    <div className="p-3 sm:p-6 md:p-8 max-w-5xl mx-auto min-h-screen w-full overflow-x-hidden">
       
       {/* Header */}
-      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 glass px-4 py-3 md:px-6 md:py-4 rounded-3xl shadow-sm border border-slate-200/50">
-        <div className="flex items-center gap-3.5">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3.5 mb-5 glass px-4 py-3 sm:px-6 sm:py-4 rounded-3xl shadow-xs border border-slate-200/50">
+        <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
           <Link href="/student" className="p-2 hover:bg-slate-100 rounded-full transition-colors shrink-0">
             <ArrowLeft size={22} className="text-slate-600" />
           </Link>
-          <div>
+          <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <span className="text-xl">📸</span>
-              <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
+              <span className="text-xl shrink-0">📸</span>
+              <h1 className="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight truncate">
                 Events & Media Gallery
               </h1>
             </div>
-            <p className="text-slate-500 text-xs sm:text-sm font-medium">
+            <p className="text-slate-500 text-xs sm:text-sm font-medium truncate">
               Access Google Drive photo & video albums for all college events & functions
             </p>
           </div>
@@ -107,17 +107,17 @@ export default function StudentEventsMediaPage() {
 
       {/* MASTER DRIVE HIGHLIGHT */}
       {masterDrive && (
-        <div className="mb-6 rounded-3xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-5 sm:p-6 text-white shadow-xl shadow-blue-500/20 relative overflow-hidden">
+        <div className="mb-5 rounded-3xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-4 sm:p-6 text-white shadow-xl shadow-blue-500/20 relative overflow-hidden">
           <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-3xl shadow-inner shrink-0">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl sm:text-3xl shadow-inner shrink-0">
                 📁
               </div>
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider bg-white/25 px-2.5 py-0.5 rounded-full mb-1">
                   <Pin size={11} /> Master Class Drive
                 </span>
-                <h2 className="text-lg sm:text-2xl font-black truncate">
+                <h2 className="text-base sm:text-2xl font-black truncate">
                   {masterDrive.title}
                 </h2>
                 <p className="text-xs sm:text-sm text-blue-100 mt-0.5 font-medium line-clamp-1">
@@ -126,10 +126,10 @@ export default function StudentEventsMediaPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 w-full sm:w-auto">
+            <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
               <button
                 onClick={() => handleCopyLink(masterDrive.driveUrl, masterDrive.id)}
-                className="flex-1 sm:flex-none px-3.5 py-2.5 bg-white/20 hover:bg-white/30 text-white font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer backdrop-blur-sm"
+                className="flex-1 sm:flex-none px-3 sm:px-3.5 py-2.5 bg-white/20 hover:bg-white/30 text-white font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer backdrop-blur-sm"
                 title="Copy Link"
               >
                 {copiedId === masterDrive.id ? <Check size={14} /> : <Copy size={14} />}
@@ -140,9 +140,9 @@ export default function StudentEventsMediaPage() {
                 href={masterDrive.driveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 sm:flex-none px-4 py-2.5 bg-white text-blue-700 hover:bg-blue-50 font-black text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                className="flex-1 sm:flex-none px-3.5 sm:px-4 py-2.5 bg-white text-blue-700 hover:bg-blue-50 font-black text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <span>Open Google Drive</span>
+                <span>Open Drive</span>
                 <ExternalLink size={14} />
               </a>
             </div>
@@ -151,8 +151,8 @@ export default function StudentEventsMediaPage() {
       )}
 
       {/* Category Pills & Search */}
-      <div className="glass rounded-2xl p-4 border border-slate-200/60 shadow-xs mb-6 space-y-3">
-        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+      <div className="glass rounded-2xl p-3.5 sm:p-4 border border-slate-200/60 shadow-xs mb-5 space-y-3">
+        <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center justify-between">
           <p className="text-xs font-bold text-slate-700">
             Browse Event Albums & Drives ({filteredEvents.length})
           </p>
@@ -204,15 +204,15 @@ export default function StudentEventsMediaPage() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
           {filteredEvents.map((item) => (
             <div
               key={item.id}
-              className="glass bg-white/80 hover:bg-white rounded-3xl p-5 border border-slate-200/70 shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
+              className="glass bg-white/85 hover:bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/70 shadow-xs hover:shadow-md transition-all flex flex-col justify-between overflow-hidden"
             >
-              <div>
+              <div className="min-w-0">
                 {/* Category & Pin */}
-                <div className="flex items-center justify-between gap-2 mb-2.5">
+                <div className="flex items-center justify-between gap-2 mb-2">
                   <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full border ${getCategoryColor(item.category)}`}>
                     {item.category}
                   </span>
@@ -224,17 +224,17 @@ export default function StudentEventsMediaPage() {
                 </div>
 
                 {/* Title & Date */}
-                <h3 className="font-extrabold text-base text-slate-900 leading-snug mb-1">
+                <h3 className="font-extrabold text-sm sm:text-base text-slate-900 leading-snug mb-1 truncate" title={item.title}>
                   {item.title}
                 </h3>
                 {item.eventDate && (
-                  <p className="text-xs text-slate-500 font-semibold mb-2 flex items-center gap-1">
-                    <Calendar size={13} className="text-slate-400" />
-                    <span>{item.eventDate}</span>
+                  <p className="text-[11px] sm:text-xs text-slate-500 font-semibold mb-2 flex items-center gap-1">
+                    <Calendar size={12} className="text-slate-400 shrink-0" />
+                    <span className="truncate">{item.eventDate}</span>
                   </p>
                 )}
                 {item.description && (
-                  <p className="text-xs text-slate-600 leading-relaxed line-clamp-2 mb-3">
+                  <p className="text-xs text-slate-600 leading-relaxed line-clamp-2 mb-3 break-words">
                     {item.description}
                   </p>
                 )}
@@ -244,19 +244,19 @@ export default function StudentEventsMediaPage() {
               <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
                 <button
                   onClick={() => handleCopyLink(item.driveUrl, item.id)}
-                  className="flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 py-1.5 px-2.5 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer"
+                  className="flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 py-1.5 px-2 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
                 >
-                  {copiedId === item.id ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
-                  <span>{copiedId === item.id ? "Copied!" : "Copy Link"}</span>
+                  {copiedId === item.id ? <Check size={13} className="text-emerald-600" /> : <Copy size={13} />}
+                  <span>{copiedId === item.id ? "Copied" : "Copy"}</span>
                 </button>
 
                 <a
                   href={item.driveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs hover:shadow-md transition-all cursor-pointer"
+                  className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs hover:shadow-md transition-all cursor-pointer shrink-0"
                 >
-                  <span>Open Photos & Videos</span>
+                  <span>Open Drive</span>
                   <ExternalLink size={13} />
                 </a>
               </div>
