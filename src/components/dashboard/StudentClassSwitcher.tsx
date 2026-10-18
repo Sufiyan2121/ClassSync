@@ -210,7 +210,7 @@ export function StudentClassSwitcher() {
           <GraduationCap size={12} />
         </div>
         <div className="text-left flex items-center gap-1 min-w-0">
-          <span className="text-[11px] sm:text-xs md:text-sm font-extrabold text-slate-900 tracking-tight max-w-[90px] xs:max-w-[130px] sm:max-w-[200px] truncate">
+          <span className="text-[11px] sm:text-xs md:text-sm font-extrabold text-slate-900 tracking-tight max-w-[140px] xs:max-w-[180px] sm:max-w-[220px] truncate">
             {activeName}
           </span>
           <ChevronDown size={13} className="text-slate-400 group-hover:text-slate-700 transition-colors shrink-0" />

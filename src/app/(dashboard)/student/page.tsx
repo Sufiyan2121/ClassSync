@@ -54,33 +54,48 @@ export default function StudentDashboard() {
         <p className="text-slate-500 text-xs sm:text-sm font-medium max-w-sm mx-auto">Bridging the gap between classrooms and students.</p>
       </div>
 
-      {/* Header with Glassmorphism - Compact single row on mobile */}
-      <header className="flex items-center justify-between gap-2 mb-2.5 sm:mb-4 glass px-3 py-2 sm:px-5 sm:py-3 rounded-2xl sm:rounded-3xl shadow-xs border border-slate-200/50">
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center text-white font-black text-xs sm:text-base shadow-sm shrink-0">
-            {userData?.displayName?.charAt(0) || "S"}
+      {/* Header with Glassmorphism - Perfectly aligned & balanced */}
+      <header className="glass px-3.5 py-3 sm:px-6 sm:py-3.5 rounded-2xl sm:rounded-3xl shadow-xs border border-slate-200/50 mb-3 sm:mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-4">
+        
+        {/* Top on Mobile / Left on Desktop: User Profile Greeting */}
+        <div className="flex items-center justify-between sm:justify-start gap-2.5 sm:gap-3.5 min-w-0">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-black text-sm sm:text-lg shadow-md shadow-blue-500/20 shrink-0">
+              {userData?.displayName?.charAt(0) || "S"}
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-sm sm:text-lg md:text-xl font-extrabold text-slate-900 tracking-tight flex items-center gap-1.5">
+                <span>Hello, {userData?.displayName?.split(" ")[0] || "Student"}</span> 
+                <Sparkles className="text-yellow-400 shrink-0" size={15} />
+              </h1>
+              <p className="text-[11px] sm:text-xs text-slate-400 font-medium">Learning Hub</p>
+            </div>
           </div>
-          <div className="min-w-0">
-            <h1 className="text-xs sm:text-base font-extrabold text-slate-900 tracking-tight flex items-center gap-1 truncate">
-              <span className="truncate">Hello, {userData?.displayName?.split(" ")[0] || "Student"}</span> 
-              <Sparkles className="text-yellow-400 shrink-0" size={13} />
-            </h1>
-            <p className="text-[10px] text-slate-400 font-medium truncate">Learning Hub</p>
-          </div>
-        </div>
 
-        {/* Header Right Actions */}
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-          <StudentClassSwitcher />
-          <NotificationBell />
+          {/* Quick Sign Out icon on mobile (top-right) */}
           <button 
             onClick={logout}
-            className="flex items-center gap-1 p-1.5 sm:px-2.5 sm:py-1.5 bg-white/90 text-slate-600 hover:text-red-600 rounded-xl font-semibold text-xs transition-all border border-slate-200 shadow-2xs hover:shadow-xs cursor-pointer"
+            className="sm:hidden flex items-center justify-center w-8 h-8 bg-white/80 text-slate-500 hover:text-red-600 rounded-xl transition-all border border-slate-200/80 shadow-2xs hover:shadow-xs cursor-pointer shrink-0"
             title="Sign Out"
           >
-            <LogOut size={13} />
-            <span className="hidden sm:inline">Sign Out</span>
+            <LogOut size={14} />
           </button>
+        </div>
+
+        {/* Bottom on Mobile / Right on Desktop: Action Controls */}
+        <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 pt-2 sm:pt-0 border-t border-slate-100/90 sm:border-0">
+          <StudentClassSwitcher />
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <NotificationBell />
+            <button 
+              onClick={logout}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-white/90 text-slate-600 hover:text-red-600 rounded-xl font-semibold text-xs transition-all border border-slate-200 shadow-2xs hover:shadow-xs cursor-pointer"
+              title="Sign Out"
+            >
+              <LogOut size={13} />
+              <span>Sign Out</span>
+            </button>
+          </div>
         </div>
       </header>
 
