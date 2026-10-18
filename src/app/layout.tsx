@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-  themeColor: "#edf3f8",
+  themeColor: "#dce7f3",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -42,9 +42,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-[#edf3f8] dark:bg-[#090e17] text-slate-900 dark:text-slate-100 relative selection:bg-blue-100 selection:text-blue-900">
-        {/* Subtle Glacier Mist mesh gradient background */}
-        <div className="fixed inset-0 z-[-1] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-100/50 via-sky-50/40 to-indigo-100/30 dark:from-blue-950/40 dark:via-slate-950 dark:to-slate-950 opacity-80"></div>
+      <body className="min-h-full flex flex-col bg-[#dce7f3] dark:bg-[#090e17] text-slate-900 dark:text-slate-100 relative selection:bg-blue-100 selection:text-blue-900">
+        {/* Distinct Glacier Mist mesh gradient background */}
+        <div className="fixed inset-0 z-[-1] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-200/50 via-blue-100/40 to-[#dce7f3] dark:from-blue-950/40 dark:via-slate-950 dark:to-slate-950 opacity-90"></div>
         <div className="fixed inset-0 z-[-1] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.025] mix-blend-overlay"></div>
         
         <ThemeProvider>
