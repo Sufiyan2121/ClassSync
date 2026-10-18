@@ -203,17 +203,17 @@ export function StudentClassSwitcher() {
       {/* Header Button Showing Class Name */}
       <button
         onClick={() => setIsOpen(true)}
-        className="group flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-white hover:bg-slate-50 text-slate-800 rounded-2xl border border-slate-200/90 shadow-xs hover:shadow-md transition-all cursor-pointer"
+        className="group flex items-center gap-1.5 px-2 py-1.5 sm:px-3 sm:py-2 bg-white hover:bg-slate-50 text-slate-800 rounded-xl sm:rounded-2xl border border-slate-200/90 shadow-2xs hover:shadow-xs transition-all cursor-pointer shrink min-w-0"
         title={`View ${activeName} information & options`}
       >
-        <div className="w-5 h-5 md:w-6 md:h-6 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-          <GraduationCap size={13} />
+        <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shrink-0 shadow-2xs">
+          <GraduationCap size={12} />
         </div>
-        <div className="text-left flex items-center gap-1.5">
-          <span className="text-xs md:text-sm font-extrabold text-slate-900 tracking-tight max-w-[130px] sm:max-w-[200px] truncate">
+        <div className="text-left flex items-center gap-1 min-w-0">
+          <span className="text-[11px] sm:text-xs md:text-sm font-extrabold text-slate-900 tracking-tight max-w-[90px] xs:max-w-[130px] sm:max-w-[200px] truncate">
             {activeName}
           </span>
-          <ChevronDown size={14} className="text-slate-400 group-hover:text-slate-700 transition-colors shrink-0" />
+          <ChevronDown size={13} className="text-slate-400 group-hover:text-slate-700 transition-colors shrink-0" />
         </div>
       </button>
 

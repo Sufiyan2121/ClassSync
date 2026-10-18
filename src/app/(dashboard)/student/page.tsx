@@ -43,8 +43,18 @@ export default function StudentDashboard() {
   return (
     <div className="p-3 md:p-8 max-w-5xl mx-auto min-h-screen overflow-x-hidden w-full">
       
-      {/* Top Branding Logo */}
-      <div className="flex flex-col items-center justify-center text-center mb-4 mt-1 animate-in fade-in slide-in-from-top-4 duration-500">
+      {/* Top Branding - Ultra slim on mobile, full hero on desktop */}
+      <div className="flex items-center justify-between mb-2 px-1 sm:hidden">
+        <div className="flex items-center gap-1.5">
+          <div className="w-5 h-5 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-md flex items-center justify-center text-white shadow-2xs">
+            <BookOpen size={11} strokeWidth={2.5} />
+          </div>
+          <span className="font-extrabold text-xs text-slate-900 tracking-tight">ClassSync</span>
+        </div>
+        <span className="text-[10px] font-bold text-blue-600 bg-blue-50/80 px-2 py-0.5 rounded-full border border-blue-100">Student Portal</span>
+      </div>
+
+      <div className="hidden sm:flex flex-col items-center justify-center text-center mb-4 mt-1 animate-in fade-in slide-in-from-top-4 duration-500">
         <div className="flex items-center justify-center gap-3 mb-1">
           <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-xl shadow-blue-500/30 ring-4 ring-white">
             <BookOpen size={20} strokeWidth={2.5} />
@@ -54,105 +64,95 @@ export default function StudentDashboard() {
         <p className="text-slate-500 text-xs sm:text-sm font-medium mt-1 max-w-sm mx-auto">Bridging the gap between classrooms and students.</p>
       </div>
 
-      {/* Header with Glassmorphism */}
-      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3.5 mb-4 glass px-4 py-3 sm:px-6 sm:py-4 rounded-3xl shadow-xs border border-slate-200/50">
-        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-lg shadow-blue-500/30 shrink-0">
+      {/* Header with Glassmorphism - Compact single row on mobile */}
+      <header className="flex items-center justify-between gap-2 mb-2.5 sm:mb-4 glass px-3 py-2 sm:px-5 sm:py-3 rounded-2xl sm:rounded-3xl shadow-xs border border-slate-200/50">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center text-white font-black text-xs sm:text-base shadow-sm shrink-0">
             {userData?.displayName?.charAt(0) || "S"}
           </div>
           <div className="min-w-0">
-            <h1 className="text-base sm:text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-1.5 truncate">
-              <span>Hello, {userData?.displayName?.split(" ")[0] || "Student"}</span> 
-              <Sparkles className="text-yellow-400 shrink-0" size={17} />
+            <h1 className="text-xs sm:text-base font-extrabold text-slate-900 tracking-tight flex items-center gap-1 truncate">
+              <span className="truncate">Hello, {userData?.displayName?.split(" ")[0] || "Student"}</span> 
+              <Sparkles className="text-yellow-400 shrink-0" size={13} />
             </h1>
-            <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
-              <span className="text-slate-500 text-xs sm:text-sm font-medium shrink-0">Learning hub</span>
-              {userData?.enrolledClassCode && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold bg-blue-100/80 text-blue-800 border border-blue-200 truncate">
-                  <GraduationCap size={11} className="shrink-0" />
-                  <span className="truncate max-w-[120px] sm:max-w-none">{currentClassName}</span>
-                </span>
-              )}
-            </div>
+            <p className="text-[10px] text-slate-400 font-medium truncate">Learning Hub</p>
           </div>
         </div>
 
         {/* Header Right Actions */}
-        <div className="flex items-center gap-2 sm:gap-2.5 w-full sm:w-auto justify-between sm:justify-end shrink-0">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           <StudentClassSwitcher />
-          <div className="flex items-center gap-1.5">
-            <NotificationBell />
-            <button 
-              onClick={logout}
-              className="flex items-center gap-1.5 bg-white/90 text-slate-600 px-3 py-2 rounded-xl font-semibold text-xs hover:bg-red-50 hover:text-red-600 transition-all border border-slate-200 shadow-2xs hover:shadow-xs cursor-pointer"
-              title="Sign Out"
-            >
-              <LogOut size={13} />
-              <span className="hidden xs:inline">Sign Out</span>
-            </button>
-          </div>
+          <NotificationBell />
+          <button 
+            onClick={logout}
+            className="flex items-center gap-1 p-1.5 sm:px-2.5 sm:py-1.5 bg-white/90 text-slate-600 hover:text-red-600 rounded-xl font-semibold text-xs transition-all border border-slate-200 shadow-2xs hover:shadow-xs cursor-pointer"
+            title="Sign Out"
+          >
+            <LogOut size={13} />
+            <span className="hidden sm:inline">Sign Out</span>
+          </button>
         </div>
       </header>
 
-      {/* Responsive Quick Navigation Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5 mb-5">
+      {/* Responsive Quick Navigation Row (1 row of 4 chips on mobile, full cards on desktop) */}
+      <div className="grid grid-cols-4 gap-1.5 sm:gap-2.5 mb-2.5 sm:mb-4">
         <Link 
           href="/student/resources" 
-          className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white/80 hover:bg-blue-50/70 border border-slate-200/80 hover:border-blue-300 shadow-2xs hover:shadow-xs transition-all group min-w-0"
+          className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-white/85 hover:bg-blue-50/70 border border-slate-200/80 hover:border-blue-300 shadow-2xs hover:shadow-xs transition-all group min-w-0 text-center sm:text-left"
         >
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-            <FolderOpen size={16} />
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+            <FolderOpen size={14} />
           </div>
           <div className="min-w-0 flex-1">
-            <h4 className="font-extrabold text-xs sm:text-sm text-slate-900 group-hover:text-blue-700 truncate">
-              All Subjects
+            <h4 className="font-extrabold text-[11px] sm:text-xs text-slate-900 group-hover:text-blue-700 truncate">
+              Subjects
             </h4>
-            <p className="text-[10px] text-slate-400 font-medium truncate">Notes & PDFs</p>
+            <p className="text-[9px] text-slate-400 font-medium truncate hidden sm:block">Notes & PDFs</p>
           </div>
         </Link>
 
         <Link 
           href="/student/timetable" 
-          className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white/80 hover:bg-purple-50/70 border border-slate-200/80 hover:border-purple-300 shadow-2xs hover:shadow-xs transition-all group min-w-0"
+          className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-white/85 hover:bg-purple-50/70 border border-slate-200/80 hover:border-purple-300 shadow-2xs hover:shadow-xs transition-all group min-w-0 text-center sm:text-left"
         >
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-            <Calendar size={16} />
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+            <Calendar size={14} />
           </div>
           <div className="min-w-0 flex-1">
-            <h4 className="font-extrabold text-xs sm:text-sm text-slate-900 group-hover:text-purple-700 truncate">
+            <h4 className="font-extrabold text-[11px] sm:text-xs text-slate-900 group-hover:text-purple-700 truncate">
               Time-Table
             </h4>
-            <p className="text-[10px] text-slate-400 font-medium truncate">Lectures & Exams</p>
+            <p className="text-[9px] text-slate-400 font-medium truncate hidden sm:block">Lectures & Exams</p>
           </div>
         </Link>
 
         <Link 
           href="/student/events" 
-          className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white/80 hover:bg-emerald-50/70 border border-slate-200/80 hover:border-emerald-300 shadow-2xs hover:shadow-xs transition-all group min-w-0"
+          className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-white/85 hover:bg-emerald-50/70 border border-slate-200/80 hover:border-emerald-300 shadow-2xs hover:shadow-xs transition-all group min-w-0 text-center sm:text-left"
         >
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-            <Camera size={16} />
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+            <Camera size={14} />
           </div>
           <div className="min-w-0 flex-1">
-            <h4 className="font-extrabold text-xs sm:text-sm text-slate-900 group-hover:text-emerald-700 truncate">
-              Events & Media
+            <h4 className="font-extrabold text-[11px] sm:text-xs text-slate-900 group-hover:text-emerald-700 truncate">
+              Media
             </h4>
-            <p className="text-[10px] text-slate-400 font-medium truncate">Drive Photos & Videos</p>
+            <p className="text-[9px] text-slate-400 font-medium truncate hidden sm:block">Drive Albums</p>
           </div>
         </Link>
 
         <Link 
           href="/student/birthdays" 
-          className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white/80 hover:bg-pink-50/70 border border-slate-200/80 hover:border-pink-300 shadow-2xs hover:shadow-xs transition-all group min-w-0"
+          className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-white/85 hover:bg-pink-50/70 border border-slate-200/80 hover:border-pink-300 shadow-2xs hover:shadow-xs transition-all group min-w-0 text-center sm:text-left"
         >
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-pink-100 text-pink-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-            <Cake size={16} />
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-pink-100 text-pink-700 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+            <Cake size={14} />
           </div>
           <div className="min-w-0 flex-1">
-            <h4 className="font-extrabold text-xs sm:text-sm text-slate-900 group-hover:text-pink-700 truncate">
+            <h4 className="font-extrabold text-[11px] sm:text-xs text-slate-900 group-hover:text-pink-700 truncate">
               Birthdays
             </h4>
-            <p className="text-[10px] text-slate-400 font-medium truncate">Wishes & Dates</p>
+            <p className="text-[9px] text-slate-400 font-medium truncate hidden sm:block">Wishes & Dates</p>
           </div>
         </Link>
       </div>

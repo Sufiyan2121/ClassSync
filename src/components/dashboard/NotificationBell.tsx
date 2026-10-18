@@ -22,15 +22,15 @@ export function NotificationBell() {
   return (
     <button 
       onClick={permission === 'granted' ? toggleReminders : requestPermission}
-      className={`flex items-center gap-2 px-3 py-2 rounded-xl font-bold text-sm border shadow-sm transition-all ${
+      className={`flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 rounded-xl font-bold text-xs sm:text-sm border shadow-2xs transition-all cursor-pointer ${
         isEnabled
-          ? "bg-blue-50/50 text-blue-600 border-blue-100 hover:bg-blue-100"
+          ? "bg-blue-50/80 text-blue-600 border-blue-200 hover:bg-blue-100"
           : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100"
       }`}
       title={isEnabled ? "Reminders ON (Click to turn off)" : "Reminders OFF (Click to turn on)"}
     >
-      {isEnabled ? <BellRing size={16} /> : <BellOff size={16} />}
-      <span>{isEnabled ? "Alerts On" : "Alerts Off"}</span>
+      {isEnabled ? <BellRing size={15} /> : <BellOff size={15} />}
+      <span className="hidden sm:inline">{isEnabled ? "Alerts On" : "Alerts Off"}</span>
     </button>
   );
 }
