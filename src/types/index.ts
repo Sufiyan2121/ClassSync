@@ -3,7 +3,7 @@ import { Timestamp } from "firebase/firestore";
 export type UserRole = "ADMIN" | "STUDENT";
 
 export interface UserData {
-  uid: string;
+  uid?: string;
   email: string;
   displayName: string;
   role: UserRole;
@@ -13,6 +13,11 @@ export interface UserData {
   enrolledClasses?: string[];
   createdAt: Timestamp;
   lastActive?: Timestamp;
+  photoURL?: string;
+  gender?: "Male" | "Female" | "Other" | "Prefer not to say" | string;
+  phoneNumber?: string;
+  birthday?: string;
+  bio?: string;
 }
 
 export interface ClassConfig {

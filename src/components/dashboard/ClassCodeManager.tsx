@@ -116,6 +116,11 @@ export function ClassCodeManager() {
       return;
     }
 
+    if (!student.uid) {
+      toast.error("Invalid student ID.");
+      return;
+    }
+
     try {
       await removeStudentFromClass(student.uid, selectedClassCode);
       toast.success(`${student.displayName} removed from class.`);

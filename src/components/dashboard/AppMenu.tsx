@@ -22,17 +22,21 @@ import {
   ShieldCheck, 
   Sparkles,
   ChevronRight,
-  Settings
+  Settings,
+  Pencil,
+  Phone
 } from "lucide-react";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { useTheme, Theme } from "@/components/providers/ThemeProvider";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 import { useClassConfig } from "@/hooks/useClassConfig";
+import { EditProfileModal } from "@/components/dashboard/EditProfileModal";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
 export function AppMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { userData, logout } = useAuth();
   const { theme, setTheme } = useTheme();
@@ -113,20 +117,38 @@ export function AppMenu() {
             {/* User Profile Card */}
             <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-50/80 via-indigo-50/40 to-slate-50/60 dark:from-slate-800/90 dark:via-slate-800/60 dark:to-slate-900/80 border border-blue-100/80 dark:border-slate-700/60 shadow-2xs">
               <div className="flex items-center gap-3.5">
-                <div className="w-13 h-13 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-black text-xl flex items-center justify-center shadow-md shadow-blue-500/25 ring-3 ring-white dark:ring-slate-800 shrink-0">
-                  {userData?.displayName?.charAt(0) || "U"}
+                <div className="w-13 h-13 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-black text-xl flex items-center justify-center shadow-md shadow-blue-500/25 ring-3 ring-white dark:ring-slate-800 shrink-0 overflow-hidden">
+                  {userData?.photoURL ? (
+                    <img src={userData.photoURL} alt={userData.displayName} className="w-full h-full object-cover" />
+                  ) : (
+                    userData?.displayName?.charAt(0) || "U"
+                  )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5">
-                    <h4 className="font-extrabold text-slate-900 dark:text-white text-base truncate">
-                      {userData?.displayName || "Student"}
-                    </h4>
-                    <Sparkles size={14} className="text-yellow-500 shrink-0" />
+                  <div className="flex items-center justify-between gap-1">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <h4 className="font-extrabold text-slate-900 dark:text-white text-base truncate">
+                        {userData?.displayName || "Student"}
+                      </h4>
+                      <Sparkles size={14} className="text-yellow-500 shrink-0" />
+                    </div>
+
+                    {/* Edit Profile Button */}
+                    <button
+                      type="button"
+                      onClick={() => setIsEditProfileOpen(true)}
+                      className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/90 hover:bg-blue-50 dark:bg-slate-700/90 dark:hover:bg-slate-700 text-blue-600 dark:text-blue-400 border border-slate-200/80 dark:border-slate-600 text-[11px] font-bold shadow-2xs transition-all cursor-pointer shrink-0"
+                      title="Edit Profile Details"
+                    >
+                      <Pencil size={11} />
+                      <span>Edit</span>
+                    </button>
                   </div>
                   <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                     {userData?.email || "Signed In"}
                   </p>
                   
+                  {/* Profile Badges: Role, Class, Gender, Phone */}
                   <div className="flex flex-wrap items-center gap-1.5 mt-2">
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-700/60">
                       {userData?.role || "STUDENT"}
@@ -135,6 +157,17 @@ export function AppMenu() {
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-white dark:bg-slate-700/90 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-600 truncate max-w-[170px]">
                         <GraduationCap size={11} className="text-blue-600 shrink-0" />
                         <span className="truncate">{currentClassName}</span>
+                      </span>
+                    )}
+                    {userData?.gender && (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/80 dark:bg-slate-700/80 text-slate-600 dark:text-slate-300 border border-slate-200/60 dark:border-slate-600">
+                        {userData.gender}
+                      </span>
+                    )}
+                    {userData?.phoneNumber && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/80 dark:bg-slate-700/80 text-slate-600 dark:text-slate-300 border border-slate-200/60 dark:border-slate-600">
+                        <Phone size={10} className="text-slate-400" />
+                        <span>{userData.phoneNumber}</span>
                       </span>
                     )}
                   </div>
@@ -323,6 +356,7 @@ export function AppMenu() {
       </button>
 
       {mounted && isOpen && createPortal(menuContent, document.body)}
+      <EditProfileModal isOpen={isEditProfileOpen} onClose={() => setIsEditProfileOpen(false)} />
     </>
   );
 }

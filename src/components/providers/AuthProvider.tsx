@@ -6,13 +6,8 @@ import { auth, db, googleProvider } from '@/lib/firebase/clientApp';
 import { useRouter, usePathname } from 'next/navigation';
 import toast from 'react-hot-toast';
 
-export interface UserData {
-  role: 'ADMIN' | 'STUDENT';
-  email: string;
-  displayName: string;
-  enrolledClassCode?: string;
-  enrolledClasses?: string[];
-}
+import { UserData } from '@/types';
+export type { UserData };
 
 interface AuthContextType {
   user: User | null;
@@ -23,6 +18,7 @@ interface AuthContextType {
   enrollInClass: (code: string) => Promise<void>;
   leaveClass: (code: string) => Promise<void>;
   switchClass: (code: string) => Promise<void>;
+  updateUserProfile: (updates: Partial<UserData>) => Promise<void>;
   refreshUserData: () => Promise<void>;
 }
 
@@ -35,6 +31,7 @@ const AuthContext = createContext<AuthContextType>({
   enrollInClass: async () => {},
   leaveClass: async () => {},
   switchClass: async () => {},
+  updateUserProfile: async () => {},
   refreshUserData: async () => {},
 });
 
@@ -57,7 +54,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } else {
           // Auto-register as student initially
           const newUserData = { 
-            role: 'STUDENT', 
+            uid: firebaseUser.uid,
+            role: 'STUDENT' as const, 
             email: firebaseUser.email!,
             displayName: firebaseUser.displayName || 'Student',
             createdAt: serverTimestamp(),
@@ -65,7 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             remindersEnabled: true
           };
           await setDoc(userRef, newUserData);
-          setUserData(newUserData as UserData);
+          setUserData(newUserData as unknown as UserData);
         }
       } else {
         setUser(null);
@@ -150,8 +148,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUserData(prev => prev ? { ...prev, enrolledClassCode: cleanCode } : null);
   };
 
+  const updateUserProfile = async (updates: Partial<UserData>) => {
+    if (!user) return;
+    const userRef = doc(db, 'users', user.uid);
+    // Protect core immutable fields so user never loses name, email, or role
+    const sanitizedUpdates: Partial<UserData> = {
+      ...updates,
+      email: userData?.email || user.email || "",
+      role: userData?.role || "STUDENT",
+    };
+    if (!sanitizedUpdates.displayName && userData?.displayName) {
+      sanitizedUpdates.displayName = userData.displayName;
+    }
+    await setDoc(userRef, sanitizedUpdates, { merge: true });
+    setUserData(prev => prev ? ({ ...prev, ...sanitizedUpdates } as UserData) : null);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, userData, loading, login, logout, enrollInClass, leaveClass, switchClass, refreshUserData }}>
+    <AuthContext.Provider value={{ user, userData, loading, login, logout, enrollInClass, leaveClass, switchClass, updateUserProfile, refreshUserData }}>
       {children}
     </AuthContext.Provider>
   );

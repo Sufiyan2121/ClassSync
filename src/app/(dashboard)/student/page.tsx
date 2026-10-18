@@ -65,8 +65,12 @@ export default function StudentDashboard() {
         {/* Top on Mobile / Left on Desktop: User Profile Greeting */}
         <div className="flex items-center justify-between sm:justify-start gap-2.5 sm:gap-3.5 min-w-0">
           <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-            <div className="w-9 h-9 sm:w-11 sm:h-11 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-black text-sm sm:text-lg shadow-md shadow-blue-500/20 shrink-0">
-              {userData?.displayName?.charAt(0) || "S"}
+            <div className="w-9 h-9 sm:w-11 sm:h-11 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-black text-sm sm:text-lg shadow-md shadow-blue-500/20 shrink-0 overflow-hidden">
+              {userData?.photoURL ? (
+                <img src={userData.photoURL} alt={userData.displayName} className="w-full h-full object-cover" />
+              ) : (
+                userData?.displayName?.charAt(0) || "S"
+              )}
             </div>
             <div className="min-w-0">
               <h1 className="text-sm sm:text-lg md:text-xl font-extrabold text-slate-900 tracking-tight flex items-center gap-1.5">
