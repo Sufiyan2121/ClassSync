@@ -11,6 +11,7 @@ import Link from "next/link";
 import { ShieldCheck, LogOut, Radio, LayoutGrid, FolderOpen, BookOpen, Calendar, Cake, Camera } from "lucide-react";
 import { NotificationBell } from "@/components/dashboard/NotificationBell";
 import { CalendarWidget } from "@/components/dashboard/CalendarWidget";
+import { AppMenu } from "@/components/dashboard/AppMenu";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase/clientApp";
 import toast from "react-hot-toast";
@@ -93,14 +94,7 @@ export default function AdminDashboard() {
         <div className="flex items-center gap-2 sm:gap-2.5 w-full sm:w-auto justify-between sm:justify-end shrink-0">
           <div className="flex items-center gap-2">
             <NotificationBell />
-            <button 
-              onClick={logout}
-              className="flex items-center gap-1.5 bg-white/90 text-slate-600 px-3 py-2 rounded-xl font-semibold text-xs hover:bg-red-50 hover:text-red-600 transition-all border border-slate-200 shadow-2xs hover:shadow-xs cursor-pointer"
-              title="Sign Out"
-            >
-              <LogOut size={13} />
-              <span className="hidden xs:inline">Sign Out</span>
-            </button>
+            <AppMenu />
           </div>
         </div>
       </header>

@@ -11,6 +11,7 @@ import { Sparkles, LayoutGrid, CheckCircle2, LogOut, FolderOpen, BookOpen, Calen
 import { NotificationBell } from "@/components/dashboard/NotificationBell";
 import { CalendarWidget } from "@/components/dashboard/CalendarWidget";
 import { StudentClassSwitcher } from "@/components/dashboard/StudentClassSwitcher";
+import { AppMenu } from "@/components/dashboard/AppMenu";
 import { useClassConfig } from "@/hooks/useClassConfig";
 
 export default function StudentDashboard() {
@@ -76,14 +77,10 @@ export default function StudentDashboard() {
             </div>
           </div>
 
-          {/* Quick Sign Out icon on mobile (top-right) */}
-          <button 
-            onClick={logout}
-            className="sm:hidden flex items-center justify-center w-8 h-8 bg-white/80 text-slate-500 hover:text-red-600 rounded-xl transition-all border border-slate-200/80 shadow-2xs hover:shadow-xs cursor-pointer shrink-0"
-            title="Sign Out"
-          >
-            <LogOut size={14} />
-          </button>
+          {/* App Menu icon on mobile (top-right) */}
+          <div className="sm:hidden">
+            <AppMenu />
+          </div>
         </div>
 
         {/* Bottom on Mobile / Right on Desktop: Action Controls */}
@@ -91,14 +88,9 @@ export default function StudentDashboard() {
           <StudentClassSwitcher />
           <div className="flex items-center gap-1.5 sm:gap-2">
             <NotificationBell />
-            <button 
-              onClick={logout}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-white/90 text-slate-600 hover:text-red-600 rounded-xl font-semibold text-xs transition-all border border-slate-200 shadow-2xs hover:shadow-xs cursor-pointer"
-              title="Sign Out"
-            >
-              <LogOut size={13} />
-              <span>Sign Out</span>
-            </button>
+            <div className="hidden sm:block">
+              <AppMenu />
+            </div>
           </div>
         </div>
       </header>
