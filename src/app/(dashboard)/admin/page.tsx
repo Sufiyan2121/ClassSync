@@ -64,7 +64,7 @@ export default function AdminDashboard() {
       {/* Top Branding Logo & Tagline (Centered) */}
       <div className="flex flex-col items-center justify-center text-center mb-3 sm:mb-4 pt-1 sm:pt-2 select-none animate-in fade-in slide-in-from-top-4 duration-500">
         <div className="inline-flex items-center justify-center gap-2.5 sm:gap-3">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-blue-600 via-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-sm shadow-blue-500/20 ring-1 ring-blue-500/15 shrink-0">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-600 flex items-center justify-center text-white shadow-sm shadow-emerald-600/20 ring-1 ring-emerald-500/15 shrink-0">
             <BookOpen size={17} className="sm:w-5 sm:h-5 text-white" strokeWidth={2.4} />
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-none">
