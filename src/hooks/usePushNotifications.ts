@@ -6,8 +6,15 @@ import { useAuth } from '@/components/providers/AuthProvider';
 import toast from 'react-hot-toast';
 
 export const usePushNotifications = () => {
-  const { user, userData } = useAuth();
+  const { user, userData, refreshUserData } = useAuth();
   const [permission, setPermission] = useState<NotificationPermission>('default');
+  const [localEnabled, setLocalEnabled] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (userData) {
+      setLocalEnabled((userData as any)?.remindersEnabled !== false);
+    }
+  }, [userData]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
@@ -74,6 +81,10 @@ export const usePushNotifications = () => {
             fcmTokens: arrayUnion(token),
             remindersEnabled: true
           });
+          setLocalEnabled(true);
+          if (refreshUserData) {
+            await refreshUserData();
+          }
           toast.success('Reminders enabled!');
         }
       } else {
@@ -86,27 +97,32 @@ export const usePushNotifications = () => {
   };
 
   const toggleReminders = async () => {
-    if (!user || !userData) return;
-    const newState = !(userData as any).remindersEnabled;
+    if (!user) return;
+    const current = localEnabled !== null ? localEnabled : (userData as any)?.remindersEnabled !== false;
+    const newState = !current;
+    setLocalEnabled(newState);
+
     const userRef = doc(db, 'users', user.uid);
     try {
       await updateDoc(userRef, {
         remindersEnabled: newState
       });
+      if (refreshUserData) {
+        await refreshUserData();
+      }
       if (newState) {
         toast.success('Reminders turned ON');
-        // Always request permission to ensure we get and save a fresh token,
-        // even if permission is already 'granted' in the browser.
         requestPermission();
       } else {
         toast.success('Reminders turned OFF');
       }
     } catch (error) {
+      setLocalEnabled(current); // Rollback on error
       toast.error('Failed to update reminder settings');
     }
   };
 
-  const isEnabled = permission === 'granted' && (userData as any)?.remindersEnabled !== false;
+  const isEnabled = permission === 'granted' && (localEnabled !== null ? localEnabled : (userData as any)?.remindersEnabled !== false);
 
   return { permission, isEnabled, requestPermission, toggleReminders };
 };
