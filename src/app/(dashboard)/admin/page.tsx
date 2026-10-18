@@ -60,15 +60,19 @@ export default function AdminDashboard() {
   return (
     <div className="p-3 md:p-8 max-w-7xl mx-auto min-h-screen overflow-x-hidden w-full">
       
-      {/* Top Branding Logo */}
-      <div className="flex flex-col items-center justify-center text-center mb-4 mt-1 animate-in fade-in slide-in-from-top-4 duration-500">
-        <div className="flex items-center justify-center gap-3 mb-1">
-          <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-xl shadow-blue-500/30 ring-4 ring-white">
-            <BookOpen size={20} strokeWidth={2.5} />
+      {/* Top Branding Logo & Tagline (Centered) */}
+      <div className="flex flex-col items-center justify-center text-center mb-3 sm:mb-4 pt-1 sm:pt-2 select-none animate-in fade-in slide-in-from-top-4 duration-500">
+        <div className="inline-flex items-center justify-center gap-2.5 sm:gap-3">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-blue-600 via-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-sm shadow-blue-500/20 ring-1 ring-blue-500/15 shrink-0">
+            <BookOpen size={17} className="sm:w-5 sm:h-5 text-white" strokeWidth={2.4} />
           </div>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight drop-shadow-sm">ClassSync</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-none">
+            ClassSync
+          </h2>
         </div>
-        <p className="text-slate-500 text-xs sm:text-sm font-medium mt-1 max-w-sm mx-auto">Bridging the gap between classrooms and students.</p>
+        <p className="text-slate-500 text-xs sm:text-sm font-medium mt-1.5 sm:mt-2 max-w-sm mx-auto tracking-normal">
+          Bridging the gap between classrooms and students.
+        </p>
       </div>
 
       {/* Header with Glassmorphism */}
