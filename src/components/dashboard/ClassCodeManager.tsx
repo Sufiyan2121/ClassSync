@@ -214,22 +214,22 @@ export function ClassCodeManager() {
   return (
     <>
       {/* Top Banner on Admin Dashboard */}
-      <div className="mb-6 glass rounded-2xl p-4 md:p-5 border border-slate-200/60 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-gradient-to-r from-blue-50/60 via-indigo-50/40 to-white/70">
+      <div className="mb-6 glass rounded-2xl p-4 md:p-5 border border-stone-200/60 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-gradient-to-r from-emerald-50/70 via-teal-50/40 to-white/70">
         <div className="flex items-center gap-3.5 min-w-0">
-          <div className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white flex items-center justify-center shadow-md shadow-blue-500/20 shrink-0">
+          <div className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-600 text-white flex items-center justify-center shadow-md shadow-emerald-700/20 shrink-0">
             <KeyRound size={20} />
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Class Code:</span>
-              <span className="font-mono text-base md:text-lg font-black text-slate-900 bg-white px-3 py-0.5 rounded-lg border border-slate-200/80 shadow-xs tracking-widest">
+              <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">Class Code:</span>
+              <span className="font-mono text-base md:text-lg font-black text-stone-900 bg-white px-3 py-0.5 rounded-lg border border-stone-200/80 shadow-xs tracking-widest">
                 {classConfig.classCode}
               </span>
-              <span className="text-xs font-semibold text-blue-700 bg-blue-100/60 px-2.5 py-0.5 rounded-full border border-blue-200/60">
+              <span className="text-xs font-semibold text-emerald-800 bg-emerald-100/70 px-2.5 py-0.5 rounded-full border border-emerald-200/80">
                 {classConfig.className || "Active Class"}
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-1 font-medium leading-tight">
+            <p className="text-xs text-stone-500 mt-1 font-medium leading-tight">
               Share this code with your students to grant them access to announcements, timetables, and subjects.
             </p>
           </div>
@@ -238,7 +238,7 @@ export function ClassCodeManager() {
         <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
           <button
             onClick={() => handleCopy()}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 shadow-xs hover:shadow-sm transition-all"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2 bg-white hover:bg-stone-50 text-stone-700 font-bold text-xs rounded-xl border border-stone-200 shadow-xs hover:shadow-sm transition-all"
             title="Copy Code"
           >
             {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
@@ -249,7 +249,7 @@ export function ClassCodeManager() {
               setSelectedClassCode(classConfig.classCode);
               setIsModalOpen(true);
             }}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2 bg-slate-900 hover:bg-blue-600 text-white font-bold text-xs rounded-xl shadow-xs hover:shadow-md transition-all"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2 bg-stone-900 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs hover:shadow-md transition-all"
             title="Manage Code & Enrolled Students"
           >
             <Users size={14} />
@@ -273,46 +273,46 @@ export function ClassCodeManager() {
           <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden border border-slate-100 max-h-[85dvh] sm:max-h-[88vh] flex flex-col my-auto relative animate-in zoom-in-95 duration-200">
             
             {/* Modal Header */}
-            <div className="flex justify-between items-center px-6 py-5 border-b border-slate-100 shrink-0">
+            <div className="flex justify-between items-center px-6 py-5 border-b border-stone-100 shrink-0">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
+                <div className="p-2.5 bg-emerald-100 text-emerald-850 rounded-xl">
                   <KeyRound size={22} />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">Classroom Management</h2>
-                  <p className="text-xs text-slate-500">Manage enrolled students and class codes</p>
+                  <h2 className="text-lg font-bold text-stone-900">Classroom Management</h2>
+                  <p className="text-xs text-stone-500">Manage enrolled students and class codes</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+                className="p-2 text-stone-400 hover:text-stone-600 hover:bg-stone-100 rounded-full transition-colors cursor-pointer"
               >
                 <X size={18} />
               </button>
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-slate-100 px-6 pt-2 shrink-0 bg-slate-50/50">
+            <div className="flex border-b border-stone-100 px-6 pt-2 shrink-0 bg-stone-50/50">
               <button
                 onClick={() => setActiveTab("students")}
-                className={`flex items-center gap-2 py-3 px-4 text-xs font-bold border-b-2 transition-all ${
+                className={`flex items-center gap-2 py-3 px-4 text-xs font-bold border-b-2 transition-all cursor-pointer ${
                   activeTab === "students"
-                    ? "border-blue-600 text-blue-600"
-                    : "border-transparent text-slate-500 hover:text-slate-800"
+                    ? "border-emerald-700 text-emerald-900"
+                    : "border-transparent text-stone-500 hover:text-stone-800"
                 }`}
               >
                 <Users size={15} />
                 <span>Enrolled Students</span>
-                <span className="bg-blue-100 text-blue-700 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full">
+                <span className="bg-emerald-100 text-emerald-850 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full border border-emerald-200/60">
                   {enrolledStudents.length}
                 </span>
               </button>
               <button
                 onClick={() => setActiveTab("classes")}
-                className={`flex items-center gap-2 py-3 px-4 text-xs font-bold border-b-2 transition-all ${
+                className={`flex items-center gap-2 py-3 px-4 text-xs font-bold border-b-2 transition-all cursor-pointer ${
                   activeTab === "classes"
-                    ? "border-blue-600 text-blue-600"
-                    : "border-transparent text-slate-500 hover:text-slate-800"
+                    ? "border-emerald-700 text-emerald-900"
+                    : "border-transparent text-stone-500 hover:text-stone-800"
                 }`}
               >
                 <KeyRound size={15} />
@@ -330,11 +330,11 @@ export function ClassCodeManager() {
                   {/* Class Picker & Search */}
                   <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between pb-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-slate-500">Class:</span>
+                      <span className="text-xs font-bold text-stone-500">Class:</span>
                       <select
                         value={selectedClassCode}
                         onChange={(e) => setSelectedClassCode(e.target.value)}
-                        className="bg-slate-50 border border-slate-200 text-slate-900 font-bold text-xs rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                        className="bg-stone-50 border border-stone-200 text-stone-900 font-bold text-xs rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 cursor-pointer"
                       >
                         {classes.map((c) => (
                           <option key={c.code} value={c.code}>
@@ -345,27 +345,27 @@ export function ClassCodeManager() {
                     </div>
 
                     <div className="relative flex-1 sm:max-w-xs">
-                      <Search size={14} className="absolute left-3 top-3 text-slate-400" />
+                      <Search size={14} className="absolute left-3 top-3 text-stone-400" />
                       <input
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Search student by name or email..."
-                        className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none"
+                        className="w-full pl-9 pr-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
                       />
                     </div>
                   </div>
 
                   {/* Student List */}
                   {studentsLoading ? (
-                    <div className="py-12 text-center text-slate-400 text-xs animate-pulse">
+                    <div className="py-12 text-center text-stone-400 text-xs animate-pulse">
                       Loading enrolled students...
                     </div>
                   ) : filteredStudents.length === 0 ? (
-                    <div className="text-center py-12 px-4 border-2 border-dashed border-slate-100 rounded-2xl bg-slate-50/50">
-                      <Users size={36} className="text-slate-300 mx-auto mb-2" />
-                      <p className="font-bold text-slate-700 text-sm">No students found</p>
-                      <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+                    <div className="text-center py-12 px-4 border-2 border-dashed border-stone-200/80 rounded-2xl bg-stone-50/50">
+                      <Users size={36} className="text-stone-300 mx-auto mb-2" />
+                      <p className="font-bold text-stone-700 text-sm">No students found</p>
+                      <p className="text-xs text-stone-400 mt-1 max-w-sm mx-auto">
                         {searchQuery 
                           ? "No student matches your search." 
                           : `Share the code "${selectedClassCode}" with your students so they can join this class.`}
@@ -376,27 +376,27 @@ export function ClassCodeManager() {
                       {filteredStudents.map((student) => (
                         <div
                           key={student.uid}
-                          className="flex items-center justify-between p-3.5 bg-slate-50/70 hover:bg-slate-50 rounded-2xl border border-slate-200/60 transition-colors"
+                          className="flex items-center justify-between p-3.5 bg-stone-50/70 hover:bg-stone-50 rounded-2xl border border-stone-200/60 transition-colors"
                         >
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className="w-10 h-10 rounded-xl bg-blue-600 text-white font-bold flex items-center justify-center shrink-0 shadow-xs">
+                            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-600 text-white font-bold flex items-center justify-center shrink-0 shadow-xs">
                               {student.displayName?.charAt(0) || "S"}
                             </div>
                             <div className="min-w-0">
-                              <h4 className="font-bold text-slate-900 text-xs sm:text-sm truncate">
+                              <h4 className="font-bold text-stone-900 text-xs sm:text-sm truncate">
                                 {student.displayName || "Student"}
                               </h4>
-                              <p className="text-[11px] text-slate-500 truncate">{student.email}</p>
+                              <p className="text-[11px] text-stone-500 truncate">{student.email}</p>
                             </div>
                           </div>
 
                           <div className="flex items-center gap-2 shrink-0 ml-3">
-                            <span className="hidden sm:inline-block text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                            <span className="hidden sm:inline-block text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/80">
                               Enrolled
                             </span>
                             <button
                               onClick={() => handleRemoveStudent(student)}
-                              className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+                              className="p-2 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
                               title={`Remove ${student.displayName} from this class`}
                             >
                               <UserX size={16} />
@@ -416,48 +416,48 @@ export function ClassCodeManager() {
                   {/* Create Class Button / Form */}
                   {!isCreatingNew ? (
                     <div className="flex justify-between items-center pb-2">
-                      <p className="text-xs text-slate-500 font-medium">
+                      <p className="text-xs text-stone-500 font-medium">
                         Manage your active classes and create additional codes for different divisions or batches.
                       </p>
                       <button
                         onClick={() => setIsCreatingNew(true)}
-                        className="flex items-center gap-1.5 px-3 py-2 bg-slate-900 hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition-all shadow-sm shrink-0"
+                        className="flex items-center gap-1.5 px-3 py-2 bg-stone-900 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-all shadow-xs shrink-0 cursor-pointer"
                       >
                         <Plus size={14} />
                         <span>Add Class</span>
                       </button>
                     </div>
                   ) : (
-                    <form onSubmit={handleCreateNewClass} className="p-4 bg-blue-50/50 rounded-2xl border border-blue-200 space-y-3">
+                    <form onSubmit={handleCreateNewClass} className="p-4 bg-emerald-50/70 rounded-2xl border border-emerald-200/90 space-y-3">
                       <div className="flex justify-between items-center">
-                        <h4 className="font-bold text-xs text-blue-900 flex items-center gap-1.5">
-                          <GraduationCap size={16} /> Create New Class
+                        <h4 className="font-bold text-xs text-emerald-900 flex items-center gap-1.5">
+                          <GraduationCap size={16} className="text-emerald-700" /> Create New Class
                         </h4>
-                        <button type="button" onClick={() => setIsCreatingNew(false)} className="text-slate-400 hover:text-slate-600">
+                        <button type="button" onClick={() => setIsCreatingNew(false)} className="text-stone-400 hover:text-stone-600 cursor-pointer">
                           <X size={16} />
                         </button>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-[11px] font-bold text-slate-600 mb-1">Class Code</label>
+                          <label className="block text-[11px] font-bold text-stone-600 mb-1">Class Code</label>
                           <input
                             type="text"
                             value={newCode}
                             onChange={(e) => setNewCode(e.target.value.toUpperCase())}
                             placeholder="e.g. MCA-DIV-B"
                             maxLength={15}
-                            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl font-mono text-center font-bold text-xs uppercase outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 bg-white border border-stone-200 rounded-xl font-mono text-center font-bold text-xs uppercase outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600"
                             required
                           />
                         </div>
                         <div>
-                          <label className="block text-[11px] font-bold text-slate-600 mb-1">Class Name</label>
+                          <label className="block text-[11px] font-bold text-stone-600 mb-1">Class Name</label>
                           <input
                             type="text"
                             value={newName}
                             onChange={(e) => setNewName(e.target.value)}
                             placeholder="e.g. MCA 1st Year - Div B"
-                            className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 bg-white border border-stone-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-stone-900"
                             required
                           />
                         </div>
@@ -465,7 +465,7 @@ export function ClassCodeManager() {
                       <button
                         type="submit"
                         disabled={actionLoading}
-                        className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all shadow-xs"
+                        className="w-full py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition-all shadow-xs cursor-pointer"
                       >
                         {actionLoading ? "Creating..." : "Save Class"}
                       </button>
@@ -483,26 +483,26 @@ export function ClassCodeManager() {
                           <form
                             key={c.code}
                             onSubmit={(e) => handleSaveEditClass(e, c.code)}
-                            className="p-4 bg-white rounded-2xl border-2 border-blue-500 shadow-sm space-y-3"
+                            className="p-4 bg-white rounded-2xl border-2 border-emerald-600 shadow-sm space-y-3"
                           >
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                               <div>
-                                <label className="block text-[10px] font-bold text-slate-500 uppercase">Code</label>
+                                <label className="block text-[10px] font-bold text-stone-500 uppercase">Code</label>
                                 <input
                                   type="text"
                                   value={editCode}
                                   onChange={(e) => setEditCode(e.target.value.toUpperCase())}
-                                  className="w-full px-2.5 py-1.5 border rounded-lg font-mono text-center font-bold text-xs uppercase"
+                                  className="w-full px-2.5 py-1.5 border border-stone-200 rounded-lg font-mono text-center font-bold text-xs uppercase outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600"
                                   required
                                 />
                               </div>
                               <div>
-                                <label className="block text-[10px] font-bold text-slate-500 uppercase">Name</label>
+                                <label className="block text-[10px] font-bold text-stone-500 uppercase">Name</label>
                                 <input
                                   type="text"
                                   value={editName}
                                   onChange={(e) => setEditName(e.target.value)}
-                                  className="w-full px-2.5 py-1.5 border rounded-lg font-medium text-xs"
+                                  className="w-full px-2.5 py-1.5 border border-stone-200 rounded-lg font-medium text-xs text-stone-900 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600"
                                   required
                                 />
                               </div>
@@ -511,13 +511,13 @@ export function ClassCodeManager() {
                               <button
                                 type="button"
                                 onClick={() => setIsEditingClass(null)}
-                                className="flex-1 py-1.5 bg-slate-100 text-slate-600 text-xs font-bold rounded-lg"
+                                className="flex-1 py-1.5 bg-stone-100 text-stone-600 text-xs font-bold rounded-lg hover:bg-stone-200 transition-colors cursor-pointer"
                               >
                                 Cancel
                               </button>
                               <button
                                 type="submit"
-                                className="flex-1 py-1.5 bg-slate-900 text-white text-xs font-bold rounded-lg"
+                                className="flex-1 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-lg transition-colors cursor-pointer"
                               >
                                 Save
                               </button>
@@ -529,18 +529,18 @@ export function ClassCodeManager() {
                       return (
                         <div
                           key={c.code}
-                          className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-all"
+                          className="flex items-center justify-between p-4 bg-stone-50 rounded-2xl border border-stone-200/60 hover:border-stone-300 transition-all"
                         >
                           <div className="min-w-0 pr-3">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="font-mono font-black text-sm text-slate-900 bg-white px-2.5 py-0.5 rounded-lg border border-slate-200">
+                              <span className="font-mono font-black text-sm text-stone-900 bg-white px-2.5 py-0.5 rounded-lg border border-stone-200">
                                 {c.code}
                               </span>
-                              <span className="font-bold text-xs text-slate-800 truncate">
+                              <span className="font-bold text-xs text-stone-800 truncate">
                                 {c.name}
                               </span>
                               {isCurrentPrimary && (
-                                <span className="text-[10px] font-extrabold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">
+                                <span className="text-[10px] font-extrabold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-200/60">
                                   Primary
                                 </span>
                               )}
@@ -550,7 +550,7 @@ export function ClassCodeManager() {
                           <div className="flex items-center gap-1.5 shrink-0">
                             <button
                               onClick={() => handleCopy(c.code)}
-                              className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              className="p-2 text-stone-400 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors cursor-pointer"
                               title="Copy Code"
                             >
                               <Copy size={15} />
@@ -561,7 +561,7 @@ export function ClassCodeManager() {
                                 setEditCode(c.code);
                                 setEditName(c.name);
                               }}
-                              className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-lg transition-colors"
+                              className="p-2 text-stone-400 hover:text-stone-700 hover:bg-stone-200 rounded-lg transition-colors cursor-pointer"
                               title="Edit Class"
                             >
                               <Pencil size={15} />
@@ -569,7 +569,7 @@ export function ClassCodeManager() {
                             {classes.length > 1 && (
                               <button
                                 onClick={() => handleDeleteClass(c.code)}
-                                className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                className="p-2 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
                                 title="Delete Class"
                               >
                                 <Trash2 size={15} />

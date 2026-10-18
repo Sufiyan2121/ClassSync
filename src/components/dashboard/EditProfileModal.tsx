@@ -165,7 +165,7 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 flex items-center justify-center font-bold">
               <User size={16} />
             </div>
             <div>
@@ -189,10 +189,10 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
         <form onSubmit={handleSubmit} className="p-6 space-y-5 overflow-y-auto">
           
           {/* Profile Picture Upload Section */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
+          <div className="flex flex-col sm:flex-row items-center gap-4 p-4 rounded-2xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200/70 dark:border-stone-700/60">
             {/* Avatar Preview */}
             <div className="relative group shrink-0">
-              <div className="w-20 h-20 rounded-2xl overflow-hidden bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-black text-2xl flex items-center justify-center shadow-md shadow-blue-500/20 ring-4 ring-white dark:ring-slate-800">
+              <div className="w-20 h-20 rounded-2xl overflow-hidden bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-600 text-white font-black text-2xl flex items-center justify-center shadow-md shadow-emerald-700/20 ring-4 ring-white dark:ring-stone-800">
                 {photoURL ? (
                   <img src={photoURL} alt="Profile" className="w-full h-full object-cover" />
                 ) : (
@@ -204,7 +204,7 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploading}
-                className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-md hover:bg-blue-700 transition-colors cursor-pointer"
+                className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-md hover:bg-emerald-700 transition-colors cursor-pointer"
                 title="Change Photo"
               >
                 <Camera size={14} />
@@ -226,7 +226,7 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isUploading}
-                  className="px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-2xs transition-all cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xs transition-all cursor-pointer"
                 >
                   {isUploading ? "Processing..." : "Upload New Photo"}
                 </button>
@@ -265,7 +265,7 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Sufiyan Shaikh"
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all"
                 />
               </div>
             </div>
@@ -308,7 +308,7 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer"
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all cursor-pointer"
                 >
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
@@ -319,11 +319,11 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
 
               {/* Phone Number */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1.5">
                   Phone Number
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
                     <Phone size={15} />
                   </div>
                   <input
@@ -331,7 +331,7 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     placeholder="+91 98765 43210"
-                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all"
                   />
                 </div>
               </div>
@@ -340,18 +340,18 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
 
             {/* Birthday / Date of Birth */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1.5">
                 Date of Birth (Optional)
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-stone-400">
                   <Calendar size={15} />
                 </div>
                 <input
                   type="date"
                   value={birthday}
                   onChange={(e) => setBirthday(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all"
                 />
               </div>
             </div>
@@ -359,19 +359,19 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2.5">
+          <div className="pt-3 border-t border-stone-100 dark:border-stone-800 flex items-center justify-end gap-2.5">
             <button
               type="button"
               onClick={onClose}
               disabled={isSaving}
-              className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer"
+              className="px-4 py-2.5 rounded-xl text-xs font-bold text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-all cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSaving || isUploading}
-              className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-500/20 transition-all cursor-pointer disabled:opacity-50"
+              className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-emerald-600 hover:bg-emerald-700 shadow-md shadow-emerald-600/20 transition-all cursor-pointer disabled:opacity-50"
             >
               {isSaving ? (
                 <>

@@ -85,15 +85,15 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
       
       {/* Calendar Header */}
       <div className="flex items-center justify-between">
-        <h3 className="font-extrabold text-slate-900 tracking-tight flex items-center gap-1.5 sm:gap-2 text-xs sm:text-base">
-          <CalendarIcon className="text-blue-500" size={16} />
+        <h3 className="font-extrabold text-stone-900 tracking-tight flex items-center gap-1.5 sm:gap-2 text-xs sm:text-base">
+          <CalendarIcon className="text-emerald-700" size={16} />
           <span>{format(currentMonth, "MMMM yyyy")}</span>
         </h3>
 
         <div className="flex items-center gap-1">
           <button 
             onClick={prevMonth} 
-            className="p-1 sm:p-1.5 rounded-lg sm:rounded-xl hover:bg-slate-100 text-slate-600 transition-colors cursor-pointer"
+            className="p-1 sm:p-1.5 rounded-lg sm:rounded-xl hover:bg-stone-100 text-stone-600 transition-colors cursor-pointer"
             title="Previous Month"
           >
             <ChevronLeft size={16} />
@@ -104,13 +104,13 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
               setCurrentMonth(now);
               setSelectedDate(now);
             }}
-            className="px-2 py-0.5 text-[10px] sm:text-[11px] font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors cursor-pointer"
+            className="px-2 py-0.5 text-[10px] sm:text-[11px] font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 rounded-lg transition-colors cursor-pointer"
           >
             Today
           </button>
           <button 
             onClick={nextMonth} 
-            className="p-1 sm:p-1.5 rounded-lg sm:rounded-xl hover:bg-slate-100 text-slate-600 transition-colors cursor-pointer"
+            className="p-1 sm:p-1.5 rounded-lg sm:rounded-xl hover:bg-stone-100 text-stone-600 transition-colors cursor-pointer"
             title="Next Month"
           >
             <ChevronRight size={16} />
@@ -147,14 +147,14 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
               onClick={() => setSelectedDate(day)}
               className={`aspect-square flex flex-col items-center justify-center rounded-xl text-xs sm:text-sm font-bold transition-all relative group cursor-pointer
                 ${!isCurrentMonth ? "text-slate-300" : "text-slate-700"}
-                ${!hasAnyEvent && !isDayToday && !isSelected ? "hover:bg-slate-100" : ""}
-                ${hasAnyEvent && !isDayToday && !isSelected ? "bg-slate-50 ring-1 ring-slate-200/80 shadow-2xs" : ""}
-                ${isSelected && !isDayToday ? "ring-2 ring-blue-500 bg-blue-50/80 text-blue-900" : ""}
-                ${isDayToday ? "bg-slate-900 text-white shadow-md ring-2 ring-slate-900/20" : ""}
+                ${!hasAnyEvent && !isDayToday && !isSelected ? "hover:bg-stone-100" : ""}
+                ${hasAnyEvent && !isDayToday && !isSelected ? "bg-stone-50/80 ring-1 ring-stone-200/80 shadow-2xs" : ""}
+                ${isSelected && !isDayToday ? "ring-2 ring-emerald-600 bg-emerald-50/90 text-emerald-950 font-black" : ""}
+                ${isDayToday ? "bg-stone-900 text-white shadow-md ring-2 ring-stone-900/20" : ""}
                 ${hasBirthday && !isDayToday ? "bg-gradient-to-b from-pink-50/70 to-purple-50/70 ring-1 ring-pink-300/80" : ""}
               `}
             >
-              <span className={`z-10 relative ${hasAnyEvent && !isDayToday && !isSelected ? "text-slate-900" : ""}`}>
+              <span className={`z-10 relative ${hasAnyEvent && !isDayToday && !isSelected ? "text-stone-900" : ""}`}>
                 {format(day, "d")}
               </span>
               
@@ -171,7 +171,7 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
                     <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${isDayToday ? "bg-white" : "bg-amber-500"} shadow-2xs`} />
                   )}
                   {events.hasAnnouncement && (
-                    <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${isDayToday ? "bg-white" : "bg-blue-500"} shadow-2xs`} />
+                    <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${isDayToday ? "bg-white" : "bg-emerald-600"} shadow-2xs`} />
                   )}
                 </div>
               )}
@@ -211,14 +211,14 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
 
       {/* Selected Date Detail View (if selected date is different from today or has events) */}
       {selectedDate && !isToday(selectedDate) && selectedEvents && selectedEvents.count > 0 && (
-        <div className="p-2.5 sm:p-3 rounded-2xl bg-slate-50 border border-slate-200/70 text-xs">
+        <div className="p-2.5 sm:p-3 rounded-2xl bg-stone-50 border border-stone-200/70 text-xs">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="font-extrabold text-slate-700 flex items-center gap-1.5">
-              <CalendarIcon size={13} className="text-blue-600" />
+            <span className="font-extrabold text-stone-700 flex items-center gap-1.5">
+              <CalendarIcon size={13} className="text-emerald-700" />
               {format(selectedDate, "EEE, MMM d, yyyy")}
             </span>
             {isTomorrow(selectedDate) && (
-              <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200">
+              <span className="text-[10px] font-bold text-teal-800 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200/70">
                 Tomorrow
               </span>
             )}
@@ -239,19 +239,19 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
 
       {/* Tomorrow Birthday Heads-Up (If no birthday today, but tomorrow has one) */}
       {todaysBirthdays.length === 0 && tomorrowsBirthdays.length > 0 && (
-        <div className="p-2.5 sm:p-3 rounded-2xl bg-indigo-50/70 border border-indigo-200/70 flex items-center justify-between gap-2">
+        <div className="p-2.5 sm:p-3 rounded-2xl bg-emerald-50/80 border border-emerald-200/80 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <span className="text-base">🎈</span>
             <div className="min-w-0">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600">Tomorrow&apos;s Birthday</span>
-              <p className="text-xs font-bold text-slate-800 truncate">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700">Tomorrow&apos;s Birthday</span>
+              <p className="text-xs font-bold text-stone-800 truncate">
                 It&apos;s {tomorrowsBirthdays.map(b => b.name).join(" & ")}&apos;s birthday tomorrow! 🎂
               </p>
             </div>
           </div>
           <Link
             href={birthdaysPath}
-            className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 shrink-0"
+            className="text-[10px] font-bold text-emerald-700 hover:text-emerald-900 shrink-0"
           >
             View
           </Link>
@@ -259,12 +259,12 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
       )}
 
       {/* Legend & Birthdays Page Link */}
-      <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-xs font-bold text-slate-500">
+      <div className="pt-2 border-t border-stone-200/60 flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-xs font-bold text-stone-500">
         <div className="flex items-center gap-3 flex-wrap">
           <div className="flex items-center gap-1"><span className="text-xs">🎂</span> Birthday</div>
           <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-red-500"></div> Exam</div>
           <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-amber-500"></div> Assignment</div>
-          <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-blue-500"></div> Notice</div>
+          <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-emerald-600"></div> Notice</div>
         </div>
         <Link 
           href={birthdaysPath}

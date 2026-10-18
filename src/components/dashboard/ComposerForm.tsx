@@ -110,17 +110,17 @@ export function ComposerForm({ editingPost, onCancelEdit }: ComposerFormProps) {
   };
 
   return (
-    <div className="glass rounded-3xl shadow-sm border border-slate-200/50 p-6 sm:p-8 mb-8 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
+    <div className="glass rounded-3xl shadow-sm border border-stone-200/70 p-6 sm:p-8 mb-8 relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500"></div>
       
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-2xl font-bold text-stone-900 tracking-tight">
           {editingPost ? "Edit Broadcast" : "Create Broadcast"}
         </h2>
         {editingPost && (
           <button 
             onClick={onCancelEdit}
-            className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
+            className="p-2 text-stone-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
           >
             <X size={20} />
           </button>
@@ -129,15 +129,15 @@ export function ComposerForm({ editingPost, onCancelEdit }: ComposerFormProps) {
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block text-sm font-bold text-slate-700 mb-3">Broadcast Type</label>
+          <label className="block text-sm font-bold text-stone-700 mb-3">Broadcast Type</label>
           <div className="grid grid-cols-2 gap-3">
             {(["ANNOUNCEMENT", "ASSIGNMENT", "EXAM"] as PostType[]).map((t) => (
               <label 
                 key={t} 
                 className={`flex items-center justify-center py-3 px-2 rounded-xl border-2 cursor-pointer transition-all ${
                   type === t 
-                    ? "border-blue-600 bg-blue-50 text-blue-700 font-bold" 
-                    : "border-slate-100 bg-white text-slate-600 hover:border-slate-200 hover:bg-slate-50 font-medium"
+                    ? "border-emerald-600 bg-emerald-50 text-emerald-800 font-bold shadow-xs" 
+                    : "border-stone-200/90 bg-white text-stone-600 hover:border-emerald-200 hover:bg-stone-50 font-medium"
                 }`}
               >
                 <input
@@ -157,8 +157,8 @@ export function ComposerForm({ editingPost, onCancelEdit }: ComposerFormProps) {
         </div>
 
         <div>
-          <label htmlFor="title" className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-            <Type size={16} className="text-slate-400" /> Title
+          <label htmlFor="title" className="flex items-center gap-2 text-sm font-bold text-stone-700 mb-2">
+            <Type size={16} className="text-stone-400" /> Title
           </label>
           <input
             id="title"
@@ -166,15 +166,15 @@ export function ComposerForm({ editingPost, onCancelEdit }: ComposerFormProps) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Midterm Exam Schedule"
-            className="w-full px-4 py-3 bg-white/80 backdrop-blur border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all font-medium text-slate-900 placeholder:text-slate-400 shadow-sm"
+            className="w-full px-4 py-3 bg-white/90 backdrop-blur border border-stone-200/90 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all font-medium text-stone-900 placeholder:text-stone-400 shadow-xs outline-none"
             maxLength={100}
             required
           />
         </div>
 
         <div>
-          <label htmlFor="description" className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-            <AlignLeft size={16} className="text-slate-400" /> Details
+          <label htmlFor="description" className="flex items-center gap-2 text-sm font-bold text-stone-700 mb-2">
+            <AlignLeft size={16} className="text-stone-400" /> Details
           </label>
           <textarea
             id="description"
@@ -182,32 +182,32 @@ export function ComposerForm({ editingPost, onCancelEdit }: ComposerFormProps) {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Write the specifics here..."
             rows={5}
-            className="w-full px-4 py-3 bg-white/80 backdrop-blur border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all text-slate-900 placeholder:text-slate-400 resize-y shadow-sm"
+            className="w-full px-4 py-3 bg-white/90 backdrop-blur border border-stone-200/90 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all text-stone-900 placeholder:text-stone-400 resize-y shadow-xs outline-none"
             required
           />
         </div>
 
         <div className="animate-in fade-in slide-in-from-top-4 duration-300">
-          <label htmlFor="dueDate" className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
-            <CalendarIcon size={16} className="text-orange-500" /> Expiry / Due Date
-            {type === "ANNOUNCEMENT" && <span className="text-slate-400 font-normal text-xs ml-1">(Optional)</span>}
+          <label htmlFor="dueDate" className="flex items-center gap-2 text-sm font-bold text-stone-700 mb-2">
+            <CalendarIcon size={16} className="text-amber-600" /> Expiry / Due Date
+            {type === "ANNOUNCEMENT" && <span className="text-stone-400 font-normal text-xs ml-1">(Optional)</span>}
           </label>
           <input
             id="dueDate"
             type="datetime-local"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
-            className="w-full px-4 py-3 bg-white/80 backdrop-blur border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all font-medium text-slate-900 shadow-sm"
+            className="w-full px-4 py-3 bg-white/90 backdrop-blur border border-stone-200/90 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all font-medium text-stone-900 shadow-xs outline-none"
             required={type !== "ANNOUNCEMENT"}
           />
-          <p className="text-xs text-slate-500 mt-1.5 ml-1">The post will automatically disappear after this date.</p>
+          <p className="text-xs text-stone-500 mt-1.5 ml-1">The post will automatically disappear after this date.</p>
         </div>
 
         <div className="pt-4">
           <button
             type="submit"
             disabled={loading}
-            className={`w-full flex items-center justify-center gap-2 py-3.5 px-4 bg-slate-900 text-white font-bold rounded-xl shadow-lg shadow-slate-900/20 transition-all hover:bg-blue-600 hover:shadow-blue-600/30 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${loading ? "opacity-70 cursor-not-allowed transform-none" : ""}`}
+            className={`w-full flex items-center justify-center gap-2 py-3.5 px-4 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl shadow-md shadow-emerald-950/20 transition-all hover:shadow-emerald-700/25 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${loading ? "opacity-70 cursor-not-allowed transform-none" : "cursor-pointer"}`}
           >
             {loading ? "Broadcasting..." : (
               <>

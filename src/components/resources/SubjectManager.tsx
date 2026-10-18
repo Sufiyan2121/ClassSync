@@ -239,28 +239,28 @@ export function AdminResources() {
 
   return (
     <div className="p-3 sm:p-6 md:p-8 max-w-7xl mx-auto min-h-screen w-full overflow-x-hidden">
-      <header className="flex justify-between items-center mb-5 sm:mb-8 glass px-4 py-3 sm:px-6 sm:py-4 rounded-3xl shadow-xs border border-slate-200/50">
+      <header className="flex justify-between items-center mb-5 sm:mb-8 glass px-4 py-3 sm:px-6 sm:py-4 rounded-3xl shadow-xs border border-stone-200/70">
         <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-          <Link href="/admin" className="p-2 hover:bg-slate-100 rounded-full transition-colors shrink-0">
-            <ArrowLeft size={22} className="text-slate-600" />
+          <Link href="/admin" className="p-2 hover:bg-stone-100 rounded-full transition-colors shrink-0">
+            <ArrowLeft size={22} className="text-stone-600" />
           </Link>
           <div className="min-w-0">
-            <h1 className="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight truncate">
+            <h1 className="text-lg sm:text-2xl font-extrabold text-stone-900 tracking-tight truncate">
               Resources Manager
             </h1>
-            <p className="text-slate-500 text-xs sm:text-sm font-medium truncate">Organize subjects, syllabus, notes, and PDFs</p>
+            <p className="text-stone-500 text-xs sm:text-sm font-medium truncate">Organize subjects, syllabus, notes, and PDFs</p>
           </div>
         </div>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Left Col: Subjects list */}
-        <div className="lg:col-span-1 glass rounded-3xl p-6 h-fit border border-slate-200/50">
+        <div className="lg:col-span-1 glass rounded-3xl p-6 h-fit border border-stone-200/70">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-bold text-slate-900 flex items-center gap-2">
-              <Folder size={18} className="text-blue-500"/> Subjects
+            <h2 className="font-bold text-stone-900 flex items-center gap-2">
+              <Folder size={18} className="text-emerald-700"/> Subjects
             </h2>
-            <span className="text-xs bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-full">
+            <span className="text-xs bg-stone-100 text-stone-700 font-bold px-2 py-0.5 rounded-full border border-stone-200/60">
               {subjects.length}
             </span>
           </div>
@@ -273,12 +273,12 @@ export function AdminResources() {
               onChange={e => setNewSubjectName(e.target.value)}
               placeholder="New Subject..." 
               disabled={isSubjectActionLoading}
-              className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-medium text-slate-900 placeholder:text-slate-400 bg-white"
+              className="w-full px-3 py-2 text-sm border border-stone-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none font-medium text-stone-900 placeholder:text-stone-400 bg-white"
             />
             <button 
               type="submit" 
               disabled={isSubjectActionLoading || !newSubjectName.trim()}
-              className="bg-slate-900 text-white p-2.5 rounded-xl hover:bg-blue-600 disabled:opacity-50 transition-colors shrink-0 shadow-sm"
+              className="bg-emerald-700 text-white p-2.5 rounded-xl hover:bg-emerald-800 disabled:opacity-50 transition-colors shrink-0 shadow-xs cursor-pointer"
               title="Add Subject"
             >
               <Plus size={18} />
@@ -296,13 +296,13 @@ export function AdminResources() {
                   <form 
                     key={sub.id}
                     onSubmit={(e) => handleSaveEdit(e, sub.id)}
-                    className="flex items-center gap-1.5 p-1.5 bg-white rounded-xl border-2 border-blue-500 shadow-md animate-in fade-in duration-150"
+                    className="flex items-center gap-1.5 p-1.5 bg-white rounded-xl border-2 border-emerald-600 shadow-md animate-in fade-in duration-150"
                   >
                     <input 
-                      type="text"
+                      type="text" 
                       value={editingSubjectName}
                       onChange={(e) => setEditingSubjectName(e.target.value)}
-                      className="flex-1 min-w-0 px-2 py-1 text-sm bg-transparent outline-none font-semibold text-slate-900"
+                      className="flex-1 min-w-0 px-2 py-1 text-sm bg-transparent outline-none font-semibold text-stone-900"
                       autoFocus
                       onKeyDown={(e) => {
                         if (e.key === "Escape") handleCancelEdit();
@@ -311,7 +311,7 @@ export function AdminResources() {
                     <button
                       type="submit"
                       disabled={isSubjectActionLoading}
-                      className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors shrink-0"
+                      className="p-1.5 text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors shrink-0"
                       title="Save (Enter)"
                     >
                       <Check size={16} />
@@ -319,7 +319,7 @@ export function AdminResources() {
                     <button
                       type="button"
                       onClick={() => handleCancelEdit()}
-                      className="p-1.5 text-slate-400 hover:bg-slate-100 rounded-lg transition-colors shrink-0"
+                      className="p-1.5 text-stone-400 hover:bg-stone-100 rounded-lg transition-colors shrink-0"
                       title="Cancel (Esc)"
                     >
                       <X size={16} />
@@ -334,8 +334,8 @@ export function AdminResources() {
                   onClick={() => setActiveSubject(sub.id)}
                   className={`group w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer border ${
                     isActive 
-                      ? 'bg-blue-50 text-blue-700 shadow-sm border-blue-200' 
-                      : 'text-slate-600 hover:bg-slate-50 border-transparent hover:border-slate-200/60'
+                      ? 'bg-emerald-50 text-emerald-900 shadow-xs border-emerald-300/90 font-bold' 
+                      : 'text-stone-600 hover:bg-stone-50 border-transparent hover:border-stone-200/60'
                   }`}
                 >
                   <span className="truncate pr-2 font-medium">
@@ -346,7 +346,7 @@ export function AdminResources() {
                     <button
                       type="button"
                       onClick={(e) => handleStartEdit(e, sub)}
-                      className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-100/50 rounded-lg transition-colors"
+                      className="p-1.5 text-stone-400 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors"
                       title="Rename Subject"
                     >
                       <Pencil size={13} />
@@ -373,45 +373,45 @@ export function AdminResources() {
         {/* Right Col: Materials Upload & Preview */}
         <div className="lg:col-span-3">
           {activeSubjectData ? (
-            <div className="glass rounded-3xl p-6 md:p-8 border border-slate-200/50 min-h-[500px]">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-4 border-b border-slate-100 gap-4">
+            <div className="glass rounded-3xl p-6 md:p-8 border border-stone-200/70 min-h-[500px]">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-4 border-b border-stone-100 gap-4">
                 
                 {/* Subject Title & Actions */}
                 <div className="flex items-center gap-2 flex-wrap">
                   {editingSubjectId === activeSubjectData.id ? (
                     <form 
                       onSubmit={(e) => handleSaveEdit(e, activeSubjectData.id)}
-                      className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-blue-400 shadow-sm"
+                      className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-emerald-500 shadow-sm"
                     >
                       <input 
-                        type="text"
+                        type="text" 
                         value={editingSubjectName}
                         onChange={(e) => setEditingSubjectName(e.target.value)}
-                        className="text-lg md:text-xl font-bold text-slate-900 outline-none"
+                        className="text-lg md:text-xl font-bold text-stone-900 outline-none"
                         autoFocus
                       />
-                      <button type="submit" className="text-emerald-600 hover:bg-emerald-50 p-1 rounded-md">
+                      <button type="submit" className="text-emerald-700 hover:bg-emerald-50 p-1 rounded-md">
                         <Check size={18} />
                       </button>
-                      <button type="button" onClick={() => handleCancelEdit()} className="text-slate-400 hover:bg-slate-100 p-1 rounded-md">
+                      <button type="button" onClick={() => handleCancelEdit()} className="text-stone-400 hover:bg-stone-100 p-1 rounded-md">
                         <X size={18} />
                       </button>
                     </form>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <h2 className="text-2xl font-bold text-slate-900">
+                      <h2 className="text-2xl font-bold text-stone-900">
                         {activeSubjectData.name} Resources
                       </h2>
                       <button
                         onClick={(e) => handleStartEdit(e, activeSubjectData)}
-                        className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-slate-100 rounded-lg transition-colors"
+                        className="p-1.5 text-stone-400 hover:text-emerald-700 hover:bg-stone-100 rounded-lg transition-colors cursor-pointer"
                         title="Rename Subject"
                       >
                         <Pencil size={16} />
                       </button>
                       <button
                         onClick={(e) => handleDeleteSubject(e, activeSubjectData.id, activeSubjectData.name)}
-                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
                         title="Delete Subject"
                       >
                         <Trash2 size={16} />
@@ -422,10 +422,10 @@ export function AdminResources() {
 
                 <button
                   onClick={() => setPreviewMode(!previewMode)}
-                  className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                  className={`px-4 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer ${
                     previewMode 
-                      ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' 
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border border-emerald-200/60' 
+                      : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
                   }`}
                 >
                   {previewMode ? 'Exit Preview' : 'Preview as Student'}
@@ -435,9 +435,9 @@ export function AdminResources() {
               {!previewMode && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                   {(["SYLLABUS", "NOTES", "PRACTICAL", "PDF"] as MaterialCategory[]).map(cat => (
-                  <div key={cat} className="p-5 border border-slate-200 border-dashed rounded-2xl bg-slate-50/50 hover:bg-slate-50 transition-colors relative group">
-                    <h3 className="font-bold text-slate-700 mb-2 capitalize flex items-center gap-2">
-                      <LinkIcon size={16} className="text-blue-500" /> {cat.toLowerCase()}
+                  <div key={cat} className="p-5 border border-stone-200/90 border-dashed rounded-2xl bg-stone-50/50 hover:bg-stone-50 transition-colors relative group">
+                    <h3 className="font-bold text-stone-700 mb-2 capitalize flex items-center gap-2">
+                      <LinkIcon size={16} className="text-emerald-700" /> {cat.toLowerCase()}
                     </h3>
                     
                     <div className="space-y-3 mt-4">
@@ -446,7 +446,7 @@ export function AdminResources() {
                         placeholder={`${cat} title...`}
                         value={nameInput[cat] || ""}
                         onChange={(e) => setNameInput(prev => ({ ...prev, [cat]: e.target.value }))}
-                        className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-medium text-slate-900 bg-white"
+                        className="w-full px-3 py-2 text-sm border border-stone-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none font-medium text-stone-900 bg-white"
                       />
                       <div className="flex gap-2">
                         <input 
@@ -454,11 +454,11 @@ export function AdminResources() {
                           placeholder="Paste Google Drive/Web link..."
                           value={linkInput[cat] || ""}
                           onChange={(e) => setLinkInput(prev => ({ ...prev, [cat]: e.target.value }))}
-                          className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-medium text-slate-900 bg-white"
+                          className="w-full px-3 py-2 text-sm border border-stone-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none font-medium text-stone-900 bg-white"
                         />
                         <button 
                           onClick={() => handleAddLink(cat)}
-                          className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors shrink-0"
+                          className="bg-emerald-700 text-white p-2 rounded-lg hover:bg-emerald-800 transition-colors shrink-0 cursor-pointer shadow-xs"
                           title="Save Link"
                         >
                           <Plus size={16} />
@@ -471,12 +471,12 @@ export function AdminResources() {
               )}
 
               <div>
-                <h3 className="font-bold text-slate-900 mb-4 text-lg">
+                <h3 className="font-bold text-stone-900 mb-4 text-lg">
                   {previewMode ? 'Student View (How it looks)' : 'Manage Links'}
                 </h3>
                 <div className="space-y-3">
                   {subjectMaterials.length === 0 ? (
-                    <p className="text-slate-500 text-center py-8 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                    <p className="text-stone-500 text-center py-8 bg-stone-50 rounded-xl border border-dashed border-stone-200">
                       No materials added for this subject yet.
                     </p>
                   ) : previewMode ? (
@@ -488,25 +488,25 @@ export function AdminResources() {
                         
                         return (
                           <div key={category} className="space-y-3">
-                            <h4 className="font-bold text-slate-400 uppercase tracking-wider text-xs border-b border-slate-100 pb-1">
+                            <h4 className="font-bold text-stone-400 uppercase tracking-wider text-xs border-b border-stone-100 pb-1">
                               {category}
                             </h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                               {categoryMaterials.map(mat => (
-                                <div key={mat.id} className="flex items-center justify-between p-3.5 bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow group">
-                                  <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                                <div key={mat.id} className="flex items-center justify-between p-3.5 bg-white rounded-xl border border-stone-200/90 shadow-xs hover:shadow-sm transition-all group">
+                                  <div className="flex items-center gap-3 min-w-0">
+                                    <div className="p-2 bg-emerald-50 text-emerald-850 rounded-lg shrink-0">
                                       <FileText size={18} />
                                     </div>
-                                    <div>
-                                      <h4 className="font-bold text-slate-900 text-sm line-clamp-1" title={mat.fileName}>{mat.fileName}</h4>
+                                    <div className="min-w-0">
+                                      <h4 className="font-bold text-stone-900 text-sm line-clamp-1 truncate" title={mat.fileName}>{mat.fileName}</h4>
                                     </div>
                                   </div>
                                   <a 
                                     href={mat.fileUrl} 
                                     target="_blank" 
                                     rel="noreferrer" 
-                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 text-white text-xs font-bold rounded-lg hover:bg-blue-600 transition-colors shadow-sm shrink-0"
+                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-700 text-white text-xs font-bold rounded-lg hover:bg-emerald-800 transition-colors shadow-xs shrink-0 cursor-pointer"
                                   >
                                     Open Link
                                   </a>
@@ -520,19 +520,19 @@ export function AdminResources() {
                   ) : (
                     // Admin Management Rendering
                     subjectMaterials.map(mat => (
-                      <div key={mat.id} className="flex items-center justify-between p-3 sm:p-4 bg-white rounded-xl border border-slate-200 shadow-xs gap-3 overflow-hidden">
+                      <div key={mat.id} className="flex items-center justify-between p-3 sm:p-4 bg-white rounded-xl border border-stone-200/90 shadow-xs gap-3 overflow-hidden">
                         <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
-                          <div className="p-2 bg-blue-50 text-blue-600 rounded-lg shrink-0">
+                          <div className="p-2 bg-emerald-50 text-emerald-850 rounded-lg shrink-0">
                             <FileText size={18} />
                           </div>
                           <div className="min-w-0 flex-1">
-                            <a href={mat.fileUrl} target="_blank" rel="noreferrer" className="font-semibold text-slate-900 hover:text-blue-600 transition-colors text-xs sm:text-sm block truncate" title={mat.fileName}>
+                            <a href={mat.fileUrl} target="_blank" rel="noreferrer" className="font-semibold text-stone-900 hover:text-emerald-700 transition-colors text-xs sm:text-sm block truncate" title={mat.fileName}>
                               {mat.fileName}
                             </a>
-                            <span className="block text-[10px] font-bold text-slate-400 mt-0.5 uppercase">{mat.category}</span>
+                            <span className="block text-[10px] font-bold text-stone-400 mt-0.5 uppercase">{mat.category}</span>
                           </div>
                         </div>
-                        <button onClick={() => handleDeleteMaterial(mat.id)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors shrink-0 cursor-pointer" title="Delete Link">
+                        <button onClick={() => handleDeleteMaterial(mat.id)} className="p-2 text-stone-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors shrink-0 cursor-pointer" title="Delete Link">
                           <Trash2 size={16} />
                         </button>
                       </div>

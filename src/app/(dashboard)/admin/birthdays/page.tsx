@@ -255,7 +255,7 @@ export default function AdminBirthdaysPage() {
 
           <button
             onClick={openAddModal}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2.5 bg-slate-900 hover:bg-blue-600 text-white font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2.5 bg-stone-900 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer"
           >
             <Plus size={15} />
             <span>Add Birthday</span>
@@ -353,12 +353,12 @@ export default function AdminBirthdaysPage() {
           </p>
         </div>
 
-        <div className="glass rounded-2xl p-4 border border-slate-200/60 shadow-xs">
-          <div className="flex items-center gap-2 text-slate-500 text-xs font-semibold mb-1">
-            <Users size={15} className="text-blue-500" />
+        <div className="glass rounded-2xl p-4 border border-stone-200/60 shadow-xs">
+          <div className="flex items-center gap-2 text-stone-500 text-xs font-semibold mb-1">
+            <Users size={15} className="text-emerald-700" />
             <span>Total Recorded</span>
           </div>
-          <p className="text-2xl font-black text-slate-900">{birthdays.length}</p>
+          <p className="text-2xl font-black text-stone-900">{birthdays.length}</p>
         </div>
       </div>
 
@@ -395,7 +395,7 @@ export default function AdminBirthdaysPage() {
             <select
               value={selectedClassFilter}
               onChange={(e) => setSelectedClassFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold rounded-xl px-2.5 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-stone-50 border border-stone-200 text-stone-800 text-xs font-bold rounded-xl px-2.5 py-2 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600"
             >
               <option value="ALL">All Classes</option>
               {classes.map((c) => (
@@ -408,13 +408,13 @@ export default function AdminBirthdaysPage() {
 
           {/* Search bar */}
           <div className="relative flex-1">
-            <Search size={14} className="absolute left-3 top-2.5 text-slate-400" />
+            <Search size={14} className="absolute left-3 top-2.5 text-stone-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search student name..."
-              className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full pl-9 pr-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
             />
           </div>
         </div>
@@ -468,7 +468,7 @@ export default function AdminBirthdaysPage() {
                             Roll #{b.rollNo}
                           </span>
                         )}
-                        <span className="text-[10px] font-extrabold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] font-extrabold text-emerald-800 bg-emerald-100 border border-emerald-200/60 px-2 py-0.5 rounded-full">
                           {b.classCode || "ALL"}
                         </span>
                         {isTodayBirthday && (
@@ -568,7 +568,7 @@ export default function AdminBirthdaysPage() {
                           <span className="font-extrabold text-sm text-slate-900 truncate">
                             {b.name}
                           </span>
-                          <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded">
+                          <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-200/60 px-1.5 py-0.5 rounded">
                             {b.classCode}
                           </span>
                         </div>

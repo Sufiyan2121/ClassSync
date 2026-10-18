@@ -203,17 +203,17 @@ export function StudentClassSwitcher() {
       {/* Header Button Showing Class Name */}
       <button
         onClick={() => setIsOpen(true)}
-        className="group flex items-center gap-1.5 px-2 py-1.5 sm:px-3 sm:py-2 bg-white hover:bg-slate-50 text-slate-800 rounded-xl sm:rounded-2xl border border-slate-200/90 shadow-2xs hover:shadow-xs transition-all cursor-pointer shrink min-w-0"
+        className="group flex items-center gap-1.5 px-2 py-1.5 sm:px-3 sm:py-2 bg-white hover:bg-stone-50 text-stone-800 rounded-xl sm:rounded-2xl border border-stone-200/90 shadow-2xs hover:shadow-xs transition-all cursor-pointer shrink min-w-0"
         title={`View ${activeName} information & options`}
       >
-        <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shrink-0 shadow-2xs">
+        <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-600 text-white flex items-center justify-center shrink-0 shadow-2xs">
           <GraduationCap size={12} />
         </div>
         <div className="text-left flex items-center gap-1 min-w-0">
-          <span className="text-[11px] sm:text-xs md:text-sm font-extrabold text-slate-900 tracking-tight max-w-[140px] xs:max-w-[180px] sm:max-w-[220px] truncate">
+          <span className="text-[11px] sm:text-xs md:text-sm font-extrabold text-stone-900 tracking-tight max-w-[140px] xs:max-w-[180px] sm:max-w-[220px] truncate">
             {activeName}
           </span>
-          <ChevronDown size={13} className="text-slate-400 group-hover:text-slate-700 transition-colors shrink-0" />
+          <ChevronDown size={13} className="text-stone-400 group-hover:text-stone-700 transition-colors shrink-0" />
         </div>
       </button>
 
@@ -238,14 +238,14 @@ export function StudentClassSwitcher() {
           >
             
             {/* Modal Header */}
-            <div className="flex justify-between items-center px-5 py-3.5 sm:px-6 sm:py-4 border-b border-slate-100 shrink-0 bg-slate-50/70">
+            <div className="flex justify-between items-center px-5 py-3.5 sm:px-6 sm:py-4 border-b border-stone-200/80 shrink-0 bg-stone-50/80">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-xs shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-600 text-white flex items-center justify-center shadow-xs shrink-0">
                   <GraduationCap size={18} />
                 </div>
                 <div className="min-w-0">
-                  <h2 className="text-base font-extrabold text-slate-900 leading-tight truncate">Classroom Information</h2>
-                  <p className="text-[11px] text-slate-500 font-medium truncate">Class details, access code & enrolled batches</p>
+                  <h2 className="text-base font-extrabold text-stone-900 leading-tight truncate">Classroom Information</h2>
+                  <p className="text-[11px] text-stone-500 font-medium truncate">Class details, access code & enrolled batches</p>
                 </div>
               </div>
               <button
@@ -254,7 +254,7 @@ export function StudentClassSwitcher() {
                   setShowJoinForm(false);
                   setShowClassmates(false);
                 }}
-                className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-full transition-colors shrink-0 cursor-pointer"
+                className="p-2 text-stone-400 hover:text-stone-700 hover:bg-stone-200/60 rounded-full transition-colors shrink-0 cursor-pointer"
                 title="Close"
               >
                 <X size={18} />
@@ -265,35 +265,35 @@ export function StudentClassSwitcher() {
             <div className="p-4 sm:p-6 overflow-y-auto overscroll-contain flex-1 space-y-4 sm:space-y-5">
               
               {/* FEATURED: Current Active Class Information Card */}
-              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-50/90 via-indigo-50/40 to-white p-4 sm:p-5 border border-blue-200/80 shadow-xs">
+              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-50/90 via-teal-50/40 to-white p-4 sm:p-5 border border-emerald-200/80 shadow-xs">
                 
                 {/* Top Status & Class Name */}
                 <div className="flex items-start justify-between gap-2.5 mb-3">
                   <div className="min-w-0">
-                    <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-blue-700 bg-blue-100/80 px-2 py-0.5 rounded-full uppercase tracking-wider mb-1.5 border border-blue-200/60">
+                    <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-emerald-800 bg-emerald-100/90 px-2 py-0.5 rounded-full uppercase tracking-wider mb-1.5 border border-emerald-200/80">
                       <Sparkles size={10} /> Active Classroom
                     </span>
-                    <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight leading-snug break-words">
+                    <h3 className="text-lg sm:text-xl font-black text-stone-900 tracking-tight leading-snug break-words">
                       {activeName}
                     </h3>
                   </div>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/80 shrink-0">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 bg-emerald-100/70 px-2.5 py-1 rounded-full border border-emerald-200/80 shrink-0">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
                     Enrolled
                   </span>
                 </div>
 
                 {/* Class Code Box with 1-Click Copy */}
-                <div className="bg-white/90 rounded-2xl p-3 border border-slate-200/80 flex items-center justify-between gap-2.5 shadow-xs mb-3.5 flex-wrap sm:flex-nowrap">
+                <div className="bg-white/90 rounded-2xl p-3 border border-stone-200/80 flex items-center justify-between gap-2.5 shadow-xs mb-3.5 flex-wrap sm:flex-nowrap">
                   <div className="min-w-0">
-                    <p className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Class Access Code</p>
-                    <p className="font-mono text-base sm:text-lg font-black text-slate-900 tracking-widest break-all">
+                    <p className="text-[10px] font-bold uppercase text-stone-400 tracking-wider">Class Access Code</p>
+                    <p className="font-mono text-base sm:text-lg font-black text-stone-900 tracking-widest break-all">
                       {activeCode}
                     </p>
                   </div>
                   <button
                     onClick={() => handleCopyCode(activeCode)}
-                    className="flex items-center justify-center gap-1.5 px-3.5 py-2 bg-slate-900 hover:bg-blue-600 text-white font-bold text-xs rounded-xl shadow-xs transition-all shrink-0 cursor-pointer w-full sm:w-auto"
+                    className="flex items-center justify-center gap-1.5 px-3.5 py-2 bg-stone-900 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all shrink-0 cursor-pointer w-full sm:w-auto"
                     title="Copy Class Code"
                   >
                     {copiedCode ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
@@ -303,22 +303,22 @@ export function StudentClassSwitcher() {
 
                 {/* Classroom Quick Stats Grid */}
                 <div className="grid grid-cols-2 gap-2 sm:gap-2.5 mb-3.5">
-                  <div className="bg-white/80 rounded-xl p-2.5 border border-slate-200/60">
-                    <div className="flex items-center gap-1.5 text-slate-500 text-[11px] font-medium mb-0.5">
-                      <Users size={13} className="text-blue-600 shrink-0" />
+                  <div className="bg-white/80 rounded-xl p-2.5 border border-stone-200/70">
+                    <div className="flex items-center gap-1.5 text-stone-500 text-[11px] font-medium mb-0.5">
+                      <Users size={13} className="text-emerald-700 shrink-0" />
                       <span className="truncate">Classmates</span>
                     </div>
-                    <p className="text-sm font-black text-slate-900 truncate">
+                    <p className="text-sm font-black text-stone-900 truncate">
                       {classmatesLoading ? "..." : `${classmates.length} Students`}
                     </p>
                   </div>
 
-                  <div className="bg-white/80 rounded-xl p-2.5 border border-slate-200/60">
-                    <div className="flex items-center gap-1.5 text-slate-500 text-[11px] font-medium mb-0.5">
-                      <BookOpen size={13} className="text-indigo-600 shrink-0" />
+                  <div className="bg-white/80 rounded-xl p-2.5 border border-stone-200/70">
+                    <div className="flex items-center gap-1.5 text-stone-500 text-[11px] font-medium mb-0.5">
+                      <BookOpen size={13} className="text-teal-700 shrink-0" />
                       <span className="truncate">Curriculum</span>
                     </div>
-                    <p className="text-sm font-black text-slate-900 truncate">
+                    <p className="text-sm font-black text-stone-900 truncate">
                       {subjectsCount} Subjects Active
                     </p>
                   </div>
@@ -329,7 +329,7 @@ export function StudentClassSwitcher() {
                   <Link
                     href="/student/resources"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all text-center"
+                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-xs transition-all text-center"
                   >
                     <FolderOpen size={14} className="shrink-0" />
                     <span className="truncate">Subjects & Notes</span>
@@ -337,7 +337,7 @@ export function StudentClassSwitcher() {
                   <Link
                     href="/student/timetable"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all text-center"
+                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs rounded-xl shadow-xs transition-all text-center"
                   >
                     <Calendar size={14} className="shrink-0" />
                     <span className="truncate">Time-Table</span>
@@ -353,7 +353,7 @@ export function StudentClassSwitcher() {
                   <Link
                     href="/student/birthdays"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-pink-600 hover:bg-pink-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all text-center"
+                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-pink-700 hover:bg-pink-800 text-white font-bold text-xs rounded-xl shadow-xs transition-all text-center"
                   >
                     <Cake size={14} className="shrink-0" />
                     <span className="truncate">Birthdays</span>
@@ -363,7 +363,7 @@ export function StudentClassSwitcher() {
                 {/* Toggle Classmates List */}
                 <button
                   onClick={() => setShowClassmates(!showClassmates)}
-                  className="w-full mt-3 flex items-center justify-center gap-1 text-[11px] font-bold text-blue-700 hover:text-blue-800 py-1 transition-colors cursor-pointer"
+                  className="w-full mt-3 flex items-center justify-center gap-1 text-[11px] font-bold text-emerald-800 hover:text-emerald-900 py-1 transition-colors cursor-pointer"
                 >
                   <span>{showClassmates ? "Hide Classmates" : `View Enrolled Classmates (${classmates.length})`}</span>
                   {showClassmates ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
@@ -372,46 +372,46 @@ export function StudentClassSwitcher() {
 
               {/* Collapsible Classmates Section */}
               {showClassmates && (
-                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-3 animate-in fade-in duration-200">
+                <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200/80 space-y-3 animate-in fade-in duration-200">
                   <div className="flex items-center justify-between gap-2">
-                    <h4 className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                      <Users size={14} className="text-blue-600 shrink-0" />
+                    <h4 className="text-xs font-bold text-stone-700 flex items-center gap-1.5">
+                      <Users size={14} className="text-emerald-700 shrink-0" />
                       <span>Classmates ({classmates.length})</span>
                     </h4>
                   </div>
 
                   <div className="relative">
-                    <Search size={13} className="absolute left-3 top-2.5 text-slate-400" />
+                    <Search size={13} className="absolute left-3 top-2.5 text-stone-400" />
                     <input
                       type="text"
                       value={classmateSearch}
                       onChange={(e) => setClassmateSearch(e.target.value)}
                       placeholder="Search classmate..."
-                      className="w-full pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full pl-8 pr-3 py-1.5 bg-white border border-stone-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600"
                     />
                   </div>
 
                   <div className="max-h-40 overflow-y-auto space-y-1.5 pr-1">
                     {filteredClassmates.length === 0 ? (
-                      <p className="text-center py-4 text-xs text-slate-400">No classmates found</p>
+                      <p className="text-center py-4 text-xs text-stone-400">No classmates found</p>
                     ) : (
                       filteredClassmates.map((c) => {
                         const isMe = c.uid === user?.uid;
                         return (
                           <div
                             key={c.uid}
-                            className="flex items-center justify-between p-2 bg-white rounded-xl border border-slate-100 text-xs"
+                            className="flex items-center justify-between p-2 bg-white rounded-xl border border-stone-100 text-xs"
                           >
                             <div className="flex items-center gap-2 min-w-0">
-                              <div className="w-6 h-6 rounded-lg bg-blue-100 text-blue-700 font-bold text-[10px] flex items-center justify-center shrink-0">
+                              <div className="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-800 font-bold text-[10px] flex items-center justify-center shrink-0">
                                 {c.displayName?.charAt(0) || "S"}
                               </div>
-                              <span className="font-semibold text-slate-800 truncate">
+                              <span className="font-semibold text-stone-800 truncate">
                                 {c.displayName || "Student"}
                               </span>
                             </div>
                             {isMe && (
-                              <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full shrink-0">
+                              <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60 shrink-0">
                                 You
                               </span>
                             )}
@@ -426,13 +426,13 @@ export function StudentClassSwitcher() {
               {/* My Enrolled Classes List (If enrolled in more than one) */}
               <div className="space-y-3 pt-1">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  <h4 className="text-xs font-bold text-stone-500 uppercase tracking-wider">
                     My Classes ({enrolledList.length})
                   </h4>
                   {!showJoinForm && (
                     <button
                       onClick={() => setShowJoinForm(true)}
-                      className="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 cursor-pointer"
+                      className="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 cursor-pointer"
                     >
                       <Plus size={13} />
                       <span>Join Another</span>
@@ -442,15 +442,15 @@ export function StudentClassSwitcher() {
 
                 {/* Join Form */}
                 {showJoinForm && (
-                  <form onSubmit={handleJoinNewClass} className="p-4 bg-blue-50/70 rounded-2xl border border-blue-200 space-y-3 animate-in fade-in duration-150">
+                  <form onSubmit={handleJoinNewClass} className="p-4 bg-emerald-50/70 rounded-2xl border border-emerald-200/90 space-y-3 animate-in fade-in duration-150">
                     <div className="flex justify-between items-center">
-                      <h4 className="font-bold text-xs text-blue-900 flex items-center gap-1.5">
-                        <KeyRound size={15} /> Enter Class Code
+                      <h4 className="font-bold text-xs text-emerald-900 flex items-center gap-1.5">
+                        <KeyRound size={15} className="text-emerald-700" /> Enter Class Code
                       </h4>
                       <button 
                         type="button" 
                         onClick={() => setShowJoinForm(false)}
-                        className="text-slate-400 hover:text-slate-600 cursor-pointer"
+                        className="text-stone-400 hover:text-stone-600 cursor-pointer"
                       >
                         <X size={15} />
                       </button>
@@ -462,14 +462,14 @@ export function StudentClassSwitcher() {
                         onChange={(e) => setJoinCodeInput(e.target.value.toUpperCase())}
                         placeholder="e.g. MCA-DIV-B"
                         maxLength={15}
-                        className="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-xl font-mono text-center font-bold text-xs uppercase outline-none focus:ring-2 focus:ring-blue-500"
+                        className="flex-1 px-3 py-2 bg-white border border-stone-200 rounded-xl font-mono text-center font-bold text-xs uppercase outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600"
                         autoFocus
                         required
                       />
                       <button
                         type="submit"
                         disabled={isJoining || !joinCodeInput.trim()}
-                        className="px-4 py-2 bg-slate-900 hover:bg-blue-600 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-xs shrink-0 cursor-pointer"
+                        className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-xs shrink-0 cursor-pointer"
                       >
                         {isJoining ? "Joining..." : "Join"}
                       </button>
@@ -488,20 +488,20 @@ export function StudentClassSwitcher() {
                         key={code}
                         className={`flex items-center justify-between p-3.5 rounded-2xl border transition-all ${
                           isActive
-                            ? "bg-blue-50/70 border-blue-200 shadow-2xs"
-                            : "bg-slate-50 hover:bg-slate-100/70 border-slate-200/80"
+                            ? "bg-emerald-50/80 border-emerald-300/90 shadow-2xs"
+                            : "bg-stone-50 hover:bg-stone-100/70 border-stone-200/80"
                         }`}
                       >
                         <div className="min-w-0 pr-2">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-bold text-xs sm:text-sm text-slate-900 truncate">
+                            <span className="font-bold text-xs sm:text-sm text-stone-900 truncate">
                               {name}
                             </span>
-                            <span className="font-mono text-[10px] font-extrabold text-slate-600 bg-white px-2 py-0.5 rounded-md border border-slate-200">
+                            <span className="font-mono text-[10px] font-extrabold text-stone-700 bg-white px-2 py-0.5 rounded-md border border-stone-200">
                               {code}
                             </span>
                             {isActive && (
-                              <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">
+                              <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-200/60">
                                 <Check size={10} /> Active
                               </span>
                             )}
@@ -512,14 +512,14 @@ export function StudentClassSwitcher() {
                           {!isActive && (
                             <button
                               onClick={() => handleSwitchClass(code)}
-                              className="px-3 py-1 bg-slate-900 hover:bg-blue-600 text-white font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer"
+                              className="px-3 py-1 bg-stone-900 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer"
                             >
                               Switch
                             </button>
                           )}
                           <button
                             onClick={() => handleLeaveClass(code)}
-                            className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
+                            className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
                             title={`Exit ${name} (${code})`}
                           >
                             <LogOut size={15} />

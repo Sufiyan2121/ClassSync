@@ -12,10 +12,10 @@ export default function Home() {
   }, [router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+    <div className="min-h-screen flex items-center justify-center bg-[#dfe8df]">
       <div className="animate-pulse flex flex-col items-center">
-        <div className="h-12 w-12 bg-blue-200 rounded-full mb-4"></div>
-        <div className="h-4 w-24 bg-slate-200 rounded"></div>
+        <div className="h-12 w-12 bg-emerald-200 rounded-full mb-4"></div>
+        <div className="h-4 w-24 bg-stone-300 rounded"></div>
       </div>
     </div>
   );

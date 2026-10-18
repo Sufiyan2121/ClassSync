@@ -52,19 +52,19 @@ export default function StudentBirthdaysPage() {
     <div className="p-3 md:p-8 max-w-5xl mx-auto min-h-screen">
       
       {/* Header */}
-      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 glass px-4 py-3 md:px-6 md:py-4 rounded-3xl shadow-sm border border-slate-200/50">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 glass px-4 py-3 md:px-6 md:py-4 rounded-3xl shadow-xs border border-stone-200/60">
         <div className="flex items-center gap-3.5">
-          <Link href="/student" className="p-2 hover:bg-slate-100 rounded-full transition-colors shrink-0">
-            <ArrowLeft size={22} className="text-slate-600" />
+          <Link href="/student" className="p-2 hover:bg-stone-100 rounded-full transition-colors shrink-0">
+            <ArrowLeft size={22} className="text-stone-600" />
           </Link>
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xl">🎂</span>
-              <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
+              <h1 className="text-xl md:text-2xl font-extrabold text-stone-900 tracking-tight">
                 Classroom Birthdays
               </h1>
             </div>
-            <p className="text-slate-500 text-xs sm:text-sm font-medium">
+            <p className="text-stone-500 text-xs sm:text-sm font-medium">
               Celebrate your classmates and never miss a birthday!
             </p>
           </div>
@@ -129,32 +129,32 @@ export default function StudentBirthdaysPage() {
       )}
 
       {/* Search Bar */}
-      <div className="glass rounded-2xl p-4 border border-slate-200/60 shadow-xs mb-6 flex items-center justify-between gap-3">
-        <h3 className="font-extrabold text-slate-900 text-sm hidden sm:block">
+      <div className="glass rounded-2xl p-4 border border-stone-200/60 shadow-xs mb-6 flex items-center justify-between gap-3">
+        <h3 className="font-extrabold text-stone-900 text-sm hidden sm:block">
           Upcoming Birthdays
         </h3>
         <div className="relative flex-1 sm:max-w-xs ml-auto">
-          <Search size={14} className="absolute left-3 top-2.5 text-slate-400" />
+          <Search size={14} className="absolute left-3 top-2.5 text-stone-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search classmate..."
-            className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:ring-2 focus:ring-pink-500 outline-none"
+            className="w-full pl-9 pr-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:ring-2 focus:ring-pink-500 outline-none"
           />
         </div>
       </div>
 
       {/* Birthdays List */}
       {loading ? (
-        <div className="py-16 text-center text-slate-400 text-xs animate-pulse">
+        <div className="py-16 text-center text-stone-400 text-xs animate-pulse">
           Loading birthdays...
         </div>
       ) : filteredUpcoming.length === 0 ? (
-        <div className="text-center py-16 glass rounded-3xl border border-slate-200/50">
-          <Cake size={40} className="text-slate-300 mx-auto mb-2" />
-          <p className="font-bold text-slate-700 text-sm">No birthdays found</p>
-          <p className="text-xs text-slate-400 mt-1 max-w-xs mx-auto">
+        <div className="text-center py-16 glass rounded-3xl border border-stone-200/60">
+          <Cake size={40} className="text-stone-300 mx-auto mb-2" />
+          <p className="font-bold text-stone-700 text-sm">No birthdays found</p>
+          <p className="text-xs text-stone-400 mt-1 max-w-xs mx-auto">
             {searchQuery ? "No matches for your search." : "Birthdays will appear here once recorded."}
           </p>
         </div>
@@ -172,7 +172,7 @@ export default function StudentBirthdaysPage() {
                     ? "bg-gradient-to-r from-pink-50/90 to-purple-50/80 border-pink-300 shadow-xs"
                     : isTomorrow
                     ? "bg-indigo-50/60 border-indigo-200"
-                    : "glass bg-white/70 border-slate-200/60 hover:bg-white"
+                    : "glass bg-white/70 border-stone-200/60 hover:bg-white"
                 }`}
               >
                 <div className="flex items-center gap-3 min-w-0">
@@ -188,7 +188,7 @@ export default function StudentBirthdaysPage() {
 
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <h4 className="font-bold text-sm text-slate-900 truncate">
+                      <h4 className="font-bold text-sm text-stone-900 truncate">
                         {b.name}
                       </h4>
                       {isToday && (
@@ -203,7 +203,7 @@ export default function StudentBirthdaysPage() {
                       )}
                     </div>
 
-                    <p className="text-xs text-slate-500 font-medium mt-0.5">
+                    <p className="text-xs text-stone-500 font-medium mt-0.5">
                       📅 {monthNames[b.month - 1]} {b.day}
                       {b.year ? ` • Turning ${currentYear - b.year}` : ""}
                     </p>
@@ -211,7 +211,7 @@ export default function StudentBirthdaysPage() {
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-xs font-bold text-slate-500">
+                  <span className="text-xs font-bold text-stone-500">
                     {isToday ? (
                       <span className="text-pink-600 font-extrabold">Today!</span>
                     ) : isTomorrow ? (
@@ -223,7 +223,7 @@ export default function StudentBirthdaysPage() {
 
                   <button
                     onClick={() => handleCopyWish(b.name, b.id)}
-                    className="p-2 text-slate-400 hover:text-pink-600 hover:bg-pink-50 rounded-xl transition-colors cursor-pointer"
+                    className="p-2 text-stone-400 hover:text-pink-600 hover:bg-pink-50 rounded-xl transition-colors cursor-pointer"
                     title={`Copy birthday wish for ${b.name}`}
                   >
                     {copiedId === b.id ? <Check size={16} className="text-emerald-600" /> : <Gift size={16} />}

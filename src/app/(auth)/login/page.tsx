@@ -26,8 +26,8 @@ export default function LoginPage() {
     return (
       <div className="flex-1 flex items-center justify-center min-h-screen bg-transparent relative overflow-hidden">
         {/* Animated Background for Loading */}
-        <div className="absolute inset-0 z-[-1] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-100 via-slate-50 to-indigo-100 opacity-70"></div>
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="absolute inset-0 z-[-1] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-100/60 via-stone-50 to-[#dfe8df] opacity-70"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-700"></div>
       </div>
     );
   }
@@ -36,24 +36,24 @@ export default function LoginPage() {
     <div className="relative flex-1 flex flex-col items-center justify-center min-h-screen overflow-hidden px-4">
       
       {/* Dynamic Animated Background Elements */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-400/20 blur-[100px] animate-pulse"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-400/20 blur-[100px] animate-pulse" style={{ animationDelay: '2s' }}></div>
-      <div className="absolute top-[20%] right-[10%] w-[20%] h-[20%] rounded-full bg-teal-300/20 blur-[80px] animate-pulse" style={{ animationDelay: '4s' }}></div>
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-400/20 blur-[100px] animate-pulse"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-teal-400/20 blur-[100px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+      <div className="absolute top-[20%] right-[10%] w-[20%] h-[20%] rounded-full bg-green-300/20 blur-[80px] animate-pulse" style={{ animationDelay: '4s' }}></div>
 
       <div className="w-full max-w-lg z-10">
         
         {/* Brand Header */}
         <div className="flex flex-col items-center text-center mb-10 animate-in slide-in-from-bottom-6 fade-in duration-700">
           <div className="relative mb-6 group cursor-default">
-            <div className="absolute inset-0 bg-blue-500 rounded-3xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
-            <div className="relative w-20 h-20 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-3xl flex items-center justify-center text-white shadow-xl shadow-blue-500/30 transform group-hover:scale-105 transition-transform duration-500 ring-1 ring-white/50">
+            <div className="absolute inset-0 bg-emerald-600 rounded-3xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
+            <div className="relative w-20 h-20 bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-600 rounded-3xl flex items-center justify-center text-white shadow-xl shadow-emerald-950/20 transform group-hover:scale-105 transition-transform duration-500 ring-1 ring-white/50">
               <BookOpen size={36} strokeWidth={2.5} />
             </div>
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4 drop-shadow-sm">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-stone-900 tracking-tight mb-4 drop-shadow-sm">
             ClassSync
           </h1>
-          <p className="text-lg text-slate-500 font-medium max-w-sm mx-auto">
+          <p className="text-lg text-stone-600 font-medium max-w-sm mx-auto">
             Bridging the gap between classrooms and students.
           </p>
         </div>

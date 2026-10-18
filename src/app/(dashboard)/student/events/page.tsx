@@ -52,7 +52,7 @@ export default function StudentEventsMediaPage() {
       case "FEST":
         return "bg-purple-100 text-purple-700 border-purple-200";
       case "FUNCTION":
-        return "bg-blue-100 text-blue-700 border-blue-200";
+        return "bg-teal-100 text-teal-850 border-teal-200/80";
       case "SPORTS":
         return "bg-emerald-100 text-emerald-700 border-emerald-200";
       case "FAREWELL":
@@ -107,7 +107,7 @@ export default function StudentEventsMediaPage() {
 
       {/* MASTER DRIVE HIGHLIGHT */}
       {masterDrive && (
-        <div className="mb-5 rounded-3xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-4 sm:p-6 text-white shadow-xl shadow-blue-500/20 relative overflow-hidden">
+        <div className="mb-5 rounded-3xl bg-gradient-to-r from-emerald-800 via-teal-800 to-emerald-700 p-4 sm:p-6 text-white shadow-xl shadow-emerald-950/20 relative overflow-hidden">
           <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl sm:text-3xl shadow-inner shrink-0">
@@ -120,7 +120,7 @@ export default function StudentEventsMediaPage() {
                 <h2 className="text-base sm:text-2xl font-black truncate">
                   {masterDrive.title}
                 </h2>
-                <p className="text-xs sm:text-sm text-blue-100 mt-0.5 font-medium line-clamp-1">
+                <p className="text-xs sm:text-sm text-emerald-100 mt-0.5 font-medium line-clamp-1">
                   {masterDrive.description || "The primary Google Drive folder containing all class photos, videos, and function media."}
                 </p>
               </div>
@@ -140,7 +140,7 @@ export default function StudentEventsMediaPage() {
                 href={masterDrive.driveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 sm:flex-none px-3.5 sm:px-4 py-2.5 bg-white text-blue-700 hover:bg-blue-50 font-black text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                className="flex-1 sm:flex-none px-3.5 sm:px-4 py-2.5 bg-white text-emerald-800 hover:bg-emerald-50 font-black text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <span>Open Drive</span>
                 <ExternalLink size={14} />
@@ -151,21 +151,21 @@ export default function StudentEventsMediaPage() {
       )}
 
       {/* Category Pills & Search */}
-      <div className="glass rounded-2xl p-3.5 sm:p-4 border border-slate-200/60 shadow-xs mb-5 space-y-3">
+      <div className="glass rounded-2xl p-3.5 sm:p-4 border border-stone-200/70 shadow-xs mb-5 space-y-3">
         <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center justify-between">
-          <p className="text-xs font-bold text-slate-700">
+          <p className="text-xs font-bold text-stone-700">
             Browse Event Albums & Drives ({filteredEvents.length})
           </p>
 
           {/* Search bar */}
           <div className="relative flex-1 sm:max-w-xs">
-            <Search size={14} className="absolute left-3 top-2.5 text-slate-400" />
+            <Search size={14} className="absolute left-3 top-2.5 text-stone-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search event, function..."
-              className="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full pl-9 pr-3 py-1.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
             />
           </div>
         </div>
@@ -178,8 +178,8 @@ export default function StudentEventsMediaPage() {
               onClick={() => setSelectedCategory(cat.value)}
               className={`px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                 selectedCategory === cat.value
-                  ? "bg-slate-900 text-white shadow-xs"
-                  : "bg-slate-100 hover:bg-slate-200/80 text-slate-600"
+                  ? "bg-stone-900 text-white shadow-xs"
+                  : "bg-stone-100 hover:bg-stone-200/80 text-stone-600"
               }`}
             >
               {cat.label}
@@ -254,7 +254,7 @@ export default function StudentEventsMediaPage() {
                   href={item.driveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs hover:shadow-md transition-all cursor-pointer shrink-0"
+                  className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-gradient-to-r from-emerald-700 to-teal-700 hover:from-emerald-800 hover:to-teal-800 text-white font-bold text-xs rounded-xl shadow-xs hover:shadow-md transition-all cursor-pointer shrink-0"
                 >
                   <span>Open Drive</span>
                   <ExternalLink size={13} />

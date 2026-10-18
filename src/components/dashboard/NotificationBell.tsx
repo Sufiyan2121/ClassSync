@@ -27,21 +27,21 @@ export function NotificationBell() {
       aria-checked={isEnabled}
       className={`group flex items-center gap-1.5 sm:gap-2 px-2 py-1.5 sm:px-2.5 sm:py-1.5 rounded-xl font-bold text-xs sm:text-sm border transition-all cursor-pointer shadow-2xs select-none ${
         isEnabled
-          ? "bg-blue-50/90 text-blue-700 border-blue-200/90 hover:bg-blue-100 hover:border-blue-300"
-          : "bg-white/90 text-slate-500 border-slate-200 hover:bg-slate-50 hover:text-slate-700"
+          ? "bg-emerald-50/90 text-emerald-850 border-emerald-300/90 hover:bg-emerald-100 hover:border-emerald-400"
+          : "bg-white/90 text-stone-500 border-stone-200 hover:bg-stone-50 hover:text-stone-700"
       }`}
       title={isEnabled ? "Notifications are ON (Click to turn OFF)" : "Notifications are OFF (Click to turn ON)"}
     >
       {isEnabled ? (
-        <BellRing size={14} className="text-blue-600 shrink-0" />
+        <BellRing size={14} className="text-emerald-700 shrink-0" />
       ) : (
-        <BellOff size={14} className="text-slate-400 shrink-0" />
+        <BellOff size={14} className="text-stone-400 shrink-0" />
       )}
 
       {/* Status Text Indicator */}
       <span className="text-[10px] sm:text-xs font-extrabold tracking-tight">
-        <span className="hidden sm:inline text-slate-500 font-semibold mr-1">Alerts</span>
-        <span className={isEnabled ? "text-blue-700 font-black tracking-wide" : "text-slate-500 font-bold tracking-wide"}>
+        <span className="hidden sm:inline text-stone-500 font-semibold mr-1">Alerts</span>
+        <span className={isEnabled ? "text-emerald-800 font-black tracking-wide" : "text-stone-500 font-bold tracking-wide"}>
           {isEnabled ? "ON" : "OFF"}
         </span>
       </span>
@@ -50,7 +50,7 @@ export function NotificationBell() {
       <div 
         aria-hidden="true"
         className={`w-7 h-4 sm:w-8 sm:h-4.5 rounded-full p-0.5 flex items-center shrink-0 transition-colors duration-200 ease-in-out ${
-          isEnabled ? "bg-blue-600 shadow-inner" : "bg-slate-300"
+          isEnabled ? "bg-emerald-600 shadow-inner" : "bg-stone-300"
         }`}
       >
         <div 

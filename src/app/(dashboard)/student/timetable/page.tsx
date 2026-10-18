@@ -64,28 +64,28 @@ export default function StudentTimetable() {
         <div className="grid gap-8">
           {TIMETABLES.map((t) => (
             <div key={t.id} className="glass rounded-3xl overflow-hidden shadow-sm border border-slate-200/50 bg-white/40 group">
-              <div className="flex justify-between items-center p-4 md:px-6 md:py-4 border-b border-slate-200/50 bg-white/60">
-                <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2">
-                  {t.type === "pdf" ? <FileText className="text-red-500" size={20} /> : <Calendar className="text-blue-500" size={20} />}
+              <div className="flex justify-between items-center p-4 md:px-6 md:py-4 border-b border-stone-200/70 bg-white/60">
+                <h3 className="font-bold text-lg text-stone-900 flex items-center gap-2">
+                  {t.type === "pdf" ? <FileText className="text-rose-600" size={20} /> : <Calendar className="text-teal-700" size={20} />}
                   {t.title}
                 </h3>
                 <a 
                   href={t.fileUrl} 
                   download
-                  className="flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-slate-800 transition-all shadow-sm"
+                  className="flex items-center gap-2 bg-emerald-700 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-emerald-800 transition-all shadow-xs cursor-pointer"
                 >
                   <Download size={16} />
                   <span className="hidden sm:inline">Download</span>
                 </a>
               </div>
-              <div className="p-4 md:p-6 flex items-center justify-center bg-slate-50/50">
+              <div className="p-4 md:p-6 flex items-center justify-center bg-stone-50/50">
                 {t.type === "image" ? (
-                  <img src={t.fileUrl} alt={t.title} className="w-full max-w-4xl object-contain rounded-xl shadow-sm border border-slate-200" />
+                  <img src={t.fileUrl} alt={t.title} className="w-full max-w-4xl object-contain rounded-xl shadow-xs border border-stone-200" />
                 ) : (
                   <div className="py-12 text-center flex flex-col items-center">
-                    <FileText size={64} className="text-slate-300 mb-4" />
-                    <p className="text-slate-500 font-medium">This is a PDF document.</p>
-                    <a href={t.fileUrl} target="_blank" rel="noopener noreferrer" className="mt-4 text-blue-600 hover:underline font-bold">
+                    <FileText size={64} className="text-stone-300 mb-4" />
+                    <p className="text-stone-500 font-medium">This is a PDF document.</p>
+                    <a href={t.fileUrl} target="_blank" rel="noopener noreferrer" className="mt-4 text-emerald-700 hover:text-emerald-800 hover:underline font-bold">
                       Click here to view PDF
                     </a>
                   </div>

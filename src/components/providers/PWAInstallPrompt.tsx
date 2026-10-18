@@ -76,41 +76,41 @@ export function PWAInstallPrompt() {
   if (!showPrompt) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-8 md:w-96 bg-white/95 backdrop-blur-xl border border-slate-200/80 shadow-2xl rounded-2xl p-4 z-[100] animate-in slide-in-from-bottom-10 fade-in duration-500">
+    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-8 md:w-96 bg-white/95 backdrop-blur-xl border border-stone-200/80 shadow-2xl rounded-2xl p-4 z-[100] animate-in slide-in-from-bottom-10 fade-in duration-500">
       <button 
         onClick={handleDismiss}
-        className="absolute top-3 right-3 text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-full p-1 transition-colors"
+        className="absolute top-3 right-3 text-stone-400 hover:text-stone-600 bg-stone-100 hover:bg-stone-200 rounded-full p-1 transition-colors cursor-pointer"
         aria-label="Close"
       >
         <X size={16} />
       </button>
       
       <div className="flex items-start gap-3.5">
-        <div className="w-12 h-12 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-500/30 shrink-0">
+        <div className="w-12 h-12 bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-emerald-950/20 shrink-0">
           <Download size={22} />
         </div>
         <div className="flex-1 pr-6">
-          <h3 className="font-bold text-slate-900 text-sm md:text-base">Install ClassSync</h3>
+          <h3 className="font-bold text-stone-900 text-sm md:text-base">Install ClassSync</h3>
           
           {isIOS ? (
-            <div className="mt-1 text-xs text-slate-600 space-y-1.5">
-              <p className="leading-snug text-slate-500">
+            <div className="mt-1 text-xs text-stone-600 space-y-1.5">
+              <p className="leading-snug text-stone-500">
                 To install on your iPhone:
               </p>
-              <div className="bg-slate-50 rounded-lg p-2 border border-slate-100 text-[11px] leading-relaxed text-slate-700">
-                1. Tap the <span className="font-bold inline-flex items-center gap-0.5 text-blue-600"><Share size={11} /> Share</span> button below.<br/>
-                2. Select <span className="font-bold text-slate-900">"Add to Home Screen"</span>.<br/>
-                3. Tap <span className="font-bold text-slate-900">"Add"</span> in the top-right.
+              <div className="bg-stone-50 rounded-lg p-2 border border-stone-200/60 text-[11px] leading-relaxed text-stone-700">
+                1. Tap the <span className="font-bold inline-flex items-center gap-0.5 text-emerald-700"><Share size={11} /> Share</span> button below.<br/>
+                2. Select <span className="font-bold text-stone-900">"Add to Home Screen"</span>.<br/>
+                3. Tap <span className="font-bold text-stone-900">"Add"</span> in the top-right.
               </div>
             </div>
           ) : (
             <>
-              <p className="text-xs text-slate-500 mt-0.5 mb-2.5 leading-tight">
+              <p className="text-xs text-stone-500 mt-0.5 mb-2.5 leading-tight">
                 Install our app on your home screen for quick and easy access.
               </p>
               <button 
                 onClick={handleInstall}
-                className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-xl text-xs transition-colors"
+                className="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 px-4 rounded-xl text-xs transition-colors cursor-pointer shadow-xs"
               >
                 Install App
               </button>

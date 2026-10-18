@@ -18,33 +18,33 @@ export function PostCard({ post, onEdit, onDelete }: PostCardProps) {
 
   const getIcon = () => {
     switch (post.type) {
-      case "ASSIGNMENT": return <BookOpen size={22} className="text-orange-500" />;
-      case "EXAM": return <AlertCircle size={22} className="text-red-500" />;
-      case "ANNOUNCEMENT": return <Bell size={22} className="text-blue-500" />;
+      case "ASSIGNMENT": return <BookOpen size={22} className="text-amber-600" />;
+      case "EXAM": return <AlertCircle size={22} className="text-rose-600" />;
+      case "ANNOUNCEMENT": return <Bell size={22} className="text-emerald-700" />;
     }
   };
 
   const getBadgeColor = () => {
     switch (post.type) {
-      case "ASSIGNMENT": return "bg-orange-50/80 text-orange-600 ring-1 ring-orange-500/20";
-      case "EXAM": return "bg-red-50/80 text-red-600 ring-1 ring-red-500/20";
-      case "ANNOUNCEMENT": return "bg-blue-50/80 text-blue-600 ring-1 ring-blue-500/20";
+      case "ASSIGNMENT": return "bg-amber-50/90 text-amber-800 ring-1 ring-amber-500/25";
+      case "EXAM": return "bg-rose-50/90 text-rose-800 ring-1 ring-rose-500/25";
+      case "ANNOUNCEMENT": return "bg-emerald-50/90 text-emerald-800 ring-1 ring-emerald-600/25";
     }
   };
 
   const getIconBgColor = () => {
     switch (post.type) {
-      case "ASSIGNMENT": return "bg-orange-50";
-      case "EXAM": return "bg-red-50";
-      case "ANNOUNCEMENT": return "bg-blue-50";
+      case "ASSIGNMENT": return "bg-amber-50";
+      case "EXAM": return "bg-rose-50";
+      case "ANNOUNCEMENT": return "bg-emerald-50";
     }
   };
 
   return (
-    <div className={`group relative bg-white/70 backdrop-blur-md rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-4 sm:p-6 overflow-hidden ${isUrgent ? 'ring-2 ring-orange-400/50 shadow-orange-100' : 'border border-slate-200 hover:border-blue-200'}`}>
+    <div className={`group relative bg-white/80 backdrop-blur-md rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-4 sm:p-6 overflow-hidden ${isUrgent ? 'ring-2 ring-amber-400/50 shadow-amber-100' : 'border border-stone-200/80 hover:border-emerald-300'}`}>
       
       {/* Decorative gradient blur behind the card */}
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-transparent via-transparent to-transparent group-hover:from-blue-50/50 group-hover:to-indigo-50/50 rounded-2xl z-[-1] opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-transparent via-transparent to-transparent group-hover:from-emerald-50/60 group-hover:to-teal-50/60 rounded-2xl z-[-1] opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
 
       <div className="flex justify-between items-start gap-2 sm:gap-3 mb-3 sm:mb-4">
         <div className="flex items-start sm:items-center gap-3 sm:gap-4 flex-1 min-w-0">
@@ -52,9 +52,9 @@ export function PostCard({ post, onEdit, onDelete }: PostCardProps) {
             {getIcon()}
           </div>
           <div className="min-w-0 flex-1">
-            <h3 className="font-bold text-slate-900 text-sm sm:text-lg leading-tight group-hover:text-blue-700 transition-colors truncate">{post.title}</h3>
-            <span className="text-xs sm:text-sm text-slate-500 flex items-center gap-1.5 mt-1 font-medium">
-              <Clock size={13} className="text-slate-400 shrink-0" />
+            <h3 className="font-bold text-stone-900 text-sm sm:text-lg leading-tight group-hover:text-emerald-800 transition-colors truncate">{post.title}</h3>
+            <span className="text-xs sm:text-sm text-stone-500 flex items-center gap-1.5 mt-1 font-medium">
+              <Clock size={13} className="text-stone-400 shrink-0" />
               <span className="truncate">
                 {post.createdAt ? formatDistanceToNow(post.createdAt.toDate(), { addSuffix: true }) : 'Just now'}
               </span>
@@ -91,7 +91,7 @@ export function PostCard({ post, onEdit, onDelete }: PostCardProps) {
       {(onEdit || onDelete) && (
         <div className="mt-6 pt-5 border-t border-slate-100 flex items-center justify-end gap-3">
           {onEdit && (
-            <button onClick={() => onEdit(post)} className="flex items-center gap-2 px-4 py-2 bg-slate-50 text-slate-700 hover:text-blue-700 hover:bg-blue-100 rounded-xl transition-all font-bold text-sm border border-slate-200 shadow-sm hover:shadow">
+            <button onClick={() => onEdit(post)} className="flex items-center gap-2 px-4 py-2 bg-stone-50 text-stone-700 hover:text-emerald-800 hover:bg-emerald-50 hover:border-emerald-200 rounded-xl transition-all font-bold text-sm border border-stone-200 shadow-xs hover:shadow">
               <Edit2 size={16} />
               <span>Edit Post</span>
             </button>
