@@ -76,10 +76,10 @@ export function PWAInstallPrompt() {
   if (!showPrompt) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-8 md:w-96 bg-white/95 backdrop-blur-xl border border-stone-200/80 shadow-2xl rounded-2xl p-4 z-[100] animate-in slide-in-from-bottom-10 fade-in duration-500">
+    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-8 md:w-96 bg-white/95 dark:bg-[#0c1610]/95 backdrop-blur-xl border border-stone-200/80 dark:border-[#1e3025] shadow-2xl rounded-2xl p-4 z-[100] animate-in slide-in-from-bottom-10 fade-in duration-500">
       <button 
         onClick={handleDismiss}
-        className="absolute top-3 right-3 text-stone-400 hover:text-stone-600 bg-stone-100 hover:bg-stone-200 rounded-full p-1 transition-colors cursor-pointer"
+        className="absolute top-3 right-3 text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 bg-stone-100 hover:bg-stone-200 dark:bg-[#16231b] dark:hover:bg-[#1f3325] rounded-full p-1 transition-colors cursor-pointer"
         aria-label="Close"
       >
         <X size={16} />
@@ -90,22 +90,25 @@ export function PWAInstallPrompt() {
           <Download size={22} />
         </div>
         <div className="flex-1 pr-6">
-          <h3 className="font-bold text-stone-900 text-sm md:text-base">Install ClassSync</h3>
+          <h3 className="font-black text-stone-900 dark:text-white text-sm md:text-base tracking-tight">
+            <span>Install Class</span>
+            <span className="text-emerald-700 dark:text-emerald-400">Sync</span>
+          </h3>
           
           {isIOS ? (
-            <div className="mt-1 text-xs text-stone-600 space-y-1.5">
-              <p className="leading-snug text-stone-500">
+            <div className="mt-1 text-xs text-stone-600 dark:text-stone-300 space-y-1.5">
+              <p className="leading-snug text-stone-500 dark:text-stone-400">
                 To install on your iPhone:
               </p>
-              <div className="bg-stone-50 rounded-lg p-2 border border-stone-200/60 text-[11px] leading-relaxed text-stone-700">
-                1. Tap the <span className="font-bold inline-flex items-center gap-0.5 text-emerald-700"><Share size={11} /> Share</span> button below.<br/>
-                2. Select <span className="font-bold text-stone-900">"Add to Home Screen"</span>.<br/>
-                3. Tap <span className="font-bold text-stone-900">"Add"</span> in the top-right.
+              <div className="bg-stone-50 dark:bg-[#121c16] rounded-lg p-2 border border-stone-200/60 dark:border-[#1e3025] text-[11px] leading-relaxed text-stone-700 dark:text-stone-300">
+                1. Tap the <span className="font-bold inline-flex items-center gap-0.5 text-emerald-700 dark:text-emerald-400"><Share size={11} /> Share</span> button below.<br/>
+                2. Select <span className="font-bold text-stone-900 dark:text-white">"Add to Home Screen"</span>.<br/>
+                3. Tap <span className="font-bold text-stone-900 dark:text-white">"Add"</span> in the top-right.
               </div>
             </div>
           ) : (
             <>
-              <p className="text-xs text-stone-500 mt-0.5 mb-2.5 leading-tight">
+              <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5 mb-2.5 leading-tight">
                 Install our app on your home screen for quick and easy access.
               </p>
               <button 

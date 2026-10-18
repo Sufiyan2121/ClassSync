@@ -110,17 +110,17 @@ export function ComposerForm({ editingPost, onCancelEdit }: ComposerFormProps) {
   };
 
   return (
-    <div className="glass rounded-3xl shadow-sm border border-stone-200/70 p-6 sm:p-8 mb-8 relative overflow-hidden">
+    <div className="glass rounded-3xl shadow-sm border border-stone-200/70 dark:border-[#1e3025] dark:bg-[#121c16]/90 p-6 sm:p-8 mb-8 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500"></div>
       
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-stone-900 tracking-tight">
+        <h2 className="text-2xl font-bold text-stone-900 dark:text-white tracking-tight">
           {editingPost ? "Edit Broadcast" : "Create Broadcast"}
         </h2>
         {editingPost && (
           <button 
             onClick={onCancelEdit}
-            className="p-2 text-stone-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
+            className="p-2 text-stone-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-full transition-colors cursor-pointer"
           >
             <X size={20} />
           </button>
@@ -129,15 +129,15 @@ export function ComposerForm({ editingPost, onCancelEdit }: ComposerFormProps) {
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block text-sm font-bold text-stone-700 mb-3">Broadcast Type</label>
-          <div className="grid grid-cols-2 gap-3">
+          <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-3">Broadcast Type</label>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {(["ANNOUNCEMENT", "ASSIGNMENT", "EXAM"] as PostType[]).map((t) => (
               <label 
                 key={t} 
                 className={`flex items-center justify-center py-3 px-2 rounded-xl border-2 cursor-pointer transition-all ${
                   type === t 
-                    ? "border-emerald-600 bg-emerald-50 text-emerald-800 font-bold shadow-xs" 
-                    : "border-stone-200/90 bg-white text-stone-600 hover:border-emerald-200 hover:bg-stone-50 font-medium"
+                    ? "border-emerald-600 bg-emerald-50 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 font-bold shadow-xs" 
+                    : "border-stone-200/90 dark:border-[#1e3025] bg-white dark:bg-[#16231b] text-stone-600 dark:text-stone-300 hover:border-emerald-200 dark:hover:border-emerald-800 hover:bg-stone-50 dark:hover:bg-[#1f3325] font-medium"
                 }`}
               >
                 <input
@@ -157,7 +157,7 @@ export function ComposerForm({ editingPost, onCancelEdit }: ComposerFormProps) {
         </div>
 
         <div>
-          <label htmlFor="title" className="flex items-center gap-2 text-sm font-bold text-stone-700 mb-2">
+          <label htmlFor="title" className="flex items-center gap-2 text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">
             <Type size={16} className="text-stone-400" /> Title
           </label>
           <input
@@ -166,14 +166,14 @@ export function ComposerForm({ editingPost, onCancelEdit }: ComposerFormProps) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Midterm Exam Schedule"
-            className="w-full px-4 py-3 bg-white/90 backdrop-blur border border-stone-200/90 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all font-medium text-stone-900 placeholder:text-stone-400 shadow-xs outline-none"
+            className="w-full px-4 py-3 bg-white/90 dark:bg-[#16231b] backdrop-blur border border-stone-200/90 dark:border-[#243a2c] rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all font-medium text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-stone-500 shadow-xs outline-none"
             maxLength={100}
             required
           />
         </div>
 
         <div>
-          <label htmlFor="description" className="flex items-center gap-2 text-sm font-bold text-stone-700 mb-2">
+          <label htmlFor="description" className="flex items-center gap-2 text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">
             <AlignLeft size={16} className="text-stone-400" /> Details
           </label>
           <textarea
@@ -182,14 +182,14 @@ export function ComposerForm({ editingPost, onCancelEdit }: ComposerFormProps) {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Write the specifics here..."
             rows={5}
-            className="w-full px-4 py-3 bg-white/90 backdrop-blur border border-stone-200/90 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all text-stone-900 placeholder:text-stone-400 resize-y shadow-xs outline-none"
+            className="w-full px-4 py-3 bg-white/90 dark:bg-[#16231b] backdrop-blur border border-stone-200/90 dark:border-[#243a2c] rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-stone-500 resize-y shadow-xs outline-none"
             required
           />
         </div>
 
         <div className="animate-in fade-in slide-in-from-top-4 duration-300">
-          <label htmlFor="dueDate" className="flex items-center gap-2 text-sm font-bold text-stone-700 mb-2">
-            <CalendarIcon size={16} className="text-amber-600" /> Expiry / Due Date
+          <label htmlFor="dueDate" className="flex items-center gap-2 text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">
+            <CalendarIcon size={16} className="text-amber-600 dark:text-amber-400" /> Expiry / Due Date
             {type === "ANNOUNCEMENT" && <span className="text-stone-400 font-normal text-xs ml-1">(Optional)</span>}
           </label>
           <input
@@ -197,10 +197,10 @@ export function ComposerForm({ editingPost, onCancelEdit }: ComposerFormProps) {
             type="datetime-local"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
-            className="w-full px-4 py-3 bg-white/90 backdrop-blur border border-stone-200/90 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all font-medium text-stone-900 shadow-xs outline-none"
+            className="w-full px-4 py-3 bg-white/90 dark:bg-[#16231b] backdrop-blur border border-stone-200/90 dark:border-[#243a2c] rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all font-medium text-stone-900 dark:text-white shadow-xs outline-none"
             required={type !== "ANNOUNCEMENT"}
           />
-          <p className="text-xs text-stone-500 mt-1.5 ml-1">The post will automatically disappear after this date.</p>
+          <p className="text-xs text-stone-500 dark:text-stone-400 mt-1.5 ml-1">The post will automatically disappear after this date.</p>
         </div>
 
         <div className="pt-4">

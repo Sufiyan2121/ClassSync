@@ -54,16 +54,7 @@ export default function RootLayout({
             <Toaster 
               position="top-center"
               toastOptions={{
-                style: {
-                  background: 'rgba(255, 255, 255, 0.85)',
-                  backdropFilter: 'blur(16px)',
-                  color: '#0f172a',
-                  boxShadow: '0 12px 30px -5px rgba(15, 23, 42, 0.08)',
-                  border: '1px solid rgba(255, 255, 255, 0.8)',
-                  borderRadius: '9999px',
-                  padding: '12px 24px',
-                  fontWeight: '500',
-                }
+                className: '!bg-white/95 dark:!bg-[#121c16] !text-stone-900 dark:!text-white !border !border-stone-200 dark:!border-[#1e3025] !shadow-xl !backdrop-blur-xl !rounded-full !px-5 !py-2.5 !font-medium !text-sm',
               }} 
             />
           </AuthProvider>

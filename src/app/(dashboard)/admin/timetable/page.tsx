@@ -28,52 +28,57 @@ const TIMETABLES = [
 export default function AdminTimetable() {
   return (
     <div className="p-4 md:p-8 max-w-5xl mx-auto min-h-screen">
-      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 glass px-6 py-4 rounded-3xl shadow-sm border border-slate-200/50">
-        <div className="flex items-center gap-4">
-          <Link href="/admin" className="p-2 hover:bg-slate-100 rounded-full transition-colors shrink-0">
-            <ArrowLeft size={24} className="text-slate-600" />
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8 glass px-5 py-3.5 sm:px-6 sm:py-4 rounded-3xl shadow-xs border border-stone-200/80 dark:border-[#1e3025] dark:bg-[#121c16]/90">
+        <div className="flex items-center gap-3.5 sm:gap-4">
+          <Link href="/admin" className="p-2 hover:bg-stone-100 dark:hover:bg-[#16231b] text-stone-600 dark:text-stone-300 rounded-full transition-colors shrink-0">
+            <ArrowLeft size={22} />
           </Link>
-          <div>
-            <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-              <Calendar className="text-purple-600" size={24} /> Class Time-Tables
-            </h1>
-            <p className="text-slate-500 text-sm font-medium">Schedules are managed directly in the codebase</p>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-600 text-white flex items-center justify-center shadow-xs shrink-0">
+              <Calendar size={20} />
+            </div>
+            <div>
+              <h1 className="text-lg md:text-2xl font-extrabold text-stone-900 dark:text-white tracking-tight">
+                Class Time-Tables
+              </h1>
+              <p className="text-stone-500 dark:text-stone-400 text-xs sm:text-sm font-medium">Schedules are managed directly in the codebase</p>
+            </div>
           </div>
         </div>
       </header>
 
       {TIMETABLES.length === 0 ? (
-        <div className="glass rounded-3xl p-12 text-center shadow-sm border border-slate-200/50 flex flex-col items-center justify-center">
-          <Calendar size={48} className="text-slate-300 mb-4" />
-          <h3 className="text-xl font-bold text-slate-900 mb-2">No timetables found</h3>
-          <p className="text-slate-500">Add them to the TIMETABLES array in the code.</p>
+        <div className="glass rounded-3xl p-12 text-center shadow-xs border border-stone-200/80 dark:border-[#1e3025] dark:bg-[#121c16]/90 flex flex-col items-center justify-center">
+          <Calendar size={48} className="text-stone-300 dark:text-stone-600 mb-4" />
+          <h3 className="text-xl font-bold text-stone-900 dark:text-white mb-2">No timetables found</h3>
+          <p className="text-stone-500 dark:text-stone-400">Add them to the TIMETABLES array in the code.</p>
         </div>
       ) : (
-        <div className="grid gap-8">
+        <div className="grid gap-6 sm:gap-8">
           {TIMETABLES.map((t) => (
-            <div key={t.id} className="glass rounded-3xl overflow-hidden shadow-sm border border-slate-200/50 bg-white/40 group">
-              <div className="flex justify-between items-center p-4 md:px-6 md:py-4 border-b border-stone-200/70 bg-white/60">
-                <h3 className="font-bold text-lg text-stone-900 flex items-center gap-2">
-                  {t.type === "pdf" ? <FileText className="text-rose-600" size={20} /> : <Calendar className="text-teal-700" size={20} />}
+            <div key={t.id} className="glass rounded-3xl overflow-hidden shadow-xs border border-stone-200/80 dark:border-[#1e3025] bg-white/70 dark:bg-[#121c16]/90 group">
+              <div className="flex justify-between items-center p-4 md:px-6 md:py-4 border-b border-stone-200/70 dark:border-[#1e3025] bg-white/90 dark:bg-[#16231b]">
+                <h3 className="font-bold text-base sm:text-lg text-stone-900 dark:text-white flex items-center gap-2">
+                  {t.type === "pdf" ? <FileText className="text-rose-600 dark:text-rose-400" size={20} /> : <Calendar className="text-emerald-700 dark:text-emerald-400" size={20} />}
                   {t.title}
                 </h3>
                 <a
                   href={t.fileUrl}
                   download
-                  className="flex items-center gap-2 bg-emerald-700 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-emerald-800 transition-all shadow-xs cursor-pointer"
+                  className="flex items-center gap-2 bg-gradient-to-r from-emerald-700 to-teal-700 hover:from-emerald-800 hover:to-teal-800 text-white px-3.5 sm:px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-xs cursor-pointer"
                 >
-                  <Download size={16} />
+                  <Download size={15} />
                   <span className="hidden sm:inline">Download</span>
                 </a>
               </div>
-              <div className="p-4 md:p-6 flex items-center justify-center bg-stone-50/50">
+              <div className="p-4 md:p-6 flex items-center justify-center bg-stone-50/60 dark:bg-[#0c1610]/80">
                 {t.type === "image" ? (
-                  <img src={t.fileUrl} alt={t.title} className="w-full max-w-4xl object-contain rounded-xl shadow-xs border border-stone-200" />
+                  <img src={t.fileUrl} alt={t.title} className="w-full max-w-4xl object-contain rounded-xl shadow-xs border border-stone-200 dark:border-[#1e3025]" />
                 ) : (
                   <div className="py-12 text-center flex flex-col items-center">
-                    <FileText size={64} className="text-stone-300 mb-4" />
-                    <p className="text-stone-500 font-medium">This is a PDF document.</p>
-                    <a href={t.fileUrl} target="_blank" rel="noopener noreferrer" className="mt-4 text-emerald-700 hover:text-emerald-800 hover:underline font-bold">
+                    <FileText size={64} className="text-stone-300 dark:text-stone-600 mb-4" />
+                    <p className="text-stone-500 dark:text-stone-400 font-medium text-sm">This is a PDF document.</p>
+                    <a href={t.fileUrl} target="_blank" rel="noopener noreferrer" className="mt-4 text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 hover:underline font-bold text-sm">
                       Click here to view PDF
                     </a>
                   </div>

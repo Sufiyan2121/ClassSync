@@ -160,25 +160,25 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="w-full max-w-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-3xl shadow-2xl border border-slate-200/80 dark:border-slate-800 flex flex-col max-h-[92vh] overflow-hidden animate-in zoom-in-95 duration-200">
+      <div className="w-full max-w-lg bg-white dark:bg-[#0c1610] text-slate-900 dark:text-stone-100 rounded-3xl shadow-2xl border border-slate-200/80 dark:border-[#1e3025] flex flex-col max-h-[92vh] overflow-hidden animate-in zoom-in-95 duration-200">
         
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-[#1e3025] bg-slate-50/50 dark:bg-[#121c16]">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 flex items-center justify-center font-bold">
               <User size={16} />
             </div>
             <div>
               <h3 className="font-black text-base text-slate-900 dark:text-white tracking-tight">
                 Edit Profile
               </h3>
-              <p className="text-[11px] text-slate-400">Update your photo, phone, and details</p>
+              <p className="text-[11px] text-slate-400 dark:text-stone-400">Update your photo, phone, and details</p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-stone-200 hover:bg-slate-100 dark:hover:bg-[#1e3025] transition-colors cursor-pointer"
             title="Close"
           >
             <X size={18} />
@@ -189,10 +189,10 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
         <form onSubmit={handleSubmit} className="p-6 space-y-5 overflow-y-auto">
           
           {/* Profile Picture Upload Section */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 p-4 rounded-2xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200/70 dark:border-stone-700/60">
+          <div className="flex flex-col sm:flex-row items-center gap-4 p-4 rounded-2xl bg-stone-50 dark:bg-[#121c16] border border-stone-200/70 dark:border-[#1e3025]">
             {/* Avatar Preview */}
             <div className="relative group shrink-0">
-              <div className="w-20 h-20 rounded-2xl overflow-hidden bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-600 text-white font-black text-2xl flex items-center justify-center shadow-md shadow-emerald-700/20 ring-4 ring-white dark:ring-stone-800">
+              <div className="w-20 h-20 rounded-2xl overflow-hidden bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-600 text-white font-black text-2xl flex items-center justify-center shadow-md shadow-emerald-700/20 ring-4 ring-white dark:ring-[#1e3025]">
                 {photoURL ? (
                   <img src={photoURL} alt="Profile" className="w-full h-full object-cover" />
                 ) : (
@@ -234,14 +234,14 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
                   <button
                     type="button"
                     onClick={handleRemovePhoto}
-                    className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 border border-red-200/60 transition-all cursor-pointer"
+                    className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 border border-red-200/60 dark:border-red-900/60 transition-all cursor-pointer"
                   >
                     <Trash2 size={13} />
                     <span>Remove</span>
                   </button>
                 )}
               </div>
-              <p className="text-[10px] text-slate-400">
+              <p className="text-[10px] text-slate-400 dark:text-stone-400">
                 Supports JPG, PNG, WebP. Automatically optimized for fast loading.
               </p>
             </div>
@@ -252,7 +252,7 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
             
             {/* Full Name */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label className="block text-xs font-bold text-slate-700 dark:text-stone-300 mb-1.5">
                 Full Name <span className="text-red-500">*</span>
               </label>
               <div className="relative">
@@ -265,7 +265,7 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Sufiyan Shaikh"
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all"
+                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] text-stone-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all"
                 />
               </div>
             </div>
@@ -273,10 +273,10 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
             {/* Email Address (Protected) */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                <label className="text-xs font-bold text-slate-700 dark:text-stone-300">
                   Email Address
                 </label>
-                <span className="flex items-center gap-1 text-[10px] font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full border border-slate-200/60 dark:border-slate-700">
+                <span className="flex items-center gap-1 text-[10px] font-bold text-slate-400 dark:text-stone-400 bg-slate-100 dark:bg-[#16231b] px-2 py-0.5 rounded-full border border-slate-200/60 dark:border-[#243a2c]">
                   <Lock size={10} />
                   <span>Google Account Verified</span>
                 </span>
@@ -289,10 +289,10 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
                   type="email"
                   disabled
                   value={userData?.email || ""}
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-500 dark:text-slate-400 cursor-not-allowed select-none"
+                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-100 dark:bg-[#121c16] border border-slate-200 dark:border-[#1e3025] text-sm font-semibold text-slate-500 dark:text-stone-400 cursor-not-allowed select-none"
                 />
               </div>
-              <p className="text-[10px] text-slate-400 mt-1">
+              <p className="text-[10px] text-slate-400 dark:text-stone-500 mt-1">
                 Your email is tied to your Google Sign-in and cannot be edited.
               </p>
             </div>
@@ -302,18 +302,18 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
               
               {/* Gender */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                <label className="block text-xs font-bold text-slate-700 dark:text-stone-300 mb-1.5">
                   Gender
                 </label>
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all cursor-pointer"
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] text-stone-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all cursor-pointer"
                 >
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                  <option value="Prefer not to say">Prefer not to say</option>
+                  <option value="Male" className="dark:bg-[#121c16]">Male</option>
+                  <option value="Female" className="dark:bg-[#121c16]">Female</option>
+                  <option value="Other" className="dark:bg-[#121c16]">Other</option>
+                  <option value="Prefer not to say" className="dark:bg-[#121c16]">Prefer not to say</option>
                 </select>
               </div>
 
@@ -331,7 +331,7 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     placeholder="+91 98765 43210"
-                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all"
+                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] text-stone-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all"
                   />
                 </div>
               </div>
@@ -351,7 +351,7 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
                   type="date"
                   value={birthday}
                   onChange={(e) => setBirthday(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all"
+                  className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] text-stone-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-all"
                 />
               </div>
             </div>
@@ -359,12 +359,12 @@ export function EditProfileModal({ isOpen, onClose }: EditProfileModalProps) {
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-3 border-t border-stone-100 dark:border-stone-800 flex items-center justify-end gap-2.5">
+          <div className="pt-3 border-t border-stone-100 dark:border-[#1e3025] flex items-center justify-end gap-2.5">
             <button
               type="button"
               onClick={onClose}
               disabled={isSaving}
-              className="px-4 py-2.5 rounded-xl text-xs font-bold text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-all cursor-pointer"
+              className="px-4 py-2.5 rounded-xl text-xs font-bold text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-[#1e3025] transition-all cursor-pointer"
             >
               Cancel
             </button>

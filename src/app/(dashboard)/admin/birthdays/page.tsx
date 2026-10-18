@@ -224,19 +224,19 @@ export default function AdminBirthdaysPage() {
     <div className="p-3 md:p-8 max-w-5xl mx-auto min-h-screen">
       
       {/* Top Header */}
-      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 glass px-4 py-3 md:px-6 md:py-4 rounded-3xl shadow-sm border border-slate-200/50">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 glass px-4 py-3 md:px-6 md:py-4 rounded-3xl shadow-xs border border-stone-200/80 dark:border-[#1e3025] dark:bg-[#121c16]/90">
         <div className="flex items-center gap-3.5">
-          <Link href="/admin" className="p-2 hover:bg-slate-100 rounded-full transition-colors shrink-0">
-            <ArrowLeft size={22} className="text-slate-600" />
+          <Link href="/admin" className="p-2 hover:bg-stone-100 dark:hover:bg-[#16231b] text-stone-600 dark:text-stone-300 rounded-full transition-colors shrink-0">
+            <ArrowLeft size={22} />
           </Link>
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xl">🎂</span>
-              <h1 className="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
+              <h1 className="text-xl md:text-2xl font-extrabold text-stone-900 dark:text-white tracking-tight">
                 Birthdays Manager
               </h1>
             </div>
-            <p className="text-slate-500 text-xs sm:text-sm font-medium">
+            <p className="text-stone-500 dark:text-stone-400 text-xs sm:text-sm font-medium">
               Record birthdays & automate 1-day prior and birthday notifications
             </p>
           </div>
@@ -255,7 +255,7 @@ export default function AdminBirthdaysPage() {
 
           <button
             onClick={openAddModal}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2.5 bg-stone-900 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2.5 bg-stone-900 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer"
           >
             <Plus size={15} />
             <span>Add Birthday</span>
@@ -299,17 +299,17 @@ export default function AdminBirthdaysPage() {
 
       {/* TOMORROW'S HEADS UP (If someone has a birthday tomorrow!) */}
       {tomorrowsBirthdays.length > 0 && (
-        <div className="mb-6 rounded-2xl bg-gradient-to-r from-indigo-50/90 to-purple-50/80 p-4 border border-indigo-200/80 flex items-center justify-between gap-3 shadow-2xs">
+        <div className="mb-6 rounded-2xl bg-gradient-to-r from-indigo-50/90 to-purple-50/80 dark:from-indigo-950/40 dark:to-purple-950/40 p-4 border border-indigo-200/80 dark:border-indigo-800/50 flex items-center justify-between gap-3 shadow-2xs">
           <div className="flex items-center gap-3 min-w-0">
             <span className="text-2xl">🎈</span>
             <div className="min-w-0">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 dark:text-indigo-300 bg-indigo-100 dark:bg-indigo-950/60 px-2 py-0.5 rounded-full">
                 1-Day Prior Alert
               </span>
-              <p className="text-sm font-extrabold text-slate-900 truncate mt-1">
+              <p className="text-sm font-extrabold text-stone-900 dark:text-white truncate mt-1">
                 It&apos;s {tomorrowsBirthdays.map((b) => b.name).join(" & ")}&apos;s birthday tomorrow!
               </p>
-              <p className="text-xs text-slate-500 font-medium">
+              <p className="text-xs text-stone-500 dark:text-stone-400 font-medium">
                 The software will automatically remind students so everyone can wish them on time.
               </p>
             </div>
@@ -327,52 +327,52 @@ export default function AdminBirthdaysPage() {
 
       {/* Overview Stat Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6">
-        <div className="glass rounded-2xl p-4 border border-slate-200/60 shadow-xs">
-          <div className="flex items-center gap-2 text-slate-500 text-xs font-semibold mb-1">
+        <div className="glass rounded-2xl p-4 border border-stone-200/70 dark:border-[#1e3025] dark:bg-[#121c16]/90 shadow-xs">
+          <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400 text-xs font-semibold mb-1">
             <Cake size={15} className="text-pink-500" />
             <span>Today</span>
           </div>
-          <p className="text-2xl font-black text-slate-900">{todaysBirthdays.length}</p>
+          <p className="text-2xl font-black text-stone-900 dark:text-white">{todaysBirthdays.length}</p>
         </div>
 
-        <div className="glass rounded-2xl p-4 border border-slate-200/60 shadow-xs">
-          <div className="flex items-center gap-2 text-slate-500 text-xs font-semibold mb-1">
+        <div className="glass rounded-2xl p-4 border border-stone-200/70 dark:border-[#1e3025] dark:bg-[#121c16]/90 shadow-xs">
+          <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400 text-xs font-semibold mb-1">
             <PartyPopper size={15} className="text-indigo-500" />
             <span>Tomorrow</span>
           </div>
-          <p className="text-2xl font-black text-slate-900">{tomorrowsBirthdays.length}</p>
+          <p className="text-2xl font-black text-stone-900 dark:text-white">{tomorrowsBirthdays.length}</p>
         </div>
 
-        <div className="glass rounded-2xl p-4 border border-slate-200/60 shadow-xs">
-          <div className="flex items-center gap-2 text-slate-500 text-xs font-semibold mb-1">
+        <div className="glass rounded-2xl p-4 border border-stone-200/70 dark:border-[#1e3025] dark:bg-[#121c16]/90 shadow-xs">
+          <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400 text-xs font-semibold mb-1">
             <CalendarIcon size={15} className="text-purple-500" />
             <span>This Month</span>
           </div>
-          <p className="text-2xl font-black text-slate-900">
+          <p className="text-2xl font-black text-stone-900 dark:text-white">
             {birthdays.filter(b => b.month === thisMonthNumber).length}
           </p>
         </div>
 
-        <div className="glass rounded-2xl p-4 border border-stone-200/60 shadow-xs">
-          <div className="flex items-center gap-2 text-stone-500 text-xs font-semibold mb-1">
-            <Users size={15} className="text-emerald-700" />
+        <div className="glass rounded-2xl p-4 border border-stone-200/70 dark:border-[#1e3025] dark:bg-[#121c16]/90 shadow-xs">
+          <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400 text-xs font-semibold mb-1">
+            <Users size={15} className="text-emerald-700 dark:text-emerald-400" />
             <span>Total Recorded</span>
           </div>
-          <p className="text-2xl font-black text-stone-900">{birthdays.length}</p>
+          <p className="text-2xl font-black text-stone-900 dark:text-white">{birthdays.length}</p>
         </div>
       </div>
 
       {/* Search and Filters */}
-      <div className="glass rounded-2xl p-4 border border-slate-200/60 shadow-xs mb-6 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+      <div className="glass rounded-2xl p-4 border border-stone-200/70 dark:border-[#1e3025] dark:bg-[#121c16]/90 shadow-xs mb-6 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
         
         {/* Tabs: Upcoming vs All */}
-        <div className="flex bg-slate-100 p-1 rounded-xl shrink-0">
+        <div className="flex bg-stone-100 dark:bg-[#16231b] border border-transparent dark:border-[#1e3025] p-1 rounded-xl shrink-0">
           <button
             onClick={() => setActiveTab("upcoming")}
             className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
               activeTab === "upcoming"
-                ? "bg-white text-slate-900 shadow-2xs"
-                : "text-slate-500 hover:text-slate-900"
+                ? "bg-white dark:bg-[#121c16] text-stone-900 dark:text-white shadow-2xs"
+                : "text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white"
             }`}
           >
             Upcoming Next
@@ -381,8 +381,8 @@ export default function AdminBirthdaysPage() {
             onClick={() => setActiveTab("all")}
             className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
               activeTab === "all"
-                ? "bg-white text-slate-900 shadow-2xs"
-                : "text-slate-500 hover:text-slate-900"
+                ? "bg-white dark:bg-[#121c16] text-stone-900 dark:text-white shadow-2xs"
+                : "text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white"
             }`}
           >
             All by Month
@@ -395,7 +395,7 @@ export default function AdminBirthdaysPage() {
             <select
               value={selectedClassFilter}
               onChange={(e) => setSelectedClassFilter(e.target.value)}
-              className="bg-stone-50 border border-stone-200 text-stone-800 text-xs font-bold rounded-xl px-2.5 py-2 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600"
+              className="bg-stone-50 dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] text-stone-800 dark:text-white text-xs font-bold rounded-xl px-2.5 py-2 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 cursor-pointer"
             >
               <option value="ALL">All Classes</option>
               {classes.map((c) => (
@@ -414,7 +414,7 @@ export default function AdminBirthdaysPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search student name..."
-              className="w-full pl-9 pr-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+              className="w-full pl-9 pr-3 py-2 bg-stone-50 dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] rounded-xl text-xs font-medium text-stone-900 dark:text-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none placeholder:text-stone-400"
             />
           </div>
         </div>
@@ -424,10 +424,10 @@ export default function AdminBirthdaysPage() {
       {activeTab === "upcoming" ? (
         <div className="space-y-3">
           {filteredUpcoming.length === 0 ? (
-            <div className="text-center py-16 glass rounded-3xl border border-slate-200/50">
-              <Cake size={40} className="text-slate-300 mx-auto mb-2" />
-              <p className="font-bold text-slate-700 text-sm">No birthdays found</p>
-              <p className="text-xs text-slate-400 mt-1 max-w-xs mx-auto">
+            <div className="text-center py-16 glass rounded-3xl border border-stone-200/70 dark:border-[#1e3025] dark:bg-[#121c16]/90">
+              <Cake size={40} className="text-stone-300 dark:text-stone-600 mx-auto mb-2" />
+              <p className="font-bold text-stone-700 dark:text-stone-200 text-sm">No birthdays found</p>
+              <p className="text-xs text-stone-400 mt-1 max-w-xs mx-auto">
                 {searchQuery ? "No matches for your search." : "Click \"Add Birthday\" above to record your first student birthday."}
               </p>
             </div>
@@ -441,10 +441,10 @@ export default function AdminBirthdaysPage() {
                   key={b.id}
                   className={`p-4 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
                     isTodayBirthday
-                      ? "bg-gradient-to-r from-pink-50/90 to-purple-50/80 border-pink-300 shadow-xs"
+                      ? "bg-gradient-to-r from-pink-50/90 to-purple-50/80 dark:from-pink-950/40 dark:to-purple-950/40 border-pink-300 dark:border-pink-800/60 shadow-xs"
                       : isTomorrowBirthday
-                      ? "bg-indigo-50/60 border-indigo-200"
-                      : "glass bg-white/70 border-slate-200/60 hover:bg-white"
+                      ? "bg-indigo-50/60 dark:bg-indigo-950/30 border-indigo-200 dark:border-indigo-800/50"
+                      : "glass bg-white/70 dark:bg-[#121c16]/90 border-stone-200/70 dark:border-[#1e3025] hover:bg-white dark:hover:bg-[#16231b]"
                   }`}
                 >
                   <div className="flex items-center gap-3.5 min-w-0">
@@ -453,22 +453,22 @@ export default function AdminBirthdaysPage() {
                         ? "bg-gradient-to-tr from-pink-500 to-rose-500 text-white"
                         : isTomorrowBirthday
                         ? "bg-gradient-to-tr from-indigo-500 to-purple-500 text-white"
-                        : "bg-slate-100 text-slate-700"
+                        : "bg-pink-100 dark:bg-pink-950/60 text-pink-700 dark:text-pink-300"
                     }`}>
                       {isTodayBirthday ? "🎂" : isTomorrowBirthday ? "🎈" : b.name.charAt(0)}
                     </div>
 
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="font-extrabold text-sm sm:text-base text-slate-900 truncate">
+                        <h3 className="font-extrabold text-sm sm:text-base text-stone-900 dark:text-white truncate">
                           {b.name}
                         </h3>
                         {b.rollNo && (
-                          <span className="text-[10px] font-mono font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+                          <span className="text-[10px] font-mono font-bold text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-[#16231b] px-2 py-0.5 rounded-md border border-stone-200/60 dark:border-[#1e3025]">
                             Roll #{b.rollNo}
                           </span>
                         )}
-                        <span className="text-[10px] font-extrabold text-emerald-800 bg-emerald-100 border border-emerald-200/60 px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] font-extrabold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-200/60 dark:border-emerald-800/60 px-2 py-0.5 rounded-full">
                           {b.classCode || "ALL"}
                         </span>
                         {isTodayBirthday && (
@@ -477,23 +477,23 @@ export default function AdminBirthdaysPage() {
                           </span>
                         )}
                         {isTomorrowBirthday && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full">
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-100 dark:bg-indigo-950/60 px-2 py-0.5 rounded-full">
                             ⏰ TOMORROW
                           </span>
                         )}
                       </div>
 
-                      <div className="flex items-center gap-2 text-xs text-slate-500 mt-1 flex-wrap">
-                        <span className="font-semibold text-slate-700">
+                      <div className="flex items-center gap-2 text-xs text-stone-500 dark:text-stone-400 mt-1 flex-wrap">
+                        <span className="font-semibold text-stone-700 dark:text-stone-300">
                           📅 {monthNames[b.month - 1]} {b.day}
                         </span>
                         {b.year && (
-                          <span className="text-slate-400">
+                          <span className="text-stone-400 dark:text-stone-500">
                             (Turning {currentYear - b.year})
                           </span>
                         )}
                         {b.notes && (
-                          <span className="text-slate-400 italic truncate max-w-xs">
+                          <span className="text-stone-400 dark:text-stone-500 italic truncate max-w-xs">
                             — &quot;{b.notes}&quot;
                           </span>
                         )}
@@ -501,12 +501,12 @@ export default function AdminBirthdaysPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between sm:justify-end gap-2.5 shrink-0 pt-2 sm:pt-0 border-t sm:border-0 border-slate-100">
-                    <span className="text-xs font-bold text-slate-600">
+                  <div className="flex items-center justify-between sm:justify-end gap-2.5 shrink-0 pt-2 sm:pt-0 border-t sm:border-0 border-stone-100 dark:border-[#1e3025]">
+                    <span className="text-xs font-bold text-stone-600 dark:text-stone-400">
                       {isTodayBirthday ? (
-                        <span className="text-pink-600 font-extrabold">Celebrating Today!</span>
+                        <span className="text-pink-600 dark:text-pink-400 font-extrabold">Celebrating Today!</span>
                       ) : isTomorrowBirthday ? (
-                        <span className="text-indigo-600 font-extrabold">Tomorrow</span>
+                        <span className="text-indigo-600 dark:text-indigo-400 font-extrabold">Tomorrow</span>
                       ) : (
                         `In ${b.daysUntil} days`
                       )}
@@ -515,21 +515,21 @@ export default function AdminBirthdaysPage() {
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => handleSendNotification(b, isTodayBirthday ? "TODAY" : "TOMORROW")}
-                        className="p-2 text-slate-400 hover:text-pink-600 hover:bg-pink-50 rounded-xl transition-colors cursor-pointer"
+                        className="p-2 text-stone-400 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-pink-950/40 rounded-xl transition-colors cursor-pointer"
                         title="Send notification now"
                       >
                         <Send size={15} />
                       </button>
                       <button
                         onClick={() => openEditModal(b)}
-                        className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+                        className="p-2 text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-[#16231b] rounded-xl transition-colors cursor-pointer"
                         title="Edit Birthday"
                       >
                         <Pencil size={15} />
                       </button>
                       <button
                         onClick={() => handleDelete(b)}
-                        className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
+                        className="p-2 text-stone-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-xl transition-colors cursor-pointer"
                         title="Delete Birthday"
                       >
                         <Trash2 size={15} />
@@ -550,9 +550,9 @@ export default function AdminBirthdaysPage() {
             if (inThisMonth.length === 0) return null;
 
             return (
-              <div key={monthName} className="glass rounded-3xl p-5 border border-slate-200/60 shadow-xs">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
-                  <h3 className="font-black text-slate-900 text-base flex items-center gap-2">
+              <div key={monthName} className="glass rounded-3xl p-5 border border-stone-200/70 dark:border-[#1e3025] dark:bg-[#121c16]/90 shadow-xs">
+                <div className="flex items-center justify-between border-b border-stone-100 dark:border-[#1e3025] pb-3 mb-3">
+                  <h3 className="font-black text-stone-900 dark:text-white text-base flex items-center gap-2">
                     <span>🗓️</span> {monthName} ({inThisMonth.length})
                   </h3>
                 </div>
@@ -561,18 +561,18 @@ export default function AdminBirthdaysPage() {
                   {inThisMonth.map((b) => (
                     <div
                       key={b.id}
-                      className="p-3 bg-white/80 rounded-2xl border border-slate-200/70 flex items-center justify-between gap-2"
+                      className="p-3 bg-white/80 dark:bg-[#16231b] rounded-2xl border border-stone-200/70 dark:border-[#1e3025] flex items-center justify-between gap-2"
                     >
                       <div className="min-w-0 pr-2">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-extrabold text-sm text-slate-900 truncate">
+                          <span className="font-extrabold text-sm text-stone-900 dark:text-white truncate">
                             {b.name}
                           </span>
-                          <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-200/60 px-1.5 py-0.5 rounded">
+                          <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-200/60 dark:border-emerald-800/60 px-1.5 py-0.5 rounded">
                             {b.classCode}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-500 font-semibold mt-0.5">
+                        <p className="text-xs text-stone-500 dark:text-stone-400 font-semibold mt-0.5">
                           {monthName} {b.day} {b.year ? `(${b.year})` : ""}
                         </p>
                       </div>
@@ -580,14 +580,14 @@ export default function AdminBirthdaysPage() {
                       <div className="flex items-center gap-1 shrink-0">
                         <button
                           onClick={() => openEditModal(b)}
-                          className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                          className="p-1.5 text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-[#121c16] rounded-lg transition-colors cursor-pointer"
                           title="Edit"
                         >
                           <Pencil size={14} />
                         </button>
                         <button
                           onClick={() => handleDelete(b)}
-                          className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                          className="p-1.5 text-stone-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-colors cursor-pointer"
                           title="Delete"
                         >
                           <Trash2 size={14} />
@@ -605,7 +605,7 @@ export default function AdminBirthdaysPage() {
       {/* Add / Edit Birthday Modal (Portaled for safe cross-platform viewing) */}
       {mounted && isModalOpen && createPortal(
         <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-md overscroll-contain animate-in fade-in duration-200"
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 dark:bg-black/70 backdrop-blur-md overscroll-contain animate-in fade-in duration-200"
           style={{
             paddingTop: "max(1rem, env(safe-area-inset-top, 1rem))",
             paddingBottom: "max(1rem, env(safe-area-inset-bottom, 1rem))",
@@ -614,26 +614,26 @@ export default function AdminBirthdaysPage() {
             if (e.target === e.currentTarget) setIsModalOpen(false);
           }}
         >
-          <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden border border-slate-100 max-h-[85dvh] sm:max-h-[88vh] flex flex-col my-auto relative animate-in zoom-in-95 duration-200">
+          <div className="bg-white dark:bg-[#0c1610] w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden border border-stone-100 dark:border-[#1e3025] max-h-[85dvh] sm:max-h-[88vh] flex flex-col my-auto relative animate-in zoom-in-95 duration-200">
             
             {/* Header */}
-            <div className="flex justify-between items-center px-6 py-4 border-b border-slate-100 shrink-0 bg-slate-50/70">
+            <div className="flex justify-between items-center px-6 py-4 border-b border-stone-100 dark:border-[#1e3025] shrink-0 bg-stone-50/70 dark:bg-[#121c16]">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-pink-500 to-purple-600 text-white flex items-center justify-center shadow-xs text-lg">
                   🎂
                 </div>
                 <div>
-                  <h2 className="text-base font-extrabold text-slate-900">
+                  <h2 className="text-base font-extrabold text-stone-900 dark:text-white">
                     {editingBirthday ? "Edit Birthday" : "Record New Birthday"}
                   </h2>
-                  <p className="text-[11px] text-slate-500 font-medium">
+                  <p className="text-[11px] text-stone-500 dark:text-stone-400 font-medium">
                     Software will send alerts 1 day prior and on their birthday
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
+                className="p-2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-[#16231b] rounded-full transition-colors cursor-pointer"
               >
                 <X size={18} />
               </button>
@@ -642,13 +642,13 @@ export default function AdminBirthdaysPage() {
             {/* Form */}
             <form onSubmit={handleSaveBirthday} className="p-6 overflow-y-auto space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Student / Person Name *</label>
+                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Student / Person Name *</label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Rahul Sharma"
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-pink-500"
+                  className="w-full px-3.5 py-2.5 bg-stone-50 dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-pink-500 text-stone-900 dark:text-white placeholder:text-stone-400"
                   required
                   autoFocus
                 />
@@ -656,23 +656,23 @@ export default function AdminBirthdaysPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Birth Date *</label>
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Birth Date *</label>
                   <input
                     type="date"
                     value={birthDate}
                     onChange={(e) => setBirthDate(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold outline-none focus:ring-2 focus:ring-pink-500"
+                    className="w-full px-3 py-2 bg-stone-50 dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] rounded-xl text-xs font-semibold outline-none focus:ring-2 focus:ring-pink-500 text-stone-900 dark:text-white"
                     required
                   />
-                  <span className="text-[10px] text-slate-400 mt-0.5 block">Select birth date & year</span>
+                  <span className="text-[10px] text-stone-400 mt-0.5 block">Select birth date & year</span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Class / Division</label>
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Class / Division</label>
                   <select
                     value={classCode}
                     onChange={(e) => setClassCode(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-pink-500"
+                    className="w-full px-3 py-2 bg-stone-50 dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-pink-500 text-stone-900 dark:text-white cursor-pointer"
                   >
                     <option value="ALL">All Classes (General)</option>
                     {classes.map((c) => (
@@ -681,30 +681,30 @@ export default function AdminBirthdaysPage() {
                       </option>
                     ))}
                   </select>
-                  <span className="text-[10px] text-slate-400 mt-0.5 block">Target students who receive the alert</span>
+                  <span className="text-[10px] text-stone-400 mt-0.5 block">Target students who receive the alert</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Roll / PRN Number (Optional)</label>
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Roll / PRN Number (Optional)</label>
                   <input
                     type="text"
                     value={rollNo}
                     onChange={(e) => setRollNo(e.target.value)}
                     placeholder="e.g. 42"
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-pink-500"
+                    className="w-full px-3 py-2 bg-stone-50 dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-pink-500 text-stone-900 dark:text-white placeholder:text-stone-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Custom Note / Wish (Optional)</label>
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Custom Note / Wish (Optional)</label>
                   <input
                     type="text"
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="e.g. Class Representative"
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-pink-500"
+                    className="w-full px-3 py-2 bg-stone-50 dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-pink-500 text-stone-900 dark:text-white placeholder:text-stone-400"
                   />
                 </div>
               </div>

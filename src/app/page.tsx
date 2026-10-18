@@ -12,10 +12,10 @@ export default function Home() {
   }, [router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#dfe8df]">
+    <div className="min-h-screen flex items-center justify-center bg-[#dfe8df] dark:bg-[#09130e] transition-colors">
       <div className="animate-pulse flex flex-col items-center">
-        <div className="h-12 w-12 bg-emerald-200 rounded-full mb-4"></div>
-        <div className="h-4 w-24 bg-stone-300 rounded"></div>
+        <div className="h-12 w-12 bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-600 rounded-2xl shadow-lg shadow-emerald-900/30 mb-4 flex items-center justify-center"></div>
+        <div className="h-4 w-24 bg-stone-300 dark:bg-[#16231b] rounded-full"></div>
       </div>
     </div>
   );

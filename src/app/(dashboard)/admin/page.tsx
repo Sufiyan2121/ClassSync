@@ -17,6 +17,7 @@ import { db } from "@/lib/firebase/clientApp";
 import toast from "react-hot-toast";
 
 import { ClassCodeManager } from "@/components/dashboard/ClassCodeManager";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export default function AdminDashboard() {
   const { userData, logout, loading: authLoading } = useAuth();
@@ -61,32 +62,20 @@ export default function AdminDashboard() {
   return (
     <div className="p-3 md:p-8 max-w-7xl mx-auto min-h-screen overflow-x-hidden w-full">
       
-      {/* Top Branding Logo & Tagline (Centered) */}
-      <div className="flex flex-col items-center justify-center text-center mb-3 sm:mb-4 pt-1 sm:pt-2 select-none animate-in fade-in slide-in-from-top-4 duration-500">
-        <div className="inline-flex items-center justify-center gap-2.5 sm:gap-3">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-600 flex items-center justify-center text-white shadow-sm shadow-emerald-600/20 ring-1 ring-emerald-500/15 shrink-0">
-            <BookOpen size={17} className="sm:w-5 sm:h-5 text-white" strokeWidth={2.4} />
-          </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-stone-900 tracking-tight leading-none">
-            ClassSync
-          </h2>
-        </div>
-        <p className="text-stone-500 text-xs sm:text-sm font-medium mt-1.5 sm:mt-2 max-w-sm mx-auto tracking-normal">
-          Bridging the gap between classrooms and students.
-        </p>
-      </div>
+      {/* Top Branding Logo & Tagline (Consistent across all pages) */}
+      <BrandLogo size="md" align="center" className="mb-3 sm:mb-4 pt-1 sm:pt-2" />
 
       {/* Header with Glassmorphism */}
-      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3.5 mb-4 glass px-4 py-3 sm:px-6 sm:py-4 rounded-3xl shadow-xs border border-stone-200/60">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3.5 mb-4 glass px-4 py-3 sm:px-6 sm:py-4 rounded-3xl shadow-xs border border-stone-200/60 dark:border-[#1e3025]">
         <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-stone-900 rounded-xl sm:rounded-2xl flex items-center justify-center text-white shadow-lg shadow-stone-900/20 shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-600 rounded-xl sm:rounded-2xl flex items-center justify-center text-white shadow-lg shadow-emerald-700/20 shrink-0 ring-1 ring-emerald-500/20">
             <ShieldCheck size={20} />
           </div>
           <div className="min-w-0">
-            <h1 className="text-base sm:text-2xl font-extrabold text-stone-900 tracking-tight flex items-center gap-2 truncate">
+            <h1 className="text-base sm:text-2xl font-extrabold text-stone-900 dark:text-white tracking-tight flex items-center gap-2 truncate">
               Admin Portal
             </h1>
-            <p className="text-stone-500 text-xs sm:text-sm font-medium truncate">Manage classes and broadcast updates</p>
+            <p className="text-stone-500 dark:text-stone-400 text-xs sm:text-sm font-medium truncate">Manage classes and broadcast updates</p>
           </div>
         </div>
 
@@ -103,13 +92,13 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5 mb-5">
         <Link 
           href="/admin/resources" 
-          className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white/80 hover:bg-emerald-50/70 border border-stone-200/80 hover:border-emerald-300 shadow-2xs hover:shadow-xs transition-all group min-w-0"
+          className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white/80 dark:bg-[#121c16] hover:bg-emerald-50/70 dark:hover:bg-[#18261d] border border-stone-200/80 dark:border-[#1e3025] hover:border-emerald-300 dark:hover:border-emerald-700 shadow-2xs hover:shadow-xs transition-all group min-w-0"
         >
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
             <FolderOpen size={16} />
           </div>
           <div className="min-w-0 flex-1">
-            <h4 className="font-extrabold text-xs sm:text-sm text-stone-900 group-hover:text-emerald-800 truncate">
+            <h4 className="font-extrabold text-xs sm:text-sm text-stone-900 dark:text-stone-100 group-hover:text-emerald-800 dark:group-hover:text-emerald-300 truncate">
               All Subjects
             </h4>
             <p className="text-[10px] text-stone-400 font-medium truncate">Notes & PDFs</p>
@@ -118,13 +107,13 @@ export default function AdminDashboard() {
 
         <Link 
           href="/admin/timetable" 
-          className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white/80 hover:bg-amber-50/70 border border-stone-200/80 hover:border-amber-300 shadow-2xs hover:shadow-xs transition-all group min-w-0"
+          className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white/80 dark:bg-[#121c16] hover:bg-amber-50/70 dark:hover:bg-[#18261d] border border-stone-200/80 dark:border-[#1e3025] hover:border-amber-300 dark:hover:border-amber-700 shadow-2xs hover:shadow-xs transition-all group min-w-0"
         >
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
             <Calendar size={16} />
           </div>
           <div className="min-w-0 flex-1">
-            <h4 className="font-extrabold text-xs sm:text-sm text-stone-900 group-hover:text-amber-800 truncate">
+            <h4 className="font-extrabold text-xs sm:text-sm text-stone-900 dark:text-stone-100 group-hover:text-amber-800 dark:group-hover:text-amber-300 truncate">
               Time-Table
             </h4>
             <p className="text-[10px] text-stone-400 font-medium truncate">Schedules</p>
@@ -133,13 +122,13 @@ export default function AdminDashboard() {
 
         <Link 
           href="/admin/events" 
-          className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white/80 hover:bg-teal-50/70 border border-stone-200/80 hover:border-teal-300 shadow-2xs hover:shadow-xs transition-all group min-w-0"
+          className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white/80 dark:bg-[#121c16] hover:bg-teal-50/70 dark:hover:bg-[#18261d] border border-stone-200/80 dark:border-[#1e3025] hover:border-teal-300 dark:hover:border-teal-700 shadow-2xs hover:shadow-xs transition-all group min-w-0"
         >
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-teal-100 dark:bg-teal-950/70 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
             <Camera size={16} />
           </div>
           <div className="min-w-0 flex-1">
-            <h4 className="font-extrabold text-xs sm:text-sm text-stone-900 group-hover:text-teal-800 truncate">
+            <h4 className="font-extrabold text-xs sm:text-sm text-stone-900 dark:text-stone-100 group-hover:text-teal-800 dark:group-hover:text-teal-300 truncate">
               Events & Media
             </h4>
             <p className="text-[10px] text-stone-400 font-medium truncate">Drive Photos & Videos</p>
@@ -148,13 +137,13 @@ export default function AdminDashboard() {
 
         <Link 
           href="/admin/birthdays" 
-          className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white/80 hover:bg-rose-50/70 border border-stone-200/80 hover:border-rose-300 shadow-2xs hover:shadow-xs transition-all group min-w-0"
+          className="flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl bg-white/80 dark:bg-[#121c16] hover:bg-rose-50/70 dark:hover:bg-[#18261d] border border-stone-200/80 dark:border-[#1e3025] hover:border-rose-300 dark:hover:border-rose-700 shadow-2xs hover:shadow-xs transition-all group min-w-0"
         >
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-rose-100 text-rose-800 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-rose-100 dark:bg-rose-950/70 text-rose-800 dark:text-rose-300 border border-rose-200/60 dark:border-rose-800/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
             <Cake size={16} />
           </div>
           <div className="min-w-0 flex-1">
-            <h4 className="font-extrabold text-xs sm:text-sm text-stone-900 group-hover:text-rose-800 truncate">
+            <h4 className="font-extrabold text-xs sm:text-sm text-stone-900 dark:text-stone-100 group-hover:text-rose-800 dark:group-hover:text-rose-300 truncate">
               Birthdays
             </h4>
             <p className="text-[10px] text-stone-400 font-medium truncate">Manager & Alerts</p>
@@ -178,16 +167,16 @@ export default function AdminDashboard() {
             <CalendarWidget posts={posts} />
           </div>
           
-          <div className="glass rounded-3xl shadow-sm border border-stone-200/70 p-6 sm:p-8 min-h-[600px]">
+          <div className="glass rounded-3xl shadow-sm border border-stone-200/70 dark:border-[#1e3025] p-6 sm:p-8 min-h-[600px]">
             
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-stone-900 tracking-tight flex items-center gap-3">
-                <div className="p-2 bg-emerald-100 text-emerald-850 rounded-lg">
+              <h2 className="text-2xl font-bold text-stone-900 dark:text-white tracking-tight flex items-center gap-3">
+                <div className="p-2 bg-emerald-100 dark:bg-emerald-950/70 text-emerald-850 dark:text-emerald-300 rounded-lg">
                   <Radio size={20} />
                 </div>
                 Student Panel Preview
               </h2>
-              <span className="bg-stone-100 text-stone-700 text-xs py-1.5 px-3 rounded-full font-bold uppercase tracking-wider border border-stone-200/60">
+              <span className="bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-200 text-xs py-1.5 px-3 rounded-full font-bold uppercase tracking-wider border border-stone-200/60 dark:border-stone-700">
                 {posts.length} Active
               </span>
             </div>
@@ -195,21 +184,21 @@ export default function AdminDashboard() {
             {/* Filter Tabs identical to Student View */}
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3 px-2">
-                <h3 className="text-lg font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-stone-900 to-emerald-950">Live Feed</h3>
+                <h3 className="text-lg font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-stone-900 to-emerald-950 dark:from-white dark:to-emerald-300">Live Feed</h3>
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
                 </span>
               </div>
-              <div className="flex flex-wrap items-center gap-2 bg-white/50 backdrop-blur p-2 rounded-3xl border border-stone-200/70 shadow-xs">
+              <div className="flex flex-wrap items-center gap-2 bg-white/50 dark:bg-[#121c16]/80 backdrop-blur p-2 rounded-3xl border border-stone-200/70 dark:border-[#1e3025] shadow-xs">
                 {(["ALL", "ANNOUNCEMENT", "ASSIGNMENT", "EXAM"] as const).map((type) => (
                   <button
                     key={type}
                     onClick={() => setFilter(type as any)}
                     className={`group flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-semibold text-xs sm:text-sm transition-all duration-300 ${
                       filter === type
-                        ? "bg-stone-900 text-white shadow-md scale-100"
-                        : "text-stone-600 hover:bg-stone-200/50 hover:text-stone-900 scale-95 hover:scale-100"
+                        ? "bg-stone-900 dark:bg-emerald-700 text-white shadow-md scale-100"
+                        : "text-stone-600 dark:text-stone-300 hover:bg-stone-200/50 dark:hover:bg-[#1a2b20] hover:text-stone-900 dark:hover:text-white scale-95 hover:scale-100"
                     }`}
                   >
                     {type === "ALL" && <LayoutGrid size={16} className={filter === "ALL" ? "text-emerald-400" : ""} />}
@@ -217,7 +206,7 @@ export default function AdminDashboard() {
                     <span className={`ml-1 text-[10px] font-bold py-0.5 px-2 rounded-full transition-colors ${
                       filter === type 
                         ? "bg-white/20 text-white" 
-                        : "bg-stone-200 text-stone-600 group-hover:bg-white group-hover:text-stone-800"
+                        : "bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-300 group-hover:bg-white dark:group-hover:bg-stone-700 group-hover:text-stone-800 dark:group-hover:text-white"
                     }`}>
                       {type === "ALL" ? posts.length : posts.filter(p => p.type === type).length}
                     </span>
@@ -229,15 +218,15 @@ export default function AdminDashboard() {
             {loading ? (
               <div className="grid gap-6">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="animate-pulse bg-white/60 backdrop-blur-md h-48 rounded-3xl border border-stone-100"></div>
+                  <div key={i} className="animate-pulse bg-white/60 dark:bg-[#121c16]/60 backdrop-blur-md h-48 rounded-3xl border border-stone-100 dark:border-stone-800"></div>
                 ))}
               </div>
             ) : filteredPosts.length === 0 ? (
-              <div className="text-center text-stone-500 py-16 flex flex-col items-center border-2 border-dashed border-stone-200 rounded-3xl bg-stone-50/50">
-                <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-4 text-stone-300 shadow-sm">
+              <div className="text-center text-stone-500 dark:text-stone-400 py-16 flex flex-col items-center border-2 border-dashed border-stone-200 dark:border-stone-800 rounded-3xl bg-stone-50/50 dark:bg-[#121c16]/50">
+                <div className="w-20 h-20 bg-white dark:bg-stone-800 rounded-full flex items-center justify-center mb-4 text-stone-300 dark:text-stone-600 shadow-sm">
                   <Radio size={40} />
                 </div>
-                <h3 className="text-xl font-bold text-stone-900 mb-1 tracking-tight">Airwaves are clear</h3>
+                <h3 className="text-xl font-bold text-stone-900 dark:text-white mb-1 tracking-tight">Airwaves are clear</h3>
                 <p className="max-w-xs font-medium">Use the composer on the left to broadcast your first update to the class.</p>
               </div>
             ) : (

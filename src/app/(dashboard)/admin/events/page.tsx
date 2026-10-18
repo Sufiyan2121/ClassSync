@@ -177,21 +177,21 @@ export default function AdminEventsMediaPage() {
   const getCategoryColor = (cat: EventMediaCategory) => {
     switch (cat) {
       case "FEST":
-        return "bg-purple-100 text-purple-700 border-purple-200";
+        return "bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800/60";
       case "FUNCTION":
-        return "bg-teal-100 text-teal-850 border-teal-200/80";
+        return "bg-teal-100 dark:bg-teal-950/60 text-teal-850 dark:text-teal-300 border-teal-200/80 dark:border-teal-800/60";
       case "SPORTS":
-        return "bg-emerald-100 text-emerald-700 border-emerald-200";
+        return "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/60";
       case "FAREWELL":
-        return "bg-rose-100 text-rose-700 border-rose-200";
+        return "bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800/60";
       case "TRIP":
-        return "bg-amber-100 text-amber-700 border-amber-200";
+        return "bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800/60";
       case "SEMINAR":
-        return "bg-indigo-100 text-indigo-700 border-indigo-200";
+        return "bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800/60";
       case "CELEBRATION":
-        return "bg-pink-100 text-pink-700 border-pink-200";
+        return "bg-pink-100 dark:bg-pink-950/60 text-pink-700 dark:text-pink-300 border-pink-200 dark:border-pink-800/60";
       default:
-        return "bg-stone-100 text-stone-700 border-stone-200";
+        return "bg-stone-100 dark:bg-[#16231b] text-stone-700 dark:text-stone-300 border-stone-200 dark:border-[#1e3025]";
     }
   };
 
@@ -211,11 +211,11 @@ export default function AdminEventsMediaPage() {
     return (
       <div className="p-4 md:p-8 max-w-5xl mx-auto min-h-screen">
         <div className="animate-pulse space-y-6">
-          <div className="h-20 bg-white/60 rounded-3xl"></div>
-          <div className="h-32 bg-white/60 rounded-3xl"></div>
+          <div className="h-20 bg-stone-200/60 dark:bg-[#121c16] rounded-3xl"></div>
+          <div className="h-32 bg-stone-200/60 dark:bg-[#121c16] rounded-3xl"></div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="h-44 bg-white/60 rounded-2xl"></div>
-            <div className="h-44 bg-white/60 rounded-2xl"></div>
+            <div className="h-44 bg-stone-200/60 dark:bg-[#121c16] rounded-2xl"></div>
+            <div className="h-44 bg-stone-200/60 dark:bg-[#121c16] rounded-2xl"></div>
           </div>
         </div>
       </div>
@@ -226,19 +226,19 @@ export default function AdminEventsMediaPage() {
     <div className="p-3 sm:p-6 md:p-8 max-w-5xl mx-auto min-h-screen w-full overflow-x-hidden">
       
       {/* Header */}
-      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3.5 mb-5 glass px-4 py-3 sm:px-6 sm:py-4 rounded-3xl shadow-xs border border-stone-200/70">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3.5 mb-5 glass px-4 py-3 sm:px-6 sm:py-4 rounded-3xl shadow-xs border border-stone-200/80 dark:border-[#1e3025] dark:bg-[#121c16]/90">
         <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
-          <Link href="/admin" className="p-2 hover:bg-stone-100 rounded-full transition-colors shrink-0">
-            <ArrowLeft size={22} className="text-stone-600" />
+          <Link href="/admin" className="p-2 hover:bg-stone-100 dark:hover:bg-[#16231b] text-stone-600 dark:text-stone-300 rounded-full transition-colors shrink-0">
+            <ArrowLeft size={22} />
           </Link>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
               <span className="text-xl shrink-0">📸</span>
-              <h1 className="text-lg sm:text-2xl font-extrabold text-stone-900 tracking-tight truncate">
+              <h1 className="text-lg sm:text-2xl font-extrabold text-stone-900 dark:text-white tracking-tight truncate">
                 Events & Media Gallery
               </h1>
             </div>
-            <p className="text-stone-500 text-xs sm:text-sm font-medium truncate">
+            <p className="text-stone-500 dark:text-stone-400 text-xs sm:text-sm font-medium truncate">
               Share Google Drive folders for college functions, fests, sports & memories
             </p>
           </div>
@@ -246,7 +246,7 @@ export default function AdminEventsMediaPage() {
 
         <button
           onClick={openAddModal}
-          className="flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-2 sm:py-2.5 bg-stone-900 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer w-full sm:w-auto shrink-0"
+          className="flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-2 sm:py-2.5 bg-stone-900 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer w-full sm:w-auto shrink-0"
         >
           <Plus size={15} />
           <span>Add Event Drive</span>
@@ -299,16 +299,16 @@ export default function AdminEventsMediaPage() {
       )}
 
       {/* Category Pills & Search */}
-      <div className="glass rounded-2xl p-4 border border-slate-200/60 shadow-xs mb-6 space-y-3">
+      <div className="glass rounded-2xl p-4 border border-stone-200/70 dark:border-[#1e3025] dark:bg-[#121c16]/90 shadow-xs mb-6 space-y-3">
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
           
           {/* Class Filter */}
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-stone-500">Class:</span>
+            <span className="text-xs font-bold text-stone-500 dark:text-stone-400">Class:</span>
             <select
               value={selectedClassFilter}
               onChange={(e) => setSelectedClassFilter(e.target.value)}
-              className="bg-stone-50 border border-stone-200 text-stone-800 text-xs font-bold rounded-xl px-3 py-1.5 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 cursor-pointer"
+              className="bg-stone-50 dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] text-stone-800 dark:text-white text-xs font-bold rounded-xl px-3 py-1.5 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 cursor-pointer"
             >
               <option value="ALL">All Classes</option>
               {classes.map((c) => (
@@ -327,7 +327,7 @@ export default function AdminEventsMediaPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search event, function..."
-              className="w-full pl-9 pr-3 py-1.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+              className="w-full pl-9 pr-3 py-1.5 bg-stone-50 dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] rounded-xl text-xs font-medium text-stone-900 dark:text-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none placeholder:text-stone-400"
             />
           </div>
         </div>
@@ -340,8 +340,8 @@ export default function AdminEventsMediaPage() {
               onClick={() => setSelectedCategory(cat.value)}
               className={`px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                 selectedCategory === cat.value
-                  ? "bg-stone-900 text-white shadow-xs"
-                  : "bg-stone-100 hover:bg-stone-200/80 text-stone-600"
+                  ? "bg-stone-900 text-white dark:bg-emerald-700 dark:text-white shadow-xs"
+                  : "bg-stone-100 hover:bg-stone-200/80 dark:bg-[#16231b] dark:hover:bg-[#1e3025] text-stone-600 dark:text-stone-300 border border-transparent dark:border-[#1e3025]"
               }`}
             >
               {cat.label}
@@ -352,9 +352,9 @@ export default function AdminEventsMediaPage() {
 
       {/* Event Drives Grid */}
       {filteredEvents.length === 0 ? (
-        <div className="text-center py-16 glass rounded-3xl border border-stone-200/70">
-          <FolderHeart size={44} className="text-stone-300 mx-auto mb-2" />
-          <p className="font-bold text-stone-700 text-sm">No event media drives found</p>
+        <div className="text-center py-16 glass rounded-3xl border border-stone-200/70 dark:border-[#1e3025] dark:bg-[#121c16]/90">
+          <FolderHeart size={44} className="text-stone-300 dark:text-stone-600 mx-auto mb-2" />
+          <p className="font-bold text-stone-700 dark:text-stone-200 text-sm">No event media drives found</p>
           <p className="text-xs text-stone-400 mt-1 max-w-xs mx-auto">
             {searchQuery || selectedCategory !== "ALL"
               ? "No drives match your filters."
@@ -366,7 +366,7 @@ export default function AdminEventsMediaPage() {
           {filteredEvents.map((item) => (
             <div
               key={item.id}
-              className="glass bg-white/85 hover:bg-white rounded-3xl p-4 sm:p-5 border border-stone-200/70 shadow-xs hover:shadow-md transition-all flex flex-col justify-between overflow-hidden"
+              className="glass bg-white/85 hover:bg-white dark:bg-[#121c16]/90 dark:hover:bg-[#16231b] rounded-3xl p-4 sm:p-5 border border-stone-200/70 dark:border-[#1e3025] shadow-xs hover:shadow-md transition-all flex flex-col justify-between overflow-hidden"
             >
               <div className="min-w-0">
                 {/* Card Top: Category Badge, Class Code, Pin */}
@@ -375,11 +375,11 @@ export default function AdminEventsMediaPage() {
                     <span className={`text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full border ${getCategoryColor(item.category)}`}>
                       {item.category}
                     </span>
-                    <span className="text-[10px] font-bold text-stone-600 bg-stone-100 px-2 py-0.5 rounded-full border border-stone-200/60">
+                    <span className="text-[10px] font-bold text-stone-600 dark:text-stone-300 bg-stone-100 dark:bg-[#16231b] px-2 py-0.5 rounded-full border border-stone-200/60 dark:border-[#1e3025]">
                       {item.classCode}
                     </span>
                     {item.isMasterDrive && (
-                      <span className="text-[10px] font-bold text-teal-850 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200/80">
+                      <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/60">
                         📌 Pinned
                       </span>
                     )}
@@ -388,14 +388,14 @@ export default function AdminEventsMediaPage() {
                   <div className="flex items-center gap-1 shrink-0">
                     <button
                       onClick={() => openEditModal(item)}
-                      className="p-1.5 text-stone-400 hover:text-stone-700 hover:bg-stone-100 rounded-lg transition-colors cursor-pointer"
+                      className="p-1.5 text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-[#16231b] rounded-lg transition-colors cursor-pointer"
                       title="Edit Event"
                     >
                       <Pencil size={14} />
                     </button>
                     <button
                       onClick={() => handleDelete(item)}
-                      className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                      className="p-1.5 text-stone-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-colors cursor-pointer"
                       title="Delete Event"
                     >
                       <Trash2 size={14} />
@@ -404,29 +404,29 @@ export default function AdminEventsMediaPage() {
                 </div>
 
                 {/* Title & Description */}
-                <h3 className="font-extrabold text-sm sm:text-base text-stone-900 leading-snug mb-1 truncate" title={item.title}>
+                <h3 className="font-extrabold text-sm sm:text-base text-stone-900 dark:text-white leading-snug mb-1 truncate" title={item.title}>
                   {item.title}
                 </h3>
                 {item.eventDate && (
-                  <p className="text-[11px] sm:text-xs text-stone-500 font-semibold mb-2 flex items-center gap-1">
-                    <Calendar size={12} className="text-emerald-700 shrink-0" />
+                  <p className="text-[11px] sm:text-xs text-stone-500 dark:text-stone-400 font-semibold mb-2 flex items-center gap-1">
+                    <Calendar size={12} className="text-emerald-700 dark:text-emerald-400 shrink-0" />
                     <span className="truncate">{item.eventDate}</span>
                   </p>
                 )}
                 {item.description && (
-                  <p className="text-xs text-stone-600 leading-relaxed line-clamp-2 mb-3 break-words">
+                  <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed line-clamp-2 mb-3 break-words">
                     {item.description}
                   </p>
                 )}
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-3 border-t border-stone-100 flex items-center justify-between gap-2">
+              <div className="pt-3 border-t border-stone-100 dark:border-[#1e3025] flex items-center justify-between gap-2">
                 <button
                   onClick={() => handleCopyLink(item.driveUrl, item.id)}
-                  className="flex items-center gap-1.5 text-xs font-bold text-stone-600 hover:text-stone-900 py-1.5 px-2 rounded-xl hover:bg-stone-100 transition-colors cursor-pointer shrink-0"
+                  className="flex items-center gap-1.5 text-xs font-bold text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white py-1.5 px-2 rounded-xl hover:bg-stone-100 dark:hover:bg-[#121c16] transition-colors cursor-pointer shrink-0"
                 >
-                  {copiedId === item.id ? <Check size={13} className="text-emerald-600" /> : <Copy size={13} />}
+                  {copiedId === item.id ? <Check size={13} className="text-emerald-600 dark:text-emerald-400" /> : <Copy size={13} />}
                   <span>{copiedId === item.id ? "Copied" : "Copy"}</span>
                 </button>
 
@@ -448,7 +448,7 @@ export default function AdminEventsMediaPage() {
       {/* Add / Edit Event Drive Modal (Portaled for safe cross-platform rendering) */}
       {mounted && isModalOpen && createPortal(
         <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-md overscroll-contain animate-in fade-in duration-200"
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 dark:bg-black/70 backdrop-blur-md overscroll-contain animate-in fade-in duration-200"
           style={{
             paddingTop: "max(1rem, env(safe-area-inset-top, 1rem))",
             paddingBottom: "max(1rem, env(safe-area-inset-bottom, 1rem))",
@@ -457,26 +457,26 @@ export default function AdminEventsMediaPage() {
             if (e.target === e.currentTarget) setIsModalOpen(false);
           }}
         >
-          <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden border border-stone-100 max-h-[85dvh] sm:max-h-[88vh] flex flex-col my-auto relative animate-in zoom-in-95 duration-200">
+          <div className="bg-white dark:bg-[#0c1610] w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden border border-stone-100 dark:border-[#1e3025] max-h-[85dvh] sm:max-h-[88vh] flex flex-col my-auto relative animate-in zoom-in-95 duration-200">
             
             {/* Modal Header */}
-            <div className="flex justify-between items-center px-6 py-4 border-b border-stone-100 shrink-0 bg-stone-50/70">
+            <div className="flex justify-between items-center px-6 py-4 border-b border-stone-100 dark:border-[#1e3025] shrink-0 bg-stone-50/70 dark:bg-[#121c16]">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-600 text-white flex items-center justify-center shadow-xs text-lg">
                   📸
                 </div>
                 <div>
-                  <h2 className="text-base font-extrabold text-stone-900">
+                  <h2 className="text-base font-extrabold text-stone-900 dark:text-white">
                     {editingEvent ? "Edit Event Drive" : "Add Event Google Drive"}
                   </h2>
-                  <p className="text-[11px] text-stone-500 font-medium">
+                  <p className="text-[11px] text-stone-500 dark:text-stone-400 font-medium">
                     Paste Google Drive folder link with photos & videos
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-2 text-stone-400 hover:text-stone-600 hover:bg-stone-100 rounded-full transition-colors cursor-pointer"
+                className="p-2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-[#16231b] rounded-full transition-colors cursor-pointer"
               >
                 <X size={18} />
               </button>
@@ -485,7 +485,7 @@ export default function AdminEventsMediaPage() {
             {/* Modal Form */}
             <form onSubmit={handleSave} className="p-6 overflow-y-auto space-y-4">
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1">
+                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
                   Event / Function Title *
                 </label>
                 <input
@@ -493,14 +493,14 @@ export default function AdminEventsMediaPage() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. Annual Cultural Fest 2026, Sports Day, Farewell"
-                  className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-stone-900"
+                  className="w-full px-3.5 py-2.5 bg-stone-50 dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-stone-900 dark:text-white placeholder:text-stone-400"
                   required
                   autoFocus
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1">
+                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">
                   Google Drive Folder Link (URL) *
                 </label>
                 <input
@@ -508,7 +508,7 @@ export default function AdminEventsMediaPage() {
                   value={driveUrl}
                   onChange={(e) => setDriveUrl(e.target.value)}
                   placeholder="https://drive.google.com/drive/folders/..."
-                  className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium font-mono outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-stone-900"
+                  className="w-full px-3.5 py-2.5 bg-stone-50 dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] rounded-xl text-xs font-medium font-mono outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-stone-900 dark:text-white placeholder:text-stone-400"
                   required
                 />
                 <span className="text-[10px] text-stone-400 mt-1 block">
@@ -518,11 +518,11 @@ export default function AdminEventsMediaPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-stone-700 mb-1">Category</label>
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Category</label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value as EventMediaCategory)}
-                    className="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-stone-900 cursor-pointer"
+                    className="w-full px-3 py-2 bg-stone-50 dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-stone-900 dark:text-white cursor-pointer"
                   >
                     <option value="FUNCTION">Function</option>
                     <option value="FEST">College Fest</option>
@@ -536,11 +536,11 @@ export default function AdminEventsMediaPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-stone-700 mb-1">Class / Division</label>
+                  <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Class / Division</label>
                   <select
                     value={classCode}
                     onChange={(e) => setClassCode(e.target.value)}
-                    className="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-stone-900 cursor-pointer"
+                    className="w-full px-3 py-2 bg-stone-50 dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-stone-900 dark:text-white cursor-pointer"
                   >
                     <option value="ALL">All Classes (General)</option>
                     {classes.map((c) => (
@@ -553,23 +553,23 @@ export default function AdminEventsMediaPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1">Event Date (Optional)</label>
+                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Event Date (Optional)</label>
                 <input
                   type="date"
                   value={eventDate}
                   onChange={(e) => setEventDate(e.target.value)}
-                  className="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs font-semibold outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-stone-900"
+                  className="w-full px-3 py-2 bg-stone-50 dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] rounded-xl text-xs font-semibold outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-stone-900 dark:text-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1">Description / Highlights (Optional)</label>
+                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1">Description / Highlights (Optional)</label>
                 <textarea
                   rows={2}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Short description of the event, venue, or organizers..."
-                  className="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-stone-900"
+                  className="w-full px-3 py-2 bg-stone-50 dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] rounded-xl text-xs font-medium outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-stone-900 dark:text-white placeholder:text-stone-400"
                 />
               </div>
 
@@ -581,7 +581,7 @@ export default function AdminEventsMediaPage() {
                   onChange={(e) => setIsMasterDrive(e.target.checked)}
                   className="w-4 h-4 rounded text-emerald-700 focus:ring-emerald-500 cursor-pointer"
                 />
-                <label htmlFor="masterDriveCheck" className="text-xs font-bold text-stone-700 cursor-pointer">
+                <label htmlFor="masterDriveCheck" className="text-xs font-bold text-stone-700 dark:text-stone-300 cursor-pointer">
                   Pin as Master Class Drive (Highlighted at the top)
                 </label>
               </div>

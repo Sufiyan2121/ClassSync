@@ -14,6 +14,8 @@ import { StudentClassSwitcher } from "@/components/dashboard/StudentClassSwitche
 import { AppMenu } from "@/components/dashboard/AppMenu";
 import { useClassConfig } from "@/hooks/useClassConfig";
 
+import { BrandLogo } from "@/components/ui/BrandLogo";
+
 export default function StudentDashboard() {
   const { userData, logout, loading: authLoading } = useAuth();
   const { posts, loading: postsLoading } = usePosts();
@@ -44,28 +46,16 @@ export default function StudentDashboard() {
   return (
     <div className="p-3 md:p-8 max-w-5xl mx-auto min-h-screen overflow-x-hidden w-full">
       
-      {/* Top Branding Logo & Tagline (Centered) */}
-      <div className="flex flex-col items-center justify-center text-center mb-3 sm:mb-4 pt-1 sm:pt-2 select-none animate-in fade-in slide-in-from-top-4 duration-500">
-        <div className="inline-flex items-center justify-center gap-2.5 sm:gap-3">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-emerald-700 via-emerald-600 to-teal-600 flex items-center justify-center text-white shadow-sm shadow-emerald-600/20 ring-1 ring-emerald-500/15 shrink-0">
-            <BookOpen size={17} className="sm:w-5 sm:h-5 text-white" strokeWidth={2.4} />
-          </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-stone-900 tracking-tight leading-none">
-            ClassSync
-          </h2>
-        </div>
-        <p className="text-stone-500 text-xs sm:text-sm font-medium mt-1.5 sm:mt-2 max-w-sm mx-auto tracking-normal">
-          Bridging the gap between classrooms and students.
-        </p>
-      </div>
+      {/* Top Branding Logo & Tagline (Consistent across all pages) */}
+      <BrandLogo size="md" align="center" className="mb-3 sm:mb-4 pt-1 sm:pt-2" />
 
       {/* Header with Glassmorphism - Perfectly aligned & balanced */}
-      <header className="glass px-3.5 py-3 sm:px-6 sm:py-3.5 rounded-2xl sm:rounded-3xl shadow-xs border border-stone-200/60 mb-3 sm:mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-4">
+      <header className="glass px-3.5 py-3 sm:px-6 sm:py-3.5 rounded-2xl sm:rounded-3xl shadow-xs border border-stone-200/60 dark:border-[#1e3025] mb-3 sm:mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-4">
         
         {/* Top on Mobile / Left on Desktop: User Profile Greeting */}
         <div className="flex items-center justify-between sm:justify-start gap-2.5 sm:gap-3.5 min-w-0">
           <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-            <div className="w-9 h-9 sm:w-11 sm:h-11 bg-gradient-to-tr from-emerald-700 to-teal-600 rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-black text-sm sm:text-lg shadow-md shadow-emerald-600/20 shrink-0 overflow-hidden">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 bg-gradient-to-tr from-emerald-700 to-teal-600 rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-black text-sm sm:text-lg shadow-md shadow-emerald-600/20 shrink-0 overflow-hidden ring-2 ring-white/60 dark:ring-stone-800">
               {userData?.photoURL ? (
                 <img src={userData.photoURL} alt={userData.displayName} className="w-full h-full object-cover" />
               ) : (
@@ -73,7 +63,7 @@ export default function StudentDashboard() {
               )}
             </div>
             <div className="min-w-0">
-              <h1 className="text-sm sm:text-lg md:text-xl font-extrabold text-stone-900 tracking-tight flex items-center gap-1.5">
+              <h1 className="text-sm sm:text-lg md:text-xl font-extrabold text-stone-900 dark:text-white tracking-tight flex items-center gap-1.5 truncate">
                 <span>Hello, {userData?.displayName?.split(" ")[0] || "Student"}</span> 
                 <Sparkles className="text-yellow-400 shrink-0" size={15} />
               </h1>
@@ -88,7 +78,7 @@ export default function StudentDashboard() {
         </div>
 
         {/* Bottom on Mobile / Right on Desktop: Action Controls */}
-        <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 pt-2 sm:pt-0 border-t border-stone-100 sm:border-0">
+        <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 pt-2 sm:pt-0 border-t border-stone-100 dark:border-stone-800 sm:border-0">
           <StudentClassSwitcher />
           <div className="flex items-center gap-1.5 sm:gap-2">
             <NotificationBell />
@@ -103,13 +93,13 @@ export default function StudentDashboard() {
       <div className="grid grid-cols-4 gap-1.5 sm:gap-2.5 mb-2.5 sm:mb-4">
         <Link 
           href="/student/resources" 
-          className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-white/85 hover:bg-emerald-50/70 border border-stone-200/80 hover:border-emerald-300 shadow-2xs hover:shadow-xs transition-all group min-w-0 text-center sm:text-left"
+          className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-white/85 dark:bg-[#121c16] hover:bg-emerald-50/70 dark:hover:bg-[#18261d] border border-stone-200/80 dark:border-[#1e3025] hover:border-emerald-300 dark:hover:border-emerald-700 shadow-2xs hover:shadow-xs transition-all group min-w-0 text-center sm:text-left"
         >
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
             <FolderOpen size={14} />
           </div>
           <div className="min-w-0 flex-1">
-            <h4 className="font-extrabold text-[11px] sm:text-xs text-stone-900 group-hover:text-emerald-800 truncate">
+            <h4 className="font-extrabold text-[11px] sm:text-xs text-stone-900 dark:text-stone-100 group-hover:text-emerald-800 dark:group-hover:text-emerald-300 truncate">
               Subjects
             </h4>
             <p className="text-[9px] text-stone-400 font-medium truncate hidden sm:block">Notes & PDFs</p>
@@ -118,13 +108,13 @@ export default function StudentDashboard() {
 
         <Link 
           href="/student/timetable" 
-          className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-white/85 hover:bg-amber-50/70 border border-stone-200/80 hover:border-amber-300 shadow-2xs hover:shadow-xs transition-all group min-w-0 text-center sm:text-left"
+          className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-white/85 dark:bg-[#121c16] hover:bg-amber-50/70 dark:hover:bg-[#18261d] border border-stone-200/80 dark:border-[#1e3025] hover:border-amber-300 dark:hover:border-amber-700 shadow-2xs hover:shadow-xs transition-all group min-w-0 text-center sm:text-left"
         >
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
             <Calendar size={14} />
           </div>
           <div className="min-w-0 flex-1">
-            <h4 className="font-extrabold text-[11px] sm:text-xs text-stone-900 group-hover:text-amber-800 truncate">
+            <h4 className="font-extrabold text-[11px] sm:text-xs text-stone-900 dark:text-stone-100 group-hover:text-amber-800 dark:group-hover:text-amber-300 truncate">
               Time-Table
             </h4>
             <p className="text-[9px] text-stone-400 font-medium truncate hidden sm:block">Lectures & Exams</p>
@@ -133,13 +123,13 @@ export default function StudentDashboard() {
 
         <Link 
           href="/student/events" 
-          className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-white/85 hover:bg-teal-50/70 border border-stone-200/80 hover:border-teal-300 shadow-2xs hover:shadow-xs transition-all group min-w-0 text-center sm:text-left"
+          className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-white/85 dark:bg-[#121c16] hover:bg-teal-50/70 dark:hover:bg-[#18261d] border border-stone-200/80 dark:border-[#1e3025] hover:border-teal-300 dark:hover:border-teal-700 shadow-2xs hover:shadow-xs transition-all group min-w-0 text-center sm:text-left"
         >
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-teal-100 dark:bg-teal-950/70 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
             <Camera size={14} />
           </div>
           <div className="min-w-0 flex-1">
-            <h4 className="font-extrabold text-[11px] sm:text-xs text-stone-900 group-hover:text-teal-800 truncate">
+            <h4 className="font-extrabold text-[11px] sm:text-xs text-stone-900 dark:text-stone-100 group-hover:text-teal-800 dark:group-hover:text-teal-300 truncate">
               Media
             </h4>
             <p className="text-[9px] text-stone-400 font-medium truncate hidden sm:block">Drive Albums</p>
@@ -148,13 +138,13 @@ export default function StudentDashboard() {
 
         <Link 
           href="/student/birthdays" 
-          className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-white/85 hover:bg-rose-50/70 border border-stone-200/80 hover:border-rose-300 shadow-2xs hover:shadow-xs transition-all group min-w-0 text-center sm:text-left"
+          className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-white/85 dark:bg-[#121c16] hover:bg-rose-50/70 dark:hover:bg-[#18261d] border border-stone-200/80 dark:border-[#1e3025] hover:border-rose-300 dark:hover:border-rose-700 shadow-2xs hover:shadow-xs transition-all group min-w-0 text-center sm:text-left"
         >
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-rose-100 text-rose-800 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-rose-100 dark:bg-rose-950/70 text-rose-800 dark:text-rose-300 border border-rose-200/60 dark:border-rose-800/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
             <Cake size={14} />
           </div>
           <div className="min-w-0 flex-1">
-            <h4 className="font-extrabold text-[11px] sm:text-xs text-stone-900 group-hover:text-rose-800 truncate">
+            <h4 className="font-extrabold text-[11px] sm:text-xs text-stone-900 dark:text-stone-100 group-hover:text-rose-800 dark:group-hover:text-rose-300 truncate">
               Birthdays
             </h4>
             <p className="text-[9px] text-stone-400 font-medium truncate hidden sm:block">Wishes & Dates</p>
@@ -169,21 +159,21 @@ export default function StudentDashboard() {
       {/* Modern Filter Tabs */}
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-3 px-2">
-          <h3 className="text-lg font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-stone-900 to-emerald-950">Live Feed</h3>
+          <h3 className="text-lg font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-stone-900 to-emerald-950 dark:from-white dark:to-emerald-300">Live Feed</h3>
           <span className="relative flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
           </span>
         </div>
-        <div className="flex flex-wrap items-center gap-2 bg-white/60 backdrop-blur p-2 rounded-3xl border border-stone-200/70 shadow-sm">
+        <div className="flex flex-wrap items-center gap-2 bg-white/60 dark:bg-[#121c16]/80 backdrop-blur p-2 rounded-3xl border border-stone-200/70 dark:border-[#1e3025] shadow-sm">
           {(["ALL", "ANNOUNCEMENT", "ASSIGNMENT", "EXAM"] as const).map((type) => (
             <button
               key={type}
               onClick={() => setFilter(type as any)}
               className={`group flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-semibold text-xs sm:text-sm transition-all duration-300 ${
                 filter === type
-                  ? "bg-stone-900 text-white shadow-md scale-100"
-                  : "text-stone-600 hover:bg-stone-200/60 hover:text-stone-900 scale-95 hover:scale-100"
+                  ? "bg-stone-900 dark:bg-emerald-700 text-white shadow-md scale-100"
+                  : "text-stone-600 dark:text-stone-300 hover:bg-stone-200/60 dark:hover:bg-[#1a2b20] hover:text-stone-900 dark:hover:text-white scale-95 hover:scale-100"
               }`}
             >
               {type === "ALL" && <LayoutGrid size={16} className={filter === "ALL" ? "text-emerald-400" : ""} />}
@@ -191,7 +181,7 @@ export default function StudentDashboard() {
               <span className={`ml-1 text-[10px] font-bold py-0.5 px-2 rounded-full transition-colors ${
                 filter === type 
                   ? "bg-white/20 text-white" 
-                  : "bg-stone-200 text-stone-600 group-hover:bg-white group-hover:text-stone-800"
+                  : "bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-300 group-hover:bg-white dark:group-hover:bg-stone-700 group-hover:text-stone-800 dark:group-hover:text-white"
               }`}>
                 {type === "ALL" ? posts.length : posts.filter(p => p.type === type).length}
               </span>
@@ -204,16 +194,16 @@ export default function StudentDashboard() {
       <main className="space-y-6">
         {loading ? (
           <div className="grid gap-6">
-            <div className="animate-pulse bg-white/60 backdrop-blur-md h-48 rounded-3xl border border-stone-100"></div>
-            <div className="animate-pulse bg-white/60 backdrop-blur-md h-48 rounded-3xl border border-stone-100"></div>
+            <div className="animate-pulse bg-white/60 dark:bg-[#121c16]/60 backdrop-blur-md h-48 rounded-3xl border border-stone-100 dark:border-stone-800"></div>
+            <div className="animate-pulse bg-white/60 dark:bg-[#121c16]/60 backdrop-blur-md h-48 rounded-3xl border border-stone-100 dark:border-stone-800"></div>
           </div>
         ) : filteredPosts.length === 0 ? (
-          <div className="glass rounded-3xl shadow-sm border border-stone-200/60 p-16 text-center flex flex-col items-center justify-center min-h-[400px]">
-            <div className="w-24 h-24 bg-gradient-to-tr from-emerald-100 to-teal-50 rounded-full flex items-center justify-center mb-6 shadow-inner ring-8 ring-white">
+          <div className="glass rounded-3xl shadow-sm border border-stone-200/60 dark:border-[#1e3025] p-16 text-center flex flex-col items-center justify-center min-h-[400px]">
+            <div className="w-24 h-24 bg-gradient-to-tr from-emerald-100 to-teal-50 dark:from-emerald-950/80 dark:to-teal-950/60 rounded-full flex items-center justify-center mb-6 shadow-inner ring-8 ring-white dark:ring-[#121c16]">
               <CheckCircle2 className="w-12 h-12 text-emerald-500" />
             </div>
-            <h3 className="text-2xl font-bold text-stone-900 mb-2 tracking-tight">You're all caught up!</h3>
-            <p className="text-stone-500 font-medium max-w-sm">
+            <h3 className="text-2xl font-bold text-stone-900 dark:text-white mb-2 tracking-tight">You're all caught up!</h3>
+            <p className="text-stone-500 dark:text-stone-400 font-medium max-w-sm">
               There are no {filter !== "ALL" ? filter.toLowerCase() + "s" : "updates"} waiting for your attention right now.
             </p>
           </div>

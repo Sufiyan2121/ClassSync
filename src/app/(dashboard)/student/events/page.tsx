@@ -50,21 +50,21 @@ export default function StudentEventsMediaPage() {
   const getCategoryColor = (cat: EventMediaCategory) => {
     switch (cat) {
       case "FEST":
-        return "bg-purple-100 text-purple-700 border-purple-200";
+        return "bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800/60";
       case "FUNCTION":
-        return "bg-teal-100 text-teal-850 border-teal-200/80";
+        return "bg-teal-100 dark:bg-teal-950/60 text-teal-850 dark:text-teal-300 border-teal-200/80 dark:border-teal-800/60";
       case "SPORTS":
-        return "bg-emerald-100 text-emerald-700 border-emerald-200";
+        return "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/60";
       case "FAREWELL":
-        return "bg-rose-100 text-rose-700 border-rose-200";
+        return "bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800/60";
       case "TRIP":
-        return "bg-amber-100 text-amber-700 border-amber-200";
+        return "bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800/60";
       case "SEMINAR":
-        return "bg-indigo-100 text-indigo-700 border-indigo-200";
+        return "bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800/60";
       case "CELEBRATION":
-        return "bg-pink-100 text-pink-700 border-pink-200";
+        return "bg-pink-100 dark:bg-pink-950/60 text-pink-700 dark:text-pink-300 border-pink-200 dark:border-pink-800/60";
       default:
-        return "bg-slate-100 text-slate-700 border-slate-200";
+        return "bg-stone-100 dark:bg-[#16231b] text-stone-700 dark:text-stone-300 border-stone-200 dark:border-[#1e3025]";
     }
   };
 
@@ -86,19 +86,19 @@ export default function StudentEventsMediaPage() {
     <div className="p-3 sm:p-6 md:p-8 max-w-5xl mx-auto min-h-screen w-full overflow-x-hidden">
       
       {/* Header */}
-      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3.5 mb-5 glass px-4 py-3 sm:px-6 sm:py-4 rounded-3xl shadow-xs border border-slate-200/50">
+      <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3.5 mb-5 glass px-4 py-3 sm:px-6 sm:py-4 rounded-3xl shadow-xs border border-stone-200/80 dark:border-[#1e3025] dark:bg-[#121c16]/90">
         <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
-          <Link href="/student" className="p-2 hover:bg-slate-100 rounded-full transition-colors shrink-0">
-            <ArrowLeft size={22} className="text-slate-600" />
+          <Link href="/student" className="p-2 hover:bg-stone-100 dark:hover:bg-[#16231b] text-stone-600 dark:text-stone-300 rounded-full transition-colors shrink-0">
+            <ArrowLeft size={22} />
           </Link>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
               <span className="text-xl shrink-0">📸</span>
-              <h1 className="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight truncate">
+              <h1 className="text-lg sm:text-2xl font-extrabold text-stone-900 dark:text-white tracking-tight truncate">
                 Events & Media Gallery
               </h1>
             </div>
-            <p className="text-slate-500 text-xs sm:text-sm font-medium truncate">
+            <p className="text-stone-500 dark:text-stone-400 text-xs sm:text-sm font-medium truncate">
               Access Google Drive photo & video albums for all college events & functions
             </p>
           </div>
@@ -151,9 +151,9 @@ export default function StudentEventsMediaPage() {
       )}
 
       {/* Category Pills & Search */}
-      <div className="glass rounded-2xl p-3.5 sm:p-4 border border-stone-200/70 shadow-xs mb-5 space-y-3">
+      <div className="glass rounded-2xl p-3.5 sm:p-4 border border-stone-200/70 dark:border-[#1e3025] dark:bg-[#121c16]/90 shadow-xs mb-5 space-y-3">
         <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center justify-between">
-          <p className="text-xs font-bold text-stone-700">
+          <p className="text-xs font-bold text-stone-700 dark:text-stone-300">
             Browse Event Albums & Drives ({filteredEvents.length})
           </p>
 
@@ -165,7 +165,7 @@ export default function StudentEventsMediaPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search event, function..."
-              className="w-full pl-9 pr-3 py-1.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none"
+              className="w-full pl-9 pr-3 py-1.5 bg-stone-50 dark:bg-[#16231b] border border-stone-200 dark:border-[#243a2c] rounded-xl text-xs font-medium text-stone-900 dark:text-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 outline-none placeholder:text-stone-400"
             />
           </div>
         </div>
@@ -178,8 +178,8 @@ export default function StudentEventsMediaPage() {
               onClick={() => setSelectedCategory(cat.value)}
               className={`px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                 selectedCategory === cat.value
-                  ? "bg-stone-900 text-white shadow-xs"
-                  : "bg-stone-100 hover:bg-stone-200/80 text-stone-600"
+                  ? "bg-stone-900 text-white dark:bg-emerald-700 dark:text-white shadow-xs"
+                  : "bg-stone-100 hover:bg-stone-200/80 dark:bg-[#16231b] dark:hover:bg-[#1e3025] text-stone-600 dark:text-stone-300 border border-transparent dark:border-[#1e3025]"
               }`}
             >
               {cat.label}
@@ -190,14 +190,14 @@ export default function StudentEventsMediaPage() {
 
       {/* Events Grid */}
       {loading ? (
-        <div className="py-16 text-center text-slate-400 text-xs animate-pulse">
+        <div className="py-16 text-center text-stone-400 text-xs animate-pulse">
           Loading event drives...
         </div>
       ) : filteredEvents.length === 0 ? (
-        <div className="text-center py-16 glass rounded-3xl border border-slate-200/50">
-          <FolderHeart size={44} className="text-slate-300 mx-auto mb-2" />
-          <p className="font-bold text-slate-700 text-sm">No events or media drives found</p>
-          <p className="text-xs text-slate-400 mt-1 max-w-xs mx-auto">
+        <div className="text-center py-16 glass rounded-3xl border border-stone-200/70 dark:border-[#1e3025] dark:bg-[#121c16]/90">
+          <FolderHeart size={44} className="text-stone-300 dark:text-stone-600 mx-auto mb-2" />
+          <p className="font-bold text-stone-700 dark:text-stone-200 text-sm">No events or media drives found</p>
+          <p className="text-xs text-stone-400 mt-1 max-w-xs mx-auto">
             {searchQuery || selectedCategory !== "ALL"
               ? "No drives match your search."
               : "Event photos and videos shared by your teacher will appear here."}
@@ -208,7 +208,7 @@ export default function StudentEventsMediaPage() {
           {filteredEvents.map((item) => (
             <div
               key={item.id}
-              className="glass bg-white/85 hover:bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/70 shadow-xs hover:shadow-md transition-all flex flex-col justify-between overflow-hidden"
+              className="glass bg-white/85 hover:bg-white dark:bg-[#121c16]/90 dark:hover:bg-[#16231b] rounded-3xl p-4 sm:p-5 border border-stone-200/70 dark:border-[#1e3025] shadow-xs hover:shadow-md transition-all flex flex-col justify-between overflow-hidden"
             >
               <div className="min-w-0">
                 {/* Category & Pin */}
@@ -217,36 +217,36 @@ export default function StudentEventsMediaPage() {
                     {item.category}
                   </span>
                   {item.isMasterDrive && (
-                    <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200">
+                    <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/60">
                       📌 Pinned
                     </span>
                   )}
                 </div>
 
                 {/* Title & Date */}
-                <h3 className="font-extrabold text-sm sm:text-base text-slate-900 leading-snug mb-1 truncate" title={item.title}>
+                <h3 className="font-extrabold text-sm sm:text-base text-stone-900 dark:text-white leading-snug mb-1 truncate" title={item.title}>
                   {item.title}
                 </h3>
                 {item.eventDate && (
-                  <p className="text-[11px] sm:text-xs text-slate-500 font-semibold mb-2 flex items-center gap-1">
-                    <Calendar size={12} className="text-slate-400 shrink-0" />
+                  <p className="text-[11px] sm:text-xs text-stone-500 dark:text-stone-400 font-semibold mb-2 flex items-center gap-1">
+                    <Calendar size={12} className="text-stone-400 shrink-0" />
                     <span className="truncate">{item.eventDate}</span>
                   </p>
                 )}
                 {item.description && (
-                  <p className="text-xs text-slate-600 leading-relaxed line-clamp-2 mb-3 break-words">
+                  <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed line-clamp-2 mb-3 break-words">
                     {item.description}
                   </p>
                 )}
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+              <div className="pt-3 border-t border-stone-100 dark:border-[#1e3025] flex items-center justify-between gap-2">
                 <button
                   onClick={() => handleCopyLink(item.driveUrl, item.id)}
-                  className="flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 py-1.5 px-2 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
+                  className="flex items-center gap-1.5 text-xs font-bold text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white py-1.5 px-2 rounded-xl hover:bg-stone-100 dark:hover:bg-[#121c16] transition-colors cursor-pointer shrink-0"
                 >
-                  {copiedId === item.id ? <Check size={13} className="text-emerald-600" /> : <Copy size={13} />}
+                  {copiedId === item.id ? <Check size={13} className="text-emerald-600 dark:text-emerald-400" /> : <Copy size={13} />}
                   <span>{copiedId === item.id ? "Copied" : "Copy"}</span>
                 </button>
 
