@@ -43,25 +43,15 @@ export default function StudentDashboard() {
   return (
     <div className="p-3 md:p-8 max-w-5xl mx-auto min-h-screen overflow-x-hidden w-full">
       
-      {/* Top Branding - Ultra slim on mobile, full hero on desktop */}
-      <div className="flex items-center justify-between mb-2 px-1 sm:hidden">
-        <div className="flex items-center gap-1.5">
-          <div className="w-5 h-5 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-md flex items-center justify-center text-white shadow-2xs">
-            <BookOpen size={11} strokeWidth={2.5} />
-          </div>
-          <span className="font-extrabold text-xs text-slate-900 tracking-tight">ClassSync</span>
-        </div>
-        <span className="text-[10px] font-bold text-blue-600 bg-blue-50/80 px-2 py-0.5 rounded-full border border-blue-100">Student Portal</span>
-      </div>
-
-      <div className="hidden sm:flex flex-col items-center justify-center text-center mb-4 mt-1 animate-in fade-in slide-in-from-top-4 duration-500">
-        <div className="flex items-center justify-center gap-3 mb-1">
-          <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-xl shadow-blue-500/30 ring-4 ring-white">
+      {/* Top Branding Logo & Tagline (Centered) */}
+      <div className="flex flex-col items-center justify-center text-center mb-4 mt-1 animate-in fade-in slide-in-from-top-4 duration-500">
+        <div className="flex items-center justify-center gap-2.5 sm:gap-3 mb-1">
+          <div className="w-9 h-9 sm:w-11 md:w-12 sm:h-11 md:h-12 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl md:rounded-2xl flex items-center justify-center text-white shadow-xl shadow-blue-500/30 ring-3 sm:ring-4 ring-white">
             <BookOpen size={20} strokeWidth={2.5} />
           </div>
           <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight drop-shadow-sm">ClassSync</h2>
         </div>
-        <p className="text-slate-500 text-xs sm:text-sm font-medium mt-1 max-w-sm mx-auto">Bridging the gap between classrooms and students.</p>
+        <p className="text-slate-500 text-xs sm:text-sm font-medium max-w-sm mx-auto">Bridging the gap between classrooms and students.</p>
       </div>
 
       {/* Header with Glassmorphism - Compact single row on mobile */}

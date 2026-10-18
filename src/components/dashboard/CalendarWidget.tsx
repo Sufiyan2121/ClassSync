@@ -13,7 +13,7 @@ import {
   isToday,
   isTomorrow
 } from "date-fns";
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Cake, Sparkles, PartyPopper, ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Cake, Sparkles, PartyPopper } from "lucide-react";
 import { Post } from "@/types";
 import { useBirthdays } from "@/hooks/useBirthdays";
 import Link from "next/link";
@@ -26,7 +26,6 @@ interface CalendarWidgetProps {
 export function CalendarWidget({ posts }: CalendarWidgetProps) {
   const [currentMonth, setCurrentMonth] = useState<Date | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [isMobileExpanded, setIsMobileExpanded] = useState(false);
   const { userData } = useAuth();
   const { todaysBirthdays, tomorrowsBirthdays, getBirthdaysForDate } = useBirthdays();
 
@@ -82,23 +81,14 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
   const birthdaysPath = userData?.role === "ADMIN" ? "/admin/birthdays" : "/student/birthdays";
 
   return (
-    <div className="glass rounded-2xl sm:rounded-3xl shadow-xs border border-slate-200/50 p-3 sm:p-5 overflow-hidden flex flex-col space-y-2 sm:space-y-3.5">
+    <div className="glass rounded-2xl sm:rounded-3xl shadow-xs border border-slate-200/50 p-3 sm:p-5 overflow-hidden flex flex-col space-y-2.5 sm:space-y-3.5">
       
       {/* Calendar Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <h3 className="font-extrabold text-slate-900 tracking-tight flex items-center gap-1.5 text-xs sm:text-base">
-            <CalendarIcon className="text-blue-500" size={15} />
-            <span>{format(currentMonth, "MMMM yyyy")}</span>
-          </h3>
-          <button
-            onClick={() => setIsMobileExpanded(!isMobileExpanded)}
-            className="sm:hidden flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-200/70 cursor-pointer"
-          >
-            <span>{isMobileExpanded ? "Hide" : "Grid"}</span>
-            {isMobileExpanded ? <ChevronUp size={11} /> : <ChevronDown size={11} />}
-          </button>
-        </div>
+        <h3 className="font-extrabold text-slate-900 tracking-tight flex items-center gap-1.5 sm:gap-2 text-xs sm:text-base">
+          <CalendarIcon className="text-blue-500" size={16} />
+          <span>{format(currentMonth, "MMMM yyyy")}</span>
+        </h3>
 
         <div className="flex items-center gap-1">
           <button 
@@ -106,7 +96,7 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
             className="p-1 sm:p-1.5 rounded-lg sm:rounded-xl hover:bg-slate-100 text-slate-600 transition-colors cursor-pointer"
             title="Previous Month"
           >
-            <ChevronLeft size={15} />
+            <ChevronLeft size={16} />
           </button>
           <button 
             onClick={() => {
@@ -123,37 +113,10 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
             className="p-1 sm:p-1.5 rounded-lg sm:rounded-xl hover:bg-slate-100 text-slate-600 transition-colors cursor-pointer"
             title="Next Month"
           >
-            <ChevronRight size={15} />
+            <ChevronRight size={16} />
           </button>
         </div>
       </div>
-
-      {/* Compact Status on Mobile when Collapsed */}
-      {!isMobileExpanded && (
-        <div className="sm:hidden flex items-center justify-between gap-2 pt-0.5">
-          <div className="flex items-center gap-1 text-[11px] text-slate-600 min-w-0">
-            <span className="font-bold text-slate-800 shrink-0">
-              {format(new Date(), "EEE, MMM d")}:
-            </span>
-            <span className="truncate text-slate-500">
-              {todaysBirthdays.length > 0
-                ? `🎂 ${todaysBirthdays[0].name}'s Birthday!`
-                : selectedEvents && selectedEvents.count > 0
-                ? `${selectedEvents.count} event(s) scheduled`
-                : "No events today"}
-            </span>
-          </div>
-          <button
-            onClick={() => setIsMobileExpanded(true)}
-            className="text-[10px] font-bold text-blue-600 hover:text-blue-800 shrink-0 cursor-pointer"
-          >
-            View Month →
-          </button>
-        </div>
-      )}
-
-      {/* Month Grid & Details (Collapsible on mobile, always visible on sm+) */}
-      <div className={`${isMobileExpanded ? "block" : "hidden sm:block"} space-y-2.5 sm:space-y-3.5 animate-in fade-in duration-150`}>
 
       {/* Day Name Headers */}
       <div className="grid grid-cols-7 gap-1 text-center">
@@ -310,8 +273,6 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
           <span>All Birthdays</span>
           <span>→</span>
         </Link>
-      </div>
-
       </div>
     </div>
   );
