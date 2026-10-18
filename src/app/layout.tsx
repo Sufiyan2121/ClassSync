@@ -21,13 +21,21 @@ export const metadata: Metadata = {
     title: "ClassSync",
   },
   icons: {
-    icon: "/icons/icon-192x192.png",
-    apple: "/icons/icon-192x192.png",
+    icon: [
+      { url: "/icons/icon-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512x512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
 };
 
 export const viewport = {
-  themeColor: "#dfe8df",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#dfe8df" },
+    { media: "(prefers-color-scheme: dark)", color: "#09130e" },
+  ],
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,

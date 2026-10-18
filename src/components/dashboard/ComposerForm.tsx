@@ -6,7 +6,7 @@ import { db } from "@/lib/firebase/clientApp";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { Post, PostType } from "@/types";
 import toast from "react-hot-toast";
-import { Send, Calendar as CalendarIcon, Type, AlignLeft, X, Save } from "lucide-react";
+import { Send, Calendar as CalendarIcon, Type, AlignLeft, X, Save, Bell, FileText, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 
 interface ComposerFormProps {
@@ -129,30 +129,38 @@ export function ComposerForm({ editingPost, onCancelEdit }: ComposerFormProps) {
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-3">Broadcast Type</label>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {(["ANNOUNCEMENT", "ASSIGNMENT", "EXAM"] as PostType[]).map((t) => (
-              <label 
-                key={t} 
-                className={`flex items-center justify-center py-3 px-2 rounded-xl border-2 cursor-pointer transition-all ${
-                  type === t 
-                    ? "border-emerald-600 bg-emerald-50 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 font-bold shadow-xs" 
-                    : "border-stone-200/90 dark:border-[#1e3025] bg-white dark:bg-[#16231b] text-stone-600 dark:text-stone-300 hover:border-emerald-200 dark:hover:border-emerald-800 hover:bg-stone-50 dark:hover:bg-[#1f3325] font-medium"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="type"
-                  value={t}
-                  checked={type === t}
-                  onChange={(e) => setType(e.target.value as PostType)}
-                  className="sr-only"
-                />
-                <span className="text-sm capitalize">
-                  {t.toLowerCase()}
-                </span>
-              </label>
-            ))}
+          <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2.5">Broadcast Type</label>
+          <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
+            {([
+              { id: "ANNOUNCEMENT" as PostType, label: "Announcement", icon: Bell },
+              { id: "ASSIGNMENT" as PostType, label: "Assignment", icon: FileText },
+              { id: "EXAM" as PostType, label: "Exam", icon: AlertCircle },
+            ]).map(({ id, label, icon: Icon }) => {
+              const isSelected = type === id;
+              return (
+                <label 
+                  key={id} 
+                  className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5 py-2.5 px-1.5 sm:px-2 rounded-xl border-2 cursor-pointer transition-all min-w-0 select-none ${
+                    isSelected 
+                      ? "border-emerald-600 dark:border-emerald-500 bg-emerald-50 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 font-bold shadow-xs ring-1 ring-emerald-600/20" 
+                      : "border-stone-200/90 dark:border-[#1e3025] bg-white dark:bg-[#16231b] text-stone-600 dark:text-stone-300 hover:border-emerald-300 dark:hover:border-emerald-800/70 hover:bg-stone-50 dark:hover:bg-[#18261d] font-medium"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="type"
+                    value={id}
+                    checked={isSelected}
+                    onChange={(e) => setType(e.target.value as PostType)}
+                    className="sr-only"
+                  />
+                  <Icon size={15} className={`shrink-0 ${isSelected ? "text-emerald-700 dark:text-emerald-400" : "text-stone-400 dark:text-stone-500"}`} />
+                  <span className="text-xs sm:text-xs md:text-sm font-semibold tracking-tight text-center truncate max-w-full leading-tight">
+                    {label}
+                  </span>
+                </label>
+              );
+            })}
           </div>
         </div>
 
