@@ -16,7 +16,6 @@ interface AuthContextType {
   loading: boolean;
   login: (roleChoice?: "ADMIN" | "STUDENT") => Promise<void>;
   logout: () => Promise<void>;
-  switchRole: (targetRole: "ADMIN" | "STUDENT") => Promise<void>;
   enrollInClass: (code: string) => Promise<void>;
   leaveClass: (code: string) => Promise<void>;
   switchClass: (code: string) => Promise<void>;
@@ -37,7 +36,6 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   login: async () => {},
   logout: async () => {},
-  switchRole: async () => {},
   enrollInClass: async () => {},
   leaveClass: async () => {},
   switchClass: async () => {},
@@ -189,36 +187,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       router.push('/login');
     } catch (error: any) {
       toast.error(error.message || 'Logout failed');
-    }
-  };
-
-  // Instant switch between Student and Admin mode
-  const switchRole = async (targetRole: "ADMIN" | "STUDENT") => {
-    if (!user) return;
-    try {
-      const userRef = doc(db, 'users', user.uid);
-      const isDev = isDeveloperEmail(user.email);
-
-      if (targetRole === 'STUDENT') {
-        await setDoc(userRef, {
-          role: 'STUDENT',
-          requestedRole: 'STUDENT',
-        }, { merge: true });
-        toast.success('Switched to Student mode');
-        router.push(userData?.enrolledClassCode ? '/student' : '/join-class');
-      } else {
-        const isApproved = isDev || userData?.adminApprovalStatus === 'APPROVED';
-        await setDoc(userRef, {
-          role: 'ADMIN',
-          requestedRole: 'ADMIN',
-          adminApprovalStatus: isApproved ? 'APPROVED' : (userData?.adminApprovalStatus || 'PENDING'),
-          isDeveloper: isDev || Boolean(userData?.isDeveloper),
-        }, { merge: true });
-        toast.success('Switched to Teacher/Admin mode');
-        router.push('/admin');
-      }
-    } catch (error: any) {
-      toast.error('Failed to switch role: ' + error.message);
     }
   };
 
@@ -379,7 +347,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       loading, 
       login, 
       logout, 
-      switchRole,
       enrollInClass, 
       leaveClass, 
       switchClass, 

@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 function LoginContent() {
-  const { login, logout, switchRole, userData, user, loading } = useAuth();
+  const { login, logout, userData, user, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const roleParam = searchParams.get("role");
@@ -99,27 +99,7 @@ function LoginContent() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 w-full sm:w-auto flex-wrap">
-                {userData.role === "ADMIN" ? (
-                  <button
-                    type="button"
-                    onClick={() => switchRole("STUDENT")}
-                    className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 hover:bg-emerald-200 dark:hover:bg-emerald-900 text-emerald-800 dark:text-emerald-300 text-xs font-bold transition border border-emerald-300 dark:border-emerald-800 cursor-pointer"
-                  >
-                    <GraduationCap size={13} />
-                    <span>Switch to Student Mode</span>
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => switchRole("ADMIN")}
-                    className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 hover:bg-emerald-200 dark:hover:bg-emerald-900 text-emerald-800 dark:text-emerald-300 text-xs font-bold transition border border-emerald-300 dark:border-emerald-800 cursor-pointer"
-                  >
-                    <ShieldCheck size={13} />
-                    <span>Switch to Teacher Mode</span>
-                  </button>
-                )}
-
+              <div className="flex items-center gap-2 w-full sm:w-auto">
                 <button
                   type="button"
                   onClick={() => {
@@ -131,7 +111,7 @@ function LoginContent() {
                       router.push("/join-class");
                     }
                   }}
-                  className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white text-xs font-bold transition shadow-sm cursor-pointer"
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white text-xs font-bold transition shadow-sm cursor-pointer"
                 >
                   <span>Go to App</span>
                   <ArrowRight size={13} />
@@ -139,7 +119,7 @@ function LoginContent() {
                 <button
                   type="button"
                   onClick={logout}
-                  className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 dark:bg-[#1e3025] dark:hover:bg-[#253d2f] text-stone-700 dark:text-stone-300 text-xs font-bold transition border border-stone-200 dark:border-[#243a2c] cursor-pointer"
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 dark:bg-[#1e3025] dark:hover:bg-[#253d2f] text-stone-700 dark:text-stone-300 text-xs font-bold transition border border-stone-200 dark:border-[#243a2c] cursor-pointer"
                 >
                   <LogOut size={13} />
                   <span>Sign Out</span>
