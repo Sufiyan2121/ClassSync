@@ -21,17 +21,18 @@ import {
   FolderOpen,
   Sparkles,
   Camera,
-  Cake
+  Cake,
+  Clock
 } from "lucide-react";
-import { collection, query, onSnapshot } from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase/clientApp";
-import { UserData } from "@/types";
+import { UserData, ClassJoinRequest } from "@/types";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export function StudentClassSwitcher() {
-  const { userData, user, enrollInClass, leaveClass, switchClass } = useAuth();
+  const { userData, user, enrollInClass, leaveClass, switchClass, requestJoinClass } = useAuth();
   const { classes, classConfig, verifyCode } = useClassConfig();
   const router = useRouter();
 
@@ -48,6 +49,23 @@ export function StudentClassSwitcher() {
   const [showClassmates, setShowClassmates] = useState(false);
   const [classmateSearch, setClassmateSearch] = useState("");
   const [subjectsCount, setSubjectsCount] = useState<number>(0);
+  const [pendingRequests, setPendingRequests] = useState<ClassJoinRequest[]>([]);
+
+  // Real-time listener for pending join requests for this student
+  useEffect(() => {
+    if (!user) return;
+    const q = query(
+      collection(db, "join_requests"),
+      where("studentUid", "==", user.uid),
+      where("status", "==", "PENDING")
+    );
+    const unsub = onSnapshot(q, (snap) => {
+      const list: ClassJoinRequest[] = [];
+      snap.forEach((d) => list.push(d.data() as ClassJoinRequest));
+      setPendingRequests(list);
+    });
+    return () => unsub();
+  }, [user]);
 
   // Client mounting check for portal
   useEffect(() => {
@@ -141,6 +159,11 @@ export function StudentClassSwitcher() {
       return;
     }
 
+    if (pendingRequests.some(r => r.classCode === clean)) {
+      toast.error("You already have a pending join request for this class.");
+      return;
+    }
+
     setIsJoining(true);
     try {
       const verification = verifyCode(clean);
@@ -150,12 +173,12 @@ export function StudentClassSwitcher() {
         return;
       }
 
-      await enrollInClass(clean);
-      toast.success(`Successfully joined ${verification.classItem?.name || clean}!`);
+      await requestJoinClass(clean, verification.classItem?.name || clean);
+      toast.success(`Request sent to ${verification.classItem?.name || clean} Admin! Awaiting approval.`);
       setJoinCodeInput("");
       setShowJoinForm(false);
     } catch (err: any) {
-      toast.error("Failed to join class: " + err.message);
+      toast.error("Failed to request access: " + err.message);
     } finally {
       setIsJoining(false);
     }
@@ -419,6 +442,36 @@ export function StudentClassSwitcher() {
                         );
                       })
                     )}
+                  </div>
+                </div>
+              )}
+
+              {/* Pending Join Requests */}
+              {pendingRequests.length > 0 && (
+                <div className="space-y-2 p-3 bg-amber-50/70 dark:bg-[#1a2418] rounded-2xl border border-amber-200/80 dark:border-[#2d402b]">
+                  <h4 className="text-[11px] font-bold text-amber-800 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <Clock size={13} className="text-amber-600 dark:text-amber-400" />
+                    <span>Pending Teacher Approvals ({pendingRequests.length})</span>
+                  </h4>
+                  <div className="space-y-1.5">
+                    {pendingRequests.map((req) => (
+                      <div
+                        key={req.id}
+                        className="p-2.5 rounded-xl bg-white/90 dark:bg-[#16231b] border border-amber-200/60 dark:border-[#1e3025] flex items-center justify-between gap-2 text-xs"
+                      >
+                        <div className="min-w-0">
+                          <p className="font-bold text-stone-900 dark:text-white truncate">
+                            {req.className || req.classCode}
+                          </p>
+                          <p className="text-[10px] text-amber-700 dark:text-amber-300 font-medium">
+                            Code: <span className="font-mono font-bold">{req.classCode}</span> • Awaiting Teacher
+                          </p>
+                        </div>
+                        <span className="text-[10px] font-extrabold bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 px-2 py-0.5 rounded-full border border-amber-300 dark:border-amber-700 shrink-0">
+                          Pending
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}

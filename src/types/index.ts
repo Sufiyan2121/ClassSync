@@ -1,12 +1,17 @@
 import { Timestamp } from "firebase/firestore";
 
 export type UserRole = "ADMIN" | "STUDENT";
+export type AdminApprovalStatus = "PENDING" | "APPROVED" | "REJECTED";
+export type JoinRequestStatus = "PENDING" | "APPROVED" | "REJECTED";
 
 export interface UserData {
   uid?: string;
   email: string;
   displayName: string;
   role: UserRole;
+  adminApprovalStatus?: AdminApprovalStatus;
+  requestedRole?: UserRole;
+  isDeveloper?: boolean;
   fcmTokens: string[];
   remindersEnabled?: boolean;
   enrolledClassCode?: string;
@@ -18,6 +23,20 @@ export interface UserData {
   phoneNumber?: string;
   birthday?: string;
   bio?: string;
+}
+
+export interface ClassJoinRequest {
+  id: string;
+  classCode: string;
+  className?: string;
+  studentUid: string;
+  studentName: string;
+  studentEmail: string;
+  studentPhoto?: string;
+  status: JoinRequestStatus;
+  createdAt: Timestamp;
+  reviewedAt?: Timestamp;
+  reviewedBy?: string;
 }
 
 export interface ClassConfig {
