@@ -12,11 +12,10 @@ import {
   ShieldAlert, 
   LogOut, 
   ArrowRight,
-  UserCheck
 } from "lucide-react";
 
 function LoginContent() {
-  const { login, logout, userData, user, loading } = useAuth();
+  const { login, logout, switchRole, userData, user, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const roleParam = searchParams.get("role");
@@ -36,7 +35,16 @@ function LoginContent() {
   }, [roleParam]);
 
   const handleLogin = async () => {
-    await login(selectedRole);
+    try {
+      await login(selectedRole);
+      if (selectedRole === "ADMIN") {
+        router.push("/admin");
+      } else {
+        router.push("/join-class");
+      }
+    } catch {
+      // Error is caught and surfaced in toast notification
+    }
   };
 
   const isStudent = selectedRole === "STUDENT";
@@ -91,7 +99,27 @@ function LoginContent() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 w-full sm:w-auto">
+              <div className="flex items-center gap-2 w-full sm:w-auto flex-wrap">
+                {userData.role === "ADMIN" ? (
+                  <button
+                    type="button"
+                    onClick={() => switchRole("STUDENT")}
+                    className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 hover:bg-emerald-200 dark:hover:bg-emerald-900 text-emerald-800 dark:text-emerald-300 text-xs font-bold transition border border-emerald-300 dark:border-emerald-800 cursor-pointer"
+                  >
+                    <GraduationCap size={13} />
+                    <span>Switch to Student Mode</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => switchRole("ADMIN")}
+                    className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 hover:bg-emerald-200 dark:hover:bg-emerald-900 text-emerald-800 dark:text-emerald-300 text-xs font-bold transition border border-emerald-300 dark:border-emerald-800 cursor-pointer"
+                  >
+                    <ShieldCheck size={13} />
+                    <span>Switch to Teacher Mode</span>
+                  </button>
+                )}
+
                 <button
                   type="button"
                   onClick={() => {
@@ -103,7 +131,7 @@ function LoginContent() {
                       router.push("/join-class");
                     }
                   }}
-                  className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white text-xs font-bold transition shadow-sm cursor-pointer"
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white text-xs font-bold transition shadow-sm cursor-pointer"
                 >
                   <span>Go to App</span>
                   <ArrowRight size={13} />

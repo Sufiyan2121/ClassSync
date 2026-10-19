@@ -16,6 +16,7 @@ interface AuthContextType {
   loading: boolean;
   login: (roleChoice?: "ADMIN" | "STUDENT") => Promise<void>;
   logout: () => Promise<void>;
+  switchRole: (targetRole: "ADMIN" | "STUDENT") => Promise<void>;
   enrollInClass: (code: string) => Promise<void>;
   leaveClass: (code: string) => Promise<void>;
   switchClass: (code: string) => Promise<void>;
@@ -36,6 +37,7 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   login: async () => {},
   logout: async () => {},
+  switchRole: async () => {},
   enrollInClass: async () => {},
   leaveClass: async () => {},
   switchClass: async () => {},
@@ -72,46 +74,76 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const userSnap = await getDoc(userRef);
         const isDev = isDeveloperEmail(firebaseUser.email);
         
+        // Retrieve explicit portal choice (STUDENT vs ADMIN) from storage
         const intendedRole = typeof window !== 'undefined' 
-          ? (sessionStorage.getItem('classsync_intended_role') as "ADMIN" | "STUDENT") || null
+          ? (sessionStorage.getItem('classsync_intended_role') || localStorage.getItem('classsync_intended_role')) as "ADMIN" | "STUDENT" | null
           : null;
         if (typeof window !== 'undefined') {
           sessionStorage.removeItem('classsync_intended_role');
+          localStorage.removeItem('classsync_intended_role');
         }
 
         if (userSnap.exists()) {
           const current = userSnap.data() as UserData;
-          // Auto-promote recognized developer if not already set
-          if (isDev && (!current.isDeveloper || current.adminApprovalStatus !== 'APPROVED' || current.role !== 'ADMIN')) {
+
+          if (intendedRole === 'STUDENT') {
+            // User explicitly logged in through Student Portal!
+            // Respect their choice 100%. Set role to STUDENT.
             await setDoc(userRef, {
-              role: 'ADMIN',
-              adminApprovalStatus: 'APPROVED',
-              isDeveloper: true,
+              role: 'STUDENT',
+              requestedRole: 'STUDENT',
             }, { merge: true });
-          } else if (intendedRole === 'ADMIN' && current.role !== 'ADMIN') {
-            // User specifically signed in as Teacher/Admin
+          } else if (intendedRole === 'ADMIN') {
+            // User explicitly logged in through Teacher/Admin Portal!
+            const isApproved = isDev || current.adminApprovalStatus === 'APPROVED';
             await setDoc(userRef, {
               role: 'ADMIN',
-              adminApprovalStatus: isDev ? 'APPROVED' : 'PENDING',
               requestedRole: 'ADMIN',
+              adminApprovalStatus: isApproved ? 'APPROVED' : (current.adminApprovalStatus || 'PENDING'),
+              isDeveloper: isDev || Boolean(current.isDeveloper),
             }, { merge: true });
+          } else {
+            // Regular session restore (no explicit portal clicked)
+            // If they are an active ADMIN and recognized developer, ensure dev status is kept
+            if (isDev && current.role === 'ADMIN' && (!current.isDeveloper || current.adminApprovalStatus !== 'APPROVED')) {
+              await setDoc(userRef, {
+                adminApprovalStatus: 'APPROVED',
+                isDeveloper: true,
+              }, { merge: true });
+            }
           }
         } else {
-          // Auto-register: Developer gets immediate ADMIN approval, standard users get chosen role
-          const wantsAdmin = intendedRole === 'ADMIN';
-          const newUserData: UserData = { 
-            uid: firebaseUser.uid,
-            role: (isDev || wantsAdmin) ? ('ADMIN' as const) : ('STUDENT' as const), 
-            adminApprovalStatus: isDev ? ('APPROVED' as const) : wantsAdmin ? ('PENDING' as const) : undefined,
-            isDeveloper: isDev,
-            requestedRole: wantsAdmin ? 'ADMIN' : 'STUDENT',
-            email: firebaseUser.email!,
-            displayName: firebaseUser.displayName || (isDev ? 'Developer' : wantsAdmin ? 'Teacher' : 'Student'),
-            createdAt: serverTimestamp() as any,
-            fcmTokens: [],
-            remindersEnabled: true
-          };
-          await setDoc(userRef, newUserData);
+          // New User Registration
+          if (intendedRole === 'ADMIN') {
+            // Registering as Teacher/Admin
+            const newUserData: UserData = { 
+              uid: firebaseUser.uid,
+              role: 'ADMIN',
+              requestedRole: 'ADMIN',
+              adminApprovalStatus: isDev ? 'APPROVED' : 'PENDING',
+              isDeveloper: isDev,
+              email: firebaseUser.email!,
+              displayName: firebaseUser.displayName || (isDev ? 'Developer' : 'Teacher'),
+              createdAt: serverTimestamp() as any,
+              fcmTokens: [],
+              remindersEnabled: true
+            };
+            await setDoc(userRef, newUserData);
+          } else {
+            // Registering as Student (default)
+            const newUserData: UserData = { 
+              uid: firebaseUser.uid,
+              role: 'STUDENT',
+              requestedRole: 'STUDENT',
+              isDeveloper: false,
+              email: firebaseUser.email!,
+              displayName: firebaseUser.displayName || 'Student',
+              createdAt: serverTimestamp() as any,
+              fcmTokens: [],
+              remindersEnabled: true
+            };
+            await setDoc(userRef, newUserData);
+          }
         }
 
         // Real-time listener for live approval updates without needing a page refresh
@@ -138,17 +170,106 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       if (roleChoice && typeof window !== 'undefined') {
         sessionStorage.setItem('classsync_intended_role', roleChoice);
+        localStorage.setItem('classsync_intended_role', roleChoice);
       }
       await signInWithPopup(auth, googleProvider);
       toast.success('Successfully logged in!');
     } catch (error: any) {
       toast.error('Login failed: ' + error.message);
+      throw error;
     }
   };
 
   const logout = async () => {
-    await signOut(auth);
-    router.push('/login');
+    try {
+      await signOut(auth);
+      setUser(null);
+      setUserData(null);
+      toast.success('Logged out successfully');
+      router.push('/login');
+    } catch (error: any) {
+      toast.error(error.message || 'Logout failed');
+    }
+  };
+
+  // Instant switch between Student and Admin mode
+  const switchRole = async (targetRole: "ADMIN" | "STUDENT") => {
+    if (!user) return;
+    try {
+      const userRef = doc(db, 'users', user.uid);
+      const isDev = isDeveloperEmail(user.email);
+
+      if (targetRole === 'STUDENT') {
+        await setDoc(userRef, {
+          role: 'STUDENT',
+          requestedRole: 'STUDENT',
+        }, { merge: true });
+        toast.success('Switched to Student mode');
+        router.push(userData?.enrolledClassCode ? '/student' : '/join-class');
+      } else {
+        const isApproved = isDev || userData?.adminApprovalStatus === 'APPROVED';
+        await setDoc(userRef, {
+          role: 'ADMIN',
+          requestedRole: 'ADMIN',
+          adminApprovalStatus: isApproved ? 'APPROVED' : (userData?.adminApprovalStatus || 'PENDING'),
+          isDeveloper: isDev || Boolean(userData?.isDeveloper),
+        }, { merge: true });
+        toast.success('Switched to Teacher/Admin mode');
+        router.push('/admin');
+      }
+    } catch (error: any) {
+      toast.error('Failed to switch role: ' + error.message);
+    }
+  };
+
+  const enrollInClass = async (code: string) => {
+    if (!user) return;
+    const cleanCode = code.toUpperCase().trim();
+    const currentClasses = userData?.enrolledClasses || [];
+    const updatedClasses = Array.from(new Set([...currentClasses, cleanCode]));
+
+    await updateDoc(doc(db, 'users', user.uid), {
+      enrolledClassCode: cleanCode,
+      enrolledClasses: updatedClasses
+    });
+    setUserData(prev => prev ? ({ ...prev, enrolledClassCode: cleanCode, enrolledClasses: updatedClasses }) : null);
+    toast.success(`Joined class ${cleanCode}`);
+  };
+
+  const switchClass = async (code: string) => {
+    if (!user) return;
+    const cleanCode = code.toUpperCase().trim();
+    await updateDoc(doc(db, 'users', user.uid), {
+      enrolledClassCode: cleanCode
+    });
+    setUserData(prev => prev ? ({ ...prev, enrolledClassCode: cleanCode }) : null);
+    toast.success(`Switched to class ${cleanCode}`);
+  };
+
+  const leaveClass = async (code: string) => {
+    if (!user) return;
+    const cleanCode = code.toUpperCase().trim();
+    const currentClasses = userData?.enrolledClasses || [];
+    const updatedClasses = currentClasses.filter(c => c !== cleanCode);
+    const nextActive = updatedClasses.length > 0 ? updatedClasses[0] : undefined;
+
+    await updateDoc(doc(db, 'users', user.uid), {
+      enrolledClassCode: nextActive || null,
+      enrolledClasses: updatedClasses
+    });
+    setUserData(prev => prev ? ({ ...prev, enrolledClassCode: nextActive, enrolledClasses: updatedClasses }) : null);
+    toast.success(`Left class ${cleanCode}`);
+  };
+
+  const updateUserProfile = async (updates: Partial<UserData>) => {
+    if (!user) return;
+    try {
+      await updateDoc(doc(db, 'users', user.uid), updates);
+      setUserData(prev => prev ? ({ ...prev, ...updates }) : null);
+      toast.success('Profile updated');
+    } catch (error: any) {
+      toast.error('Failed to update profile: ' + error.message);
+    }
   };
 
   const refreshUserData = async () => {
@@ -160,174 +281,95 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const enrollInClass = async (code: string) => {
+  const requestAdminRole = async () => {
     if (!user) return;
-    const cleanCode = code.trim().toUpperCase();
-    const currentClasses = userData?.enrolledClasses || (userData?.enrolledClassCode ? [userData.enrolledClassCode] : []);
-    const updatedClasses = Array.from(new Set([...currentClasses, cleanCode]));
-
-    const userRef = doc(db, 'users', user.uid);
-    await setDoc(userRef, { 
-      enrolledClassCode: cleanCode,
-      enrolledClasses: updatedClasses
-    }, { merge: true });
-
-    setUserData(prev => prev ? { 
-      ...prev, 
-      enrolledClassCode: cleanCode,
-      enrolledClasses: updatedClasses
-    } : null);
-  };
-
-  const leaveClass = async (code: string) => {
-    if (!user) return;
-    const cleanCode = code.trim().toUpperCase();
-    const currentClasses = userData?.enrolledClasses || (userData?.enrolledClassCode ? [userData.enrolledClassCode] : []);
-    const updatedClasses = currentClasses.filter(c => c !== cleanCode);
-    
-    const nextActiveClass = userData?.enrolledClassCode === cleanCode
-      ? (updatedClasses.length > 0 ? updatedClasses[0] : null)
-      : (userData?.enrolledClassCode || null);
-
-    const userRef = doc(db, 'users', user.uid);
-    await setDoc(userRef, { 
-      enrolledClassCode: nextActiveClass,
-      enrolledClasses: updatedClasses
-    }, { merge: true });
-
-    setUserData(prev => prev ? { 
-      ...prev, 
-      enrolledClassCode: nextActiveClass || undefined,
-      enrolledClasses: updatedClasses
-    } : null);
-  };
-
-  const switchClass = async (code: string) => {
-    if (!user) return;
-    const cleanCode = code.trim().toUpperCase();
-    const userRef = doc(db, 'users', user.uid);
-    await setDoc(userRef, { enrolledClassCode: cleanCode }, { merge: true });
-    setUserData(prev => prev ? { ...prev, enrolledClassCode: cleanCode } : null);
-  };
-
-  const updateUserProfile = async (updates: Partial<UserData>) => {
-    if (!user) return;
-    const userRef = doc(db, 'users', user.uid);
-    // Protect core immutable fields so user never loses name, email, or role
-    const sanitizedUpdates: Partial<UserData> = {
-      ...updates,
-      email: userData?.email || user.email || "",
-      role: userData?.role || "STUDENT",
-    };
-    if (!sanitizedUpdates.displayName && userData?.displayName) {
-      sanitizedUpdates.displayName = userData.displayName;
+    try {
+      const isDev = isDeveloperEmail(user.email);
+      await updateDoc(doc(db, 'users', user.uid), {
+        requestedRole: 'ADMIN',
+        role: 'ADMIN',
+        adminApprovalStatus: isDev ? 'APPROVED' : 'PENDING',
+        isDeveloper: isDev,
+      });
+      if (isDev) {
+        toast.success('Developer verified! Admin access granted.');
+      } else {
+        toast.success('Admin privileges requested. Awaiting developer approval.');
+      }
+    } catch (error: any) {
+      toast.error('Failed to request admin role: ' + error.message);
     }
-    await setDoc(userRef, sanitizedUpdates, { merge: true });
-    setUserData(prev => prev ? ({ ...prev, ...sanitizedUpdates } as UserData) : null);
   };
 
-  // Submit student request to join a specific class
   const requestJoinClass = async (code: string, className?: string) => {
     if (!user) return;
-    const cleanCode = code.trim().toUpperCase();
+    const cleanCode = code.toUpperCase().trim();
     const requestId = `${cleanCode}_${user.uid}`;
-    const requestRef = doc(db, 'join_requests', requestId);
     
-    await setDoc(requestRef, {
+    await setDoc(doc(db, 'join_requests', requestId), {
       id: requestId,
       classCode: cleanCode,
       className: className || cleanCode,
       studentUid: user.uid,
       studentName: userData?.displayName || user.displayName || 'Student',
-      studentEmail: userData?.email || user.email || '',
-      studentPhoto: userData?.photoURL || user.photoURL || '',
+      studentEmail: user.email || '',
+      studentPhoto: user.photoURL || undefined,
       status: 'PENDING',
-      createdAt: serverTimestamp(),
-    }, { merge: true });
+      requestedAt: serverTimestamp(),
+    });
+    toast.success(`Join request sent for class ${cleanCode}. Awaiting teacher approval!`);
   };
 
-  // Cancel or withdraw a pending join request
   const cancelJoinRequest = async (code: string) => {
     if (!user) return;
-    const cleanCode = code.trim().toUpperCase();
+    const cleanCode = code.toUpperCase().trim();
     const requestId = `${cleanCode}_${user.uid}`;
     await deleteDoc(doc(db, 'join_requests', requestId));
+    toast.success(`Cancelled request for class ${cleanCode}`);
   };
 
-  // Class Admin approves student join request
   const approveStudentJoin = async (requestId: string, studentUid: string, classCode: string) => {
-    if (!user) return;
-    const cleanCode = classCode.trim().toUpperCase();
-    
-    // 1. Mark request as APPROVED
-    const reqRef = doc(db, 'join_requests', requestId);
-    await updateDoc(reqRef, {
+    const cleanCode = classCode.toUpperCase().trim();
+    await updateDoc(doc(db, 'join_requests', requestId), {
       status: 'APPROVED',
-      reviewedAt: serverTimestamp(),
-      reviewedBy: user.uid,
+      approvedAt: serverTimestamp(),
     });
 
-    // 2. Add classCode to student's enrolledClasses
-    const studentUserRef = doc(db, 'users', studentUid);
-    const snap = await getDoc(studentUserRef);
-    if (snap.exists()) {
-      const sData = snap.data() as UserData;
-      const currentClasses = sData.enrolledClasses || (sData.enrolledClassCode ? [sData.enrolledClassCode] : []);
+    const studentRef = doc(db, 'users', studentUid);
+    const studentSnap = await getDoc(studentRef);
+    if (studentSnap.exists()) {
+      const data = studentSnap.data() as UserData;
+      const currentClasses = data.enrolledClasses || [];
       const updatedClasses = Array.from(new Set([...currentClasses, cleanCode]));
-      
-      await updateDoc(studentUserRef, {
+      await updateDoc(studentRef, {
         enrolledClassCode: cleanCode,
         enrolledClasses: updatedClasses,
       });
     }
+    toast.success(`Student approved for class ${cleanCode}!`);
   };
 
-  // Class Admin rejects student join request
   const rejectStudentJoin = async (requestId: string) => {
-    if (!user) return;
-    const reqRef = doc(db, 'join_requests', requestId);
-    await updateDoc(reqRef, {
+    await updateDoc(doc(db, 'join_requests', requestId), {
       status: 'REJECTED',
-      reviewedAt: serverTimestamp(),
-      reviewedBy: user.uid,
     });
+    toast.success('Join request declined.');
   };
 
-  // User requests Teacher/Admin role (requires Developer approval unless user is Developer)
-  const requestAdminRole = async () => {
-    if (!user) return;
-    const isDev = isDeveloperEmail(user.email);
-    const userRef = doc(db, 'users', user.uid);
-    await updateDoc(userRef, {
-      role: 'ADMIN',
-      adminApprovalStatus: isDev ? 'APPROVED' : 'PENDING',
-      isDeveloper: isDev,
-      requestedRole: 'ADMIN',
-    });
-  };
-
-  // Developer approves an Admin account
   const approveAdminRequest = async (targetUid: string) => {
-    if (!user) return;
-    const targetRef = doc(db, 'users', targetUid);
-    await updateDoc(targetRef, {
+    await updateDoc(doc(db, 'users', targetUid), {
       role: 'ADMIN',
       adminApprovalStatus: 'APPROVED',
-      reviewedBy: user.uid,
-      reviewedAt: serverTimestamp(),
     });
+    toast.success('Admin approved successfully!');
   };
 
-  // Developer rejects an Admin account
   const rejectAdminRequest = async (targetUid: string) => {
-    if (!user) return;
-    const targetRef = doc(db, 'users', targetUid);
-    await updateDoc(targetRef, {
+    await updateDoc(doc(db, 'users', targetUid), {
       role: 'STUDENT',
       adminApprovalStatus: 'REJECTED',
-      reviewedBy: user.uid,
-      reviewedAt: serverTimestamp(),
     });
+    toast.success('Admin request declined.');
   };
 
   return (
@@ -337,6 +379,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       loading, 
       login, 
       logout, 
+      switchRole,
       enrollInClass, 
       leaveClass, 
       switchClass, 
