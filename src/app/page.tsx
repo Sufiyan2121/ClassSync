@@ -1,15 +1,28 @@
 "use client";
+
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/providers/AuthProvider";
 
 export default function Home() {
   const router = useRouter();
+  const { user, userData, loading } = useAuth();
 
   useEffect(() => {
-    // Basic redirect. The AuthProvider inside login handles intelligent routing 
-    // when authenticated, so we can just send everyone to login by default.
-    router.replace("/login");
-  }, [router]);
+    if (!loading) {
+      if (user && userData) {
+        if (userData.role === "ADMIN") {
+          router.replace("/admin");
+        } else if (userData.enrolledClassCode) {
+          router.replace("/student");
+        } else {
+          router.replace("/join-class");
+        }
+      } else {
+        router.replace("/login");
+      }
+    }
+  }, [user, userData, loading, router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#dfe8df] dark:bg-[#09130e] transition-colors">

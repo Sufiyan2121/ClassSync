@@ -37,8 +37,12 @@ export default function AdminDashboard() {
   );
 
   useEffect(() => {
-    if (!authLoading && userData?.role === "STUDENT") {
-      router.push("/student");
+    if (!authLoading) {
+      if (!userData) {
+        router.replace("/login?role=admin");
+      } else if (userData.role === "STUDENT") {
+        router.replace("/student");
+      }
     }
   }, [userData, authLoading, router]);
 

@@ -29,10 +29,12 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     if (!authLoading) {
-      if (userData?.role === "ADMIN") {
-        router.push("/admin");
-      } else if (userData?.role === "STUDENT" && !userData?.enrolledClassCode) {
-        router.push("/join-class");
+      if (!userData) {
+        router.replace("/login?role=student");
+      } else if (userData.role === "ADMIN") {
+        router.replace("/admin");
+      } else if (userData.role === "STUDENT" && !userData.enrolledClassCode) {
+        router.replace("/join-class");
       }
     }
   }, [userData, authLoading, router]);

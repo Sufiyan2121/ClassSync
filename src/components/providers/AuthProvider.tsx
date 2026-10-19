@@ -14,7 +14,7 @@ interface AuthContextType {
   user: User | null;
   userData: UserData | null;
   loading: boolean;
-  login: () => Promise<void>;
+  login: (roleChoice?: "ADMIN" | "STUDENT") => Promise<void>;
   logout: () => Promise<void>;
   enrollInClass: (code: string) => Promise<void>;
   leaveClass: (code: string) => Promise<void>;
@@ -72,6 +72,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const userSnap = await getDoc(userRef);
         const isDev = isDeveloperEmail(firebaseUser.email);
         
+        const intendedRole = typeof window !== 'undefined' 
+          ? (sessionStorage.getItem('classsync_intended_role') as "ADMIN" | "STUDENT") || null
+          : null;
+        if (typeof window !== 'undefined') {
+          sessionStorage.removeItem('classsync_intended_role');
+        }
+
         if (userSnap.exists()) {
           const current = userSnap.data() as UserData;
           // Auto-promote recognized developer if not already set
@@ -81,16 +88,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               adminApprovalStatus: 'APPROVED',
               isDeveloper: true,
             }, { merge: true });
+          } else if (intendedRole === 'ADMIN' && current.role !== 'ADMIN') {
+            // User specifically signed in as Teacher/Admin
+            await setDoc(userRef, {
+              role: 'ADMIN',
+              adminApprovalStatus: isDev ? 'APPROVED' : 'PENDING',
+              requestedRole: 'ADMIN',
+            }, { merge: true });
           }
         } else {
-          // Auto-register: Developer gets immediate ADMIN approval, standard users get STUDENT
+          // Auto-register: Developer gets immediate ADMIN approval, standard users get chosen role
+          const wantsAdmin = intendedRole === 'ADMIN';
           const newUserData: UserData = { 
             uid: firebaseUser.uid,
-            role: isDev ? ('ADMIN' as const) : ('STUDENT' as const), 
-            adminApprovalStatus: isDev ? ('APPROVED' as const) : undefined,
+            role: (isDev || wantsAdmin) ? ('ADMIN' as const) : ('STUDENT' as const), 
+            adminApprovalStatus: isDev ? ('APPROVED' as const) : wantsAdmin ? ('PENDING' as const) : undefined,
             isDeveloper: isDev,
+            requestedRole: wantsAdmin ? 'ADMIN' : 'STUDENT',
             email: firebaseUser.email!,
-            displayName: firebaseUser.displayName || (isDev ? 'Developer' : 'Student'),
+            displayName: firebaseUser.displayName || (isDev ? 'Developer' : wantsAdmin ? 'Teacher' : 'Student'),
             createdAt: serverTimestamp() as any,
             fcmTokens: [],
             remindersEnabled: true
@@ -118,8 +134,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
-  const login = async () => {
+  const login = async (roleChoice?: "ADMIN" | "STUDENT") => {
     try {
+      if (roleChoice && typeof window !== 'undefined') {
+        sessionStorage.setItem('classsync_intended_role', roleChoice);
+      }
       await signInWithPopup(auth, googleProvider);
       toast.success('Successfully logged in!');
     } catch (error: any) {
