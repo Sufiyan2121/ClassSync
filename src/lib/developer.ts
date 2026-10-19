@@ -1,6 +1,7 @@
 // Developer / Super-Admin authority configuration
 export const DEVELOPER_EMAILS = [
   "shaikh.000.sufiyan@gmail.com",
+  "sufiyan.shaikh1120@gmail.com",
   (process.env.NEXT_PUBLIC_DEVELOPER_EMAIL || "").toLowerCase().trim(),
 ].filter(Boolean);
 
