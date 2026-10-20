@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb, adminMessaging } from '@/lib/firebase/admin';
+import { buildWebpushPayload, pruneDeadTokens } from '@/lib/firebase/notificationUtils';
 
 export async function POST(req: NextRequest) {
   try {
@@ -81,6 +82,14 @@ export async function POST(req: NextRequest) {
     let sentCount = 0;
     let failedCount = 0;
 
+    const origin = req.headers.get("origin") || req.nextUrl?.origin;
+    const baseUrl = origin && !origin.includes("localhost")
+      ? origin
+      : (process.env.NEXT_PUBLIC_APP_URL || "https://classsync-kohl.vercel.app");
+
+    const birthdayUrl = `${baseUrl}/student/birthdays`;
+    const iconUrl = `${baseUrl}/icons/icon-192x192.png`;
+
     // 3. Send notifications for TODAY's birthdays
     for (const b of todaysBirthdays) {
       const targetTokens = (b.classCode && b.classCode !== "ALL" && userTokensMap[b.classCode.toUpperCase()])
@@ -88,30 +97,27 @@ export async function POST(req: NextRequest) {
         : uniqueAllTokens;
 
       if (targetTokens.length > 0) {
-        const message = {
-          notification: {
-            title: `🎉 It's ${b.name}'s Birthday Today!`,
-            body: `Today is ${b.name}'s special day! Join everyone in wishing them a wonderful Happy Birthday! 🎂🥳`,
-          },
+        const payloadConfig = buildWebpushPayload({
+          title: `🎉 It's ${b.name}'s Birthday Today!`,
+          body: `Today is ${b.name}'s special day! Join everyone in wishing them a wonderful Happy Birthday! 🎂🥳`,
+          url: birthdayUrl,
+          icon: iconUrl,
           data: {
             type: "BIRTHDAY_TODAY",
-            birthdayId: b.id,
-            url: "/student/birthdays",
+            birthdayId: String(b.id),
           },
+        });
+
+        const message = {
+          ...payloadConfig,
           tokens: targetTokens,
-          webpush: {
-            notification: {
-              icon: "https://classsync-kohl.vercel.app/icons/icon-192x192.png",
-            },
-            fcmOptions: {
-              link: "https://classsync-kohl.vercel.app/student/birthdays",
-            },
-          },
         };
 
         const res = await adminMessaging.sendEachForMulticast(message);
         sentCount += res.successCount;
         failedCount += res.failureCount;
+
+        await pruneDeadTokens(targetTokens, res);
       }
     }
 
@@ -122,30 +128,27 @@ export async function POST(req: NextRequest) {
         : uniqueAllTokens;
 
       if (targetTokens.length > 0) {
-        const message = {
-          notification: {
-            title: `🎂 Birthday Tomorrow!`,
-            body: `It's ${b.name}'s birthday tomorrow! Don't forget to wish them a Happy Birthday! 🎈🎁`,
-          },
+        const payloadConfig = buildWebpushPayload({
+          title: `🎂 Birthday Tomorrow!`,
+          body: `It's ${b.name}'s birthday tomorrow! Don't forget to wish them a Happy Birthday! 🎈🎁`,
+          url: birthdayUrl,
+          icon: iconUrl,
           data: {
             type: "BIRTHDAY_TOMORROW",
-            birthdayId: b.id,
-            url: "/student/birthdays",
+            birthdayId: String(b.id),
           },
+        });
+
+        const message = {
+          ...payloadConfig,
           tokens: targetTokens,
-          webpush: {
-            notification: {
-              icon: "https://classsync-kohl.vercel.app/icons/icon-192x192.png",
-            },
-            fcmOptions: {
-              link: "https://classsync-kohl.vercel.app/student/birthdays",
-            },
-          },
         };
 
         const res = await adminMessaging.sendEachForMulticast(message);
         sentCount += res.successCount;
         failedCount += res.failureCount;
+
+        await pruneDeadTokens(targetTokens, res);
       }
     }
 
@@ -165,3 +168,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+

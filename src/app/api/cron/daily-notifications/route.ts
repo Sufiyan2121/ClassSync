@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { adminDb, adminMessaging } from '@/lib/firebase/admin';
 import { differenceInDays } from 'date-fns';
+import { buildWebpushPayload, pruneDeadTokens } from '@/lib/firebase/notificationUtils';
 
 export async function GET(request: Request) {
   const authHeader = request.headers.get('authorization');
@@ -84,20 +85,33 @@ export async function GET(request: Request) {
     let totalNotificationsSent = 0;
     let totalNotificationsFailed = 0;
 
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://classsync-kohl.vercel.app";
+    const studentUrl = `${baseUrl}/student`;
+    const birthdayUrl = `${baseUrl}/student/birthdays`;
+    const iconUrl = `${baseUrl}/icons/icon-192x192.png`;
+
     // 4. Send Urgent Posts Digest (if any)
     if (urgentPostsCount > 0 && uniqueTokens.length > 0) {
-      const message = {
-        notification: { 
-          title: "ClassSync Daily Digest", 
-          body: `You have ${urgentPostsCount} urgent task(s) approaching deadlines! Log in to check.` 
+      const payloadConfig = buildWebpushPayload({
+        title: "ClassSync Daily Digest",
+        body: `You have ${urgentPostsCount} urgent task(s) approaching deadlines! Log in to check.`,
+        url: studentUrl,
+        icon: iconUrl,
+        data: {
+          type: "DIGEST",
         },
-        data: { url: "/student" },
+      });
+
+      const message = {
+        ...payloadConfig,
         tokens: uniqueTokens,
       };
 
       const response = await adminMessaging.sendEachForMulticast(message);
       totalNotificationsSent += response.successCount;
       totalNotificationsFailed += response.failureCount;
+
+      await pruneDeadTokens(uniqueTokens, response);
     }
 
     // 5. Send Today's Birthday Notifications: "its ______ birthday today"
@@ -107,30 +121,27 @@ export async function GET(request: Request) {
         : uniqueTokens;
 
       if (targetTokens.length > 0) {
-        const message = {
-          notification: {
-            title: `🎉 It's ${b.name}'s Birthday Today!`,
-            body: `Today is ${b.name}'s birthday! Wish them a very Happy Birthday! 🎂🥳`,
-          },
+        const payloadConfig = buildWebpushPayload({
+          title: `🎉 It's ${b.name}'s Birthday Today!`,
+          body: `Today is ${b.name}'s birthday! Wish them a very Happy Birthday! 🎂🥳`,
+          url: birthdayUrl,
+          icon: iconUrl,
           data: {
             type: "BIRTHDAY_TODAY",
-            birthdayId: b.id,
-            url: "/student/birthdays",
+            birthdayId: String(b.id),
           },
+        });
+
+        const message = {
+          ...payloadConfig,
           tokens: targetTokens,
-          webpush: {
-            notification: {
-              icon: "https://classsync-kohl.vercel.app/icons/icon-192x192.png",
-            },
-            fcmOptions: {
-              link: "https://classsync-kohl.vercel.app/student/birthdays",
-            },
-          },
         };
 
         const res = await adminMessaging.sendEachForMulticast(message);
         totalNotificationsSent += res.successCount;
         totalNotificationsFailed += res.failureCount;
+
+        await pruneDeadTokens(targetTokens, res);
       }
     }
 
@@ -141,30 +152,27 @@ export async function GET(request: Request) {
         : uniqueTokens;
 
       if (targetTokens.length > 0) {
-        const message = {
-          notification: {
-            title: `🎂 Birthday Tomorrow!`,
-            body: `It's ${b.name}'s birthday tomorrow! Don't forget to wish them! 🎈🎁`,
-          },
+        const payloadConfig = buildWebpushPayload({
+          title: `🎂 Birthday Tomorrow!`,
+          body: `It's ${b.name}'s birthday tomorrow! Don't forget to wish them! 🎈🎁`,
+          url: birthdayUrl,
+          icon: iconUrl,
           data: {
             type: "BIRTHDAY_TOMORROW",
-            birthdayId: b.id,
-            url: "/student/birthdays",
+            birthdayId: String(b.id),
           },
+        });
+
+        const message = {
+          ...payloadConfig,
           tokens: targetTokens,
-          webpush: {
-            notification: {
-              icon: "https://classsync-kohl.vercel.app/icons/icon-192x192.png",
-            },
-            fcmOptions: {
-              link: "https://classsync-kohl.vercel.app/student/birthdays",
-            },
-          },
         };
 
         const res = await adminMessaging.sendEachForMulticast(message);
         totalNotificationsSent += res.successCount;
         totalNotificationsFailed += res.failureCount;
+
+        await pruneDeadTokens(targetTokens, res);
       }
     }
     
@@ -182,3 +190,4 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+

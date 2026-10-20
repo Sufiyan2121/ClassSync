@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { PWAInstallPrompt } from "@/components/providers/PWAInstallPrompt";
+import { PushNotificationSync } from "@/components/providers/PushNotificationSync";
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
@@ -58,6 +59,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             {children}
+            <PushNotificationSync />
             <PWAInstallPrompt />
             <Toaster 
               position="top-center"

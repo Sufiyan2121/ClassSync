@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminDb, adminMessaging } from "@/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
+import { buildWebpushPayload, pruneDeadTokens } from "@/lib/firebase/notificationUtils";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { title, description, type, dueDate, createdBy } = body;
+    const { title, description, type = "ANNOUNCEMENT", dueDate, createdBy } = body;
 
     if (!title || !description || !createdBy) {
       return NextResponse.json(
@@ -31,10 +32,15 @@ export async function POST(req: NextRequest) {
     const docRef = await adminDb.collection("posts").add(postData);
 
     // 2. Fetch all users who have FCM tokens
-    const usersSnapshot = await adminDb
+    let usersSnapshot = await adminDb
       .collection("users")
       .where("fcmTokens", "!=", [])
       .get();
+
+    // Fallback if empty to catch any missed indexes
+    if (usersSnapshot.empty) {
+      usersSnapshot = await adminDb.collection("users").get();
+    }
 
     const allTokens: string[] = [];
     usersSnapshot.docs.forEach((doc: any) => {
@@ -52,27 +58,32 @@ export async function POST(req: NextRequest) {
     let failureCount = 0;
 
     if (uniqueTokens.length > 0) {
-      const message = {
-        notification: {
-          title: `New ${type.toLowerCase()}: ${title}`,
-          body: description.length > 100 ? description.substring(0, 97) + "..." : description
-        },
+      const formattedType = type ? type.charAt(0).toUpperCase() + type.slice(1).toLowerCase() : "Announcement";
+      const notifTitle = `New ${formattedType}: ${title}`;
+      const notifBody = description.length > 120 ? description.substring(0, 117) + "..." : description;
+
+      const origin = req.headers.get("origin") || req.nextUrl?.origin;
+      const baseUrl = origin && !origin.includes("localhost")
+        ? origin
+        : (process.env.NEXT_PUBLIC_APP_URL || "https://classsync-kohl.vercel.app");
+
+      const destinationUrl = `${baseUrl}/student`;
+      const iconUrl = `${baseUrl}/icons/icon-192x192.png`;
+
+      const payloadConfig = buildWebpushPayload({
+        title: notifTitle,
+        body: notifBody,
+        url: destinationUrl,
+        icon: iconUrl,
         data: {
-          postId: docRef.id,
-          url: "https://classsync-kohl.vercel.app/"
+          postId: String(docRef.id),
+          type: String(type),
         },
+      });
+
+      const message = {
+        ...payloadConfig,
         tokens: uniqueTokens,
-        webpush: {
-          notification: {
-            icon: "https://classsync-kohl.vercel.app/icons/icon-192x192.png",
-            actions: [
-              { action: "open_app", title: "Open App" }
-            ]
-          },
-          fcmOptions: {
-            link: "https://classsync-kohl.vercel.app/"
-          }
-        }
       };
 
       // sendEachForMulticast can take up to 500 tokens at once
@@ -80,7 +91,8 @@ export async function POST(req: NextRequest) {
       successCount = response.successCount;
       failureCount = response.failureCount;
 
-      // Optional: clean up invalid/expired tokens based on response.responses
+      // Automatically clean up invalid/expired tokens so future broadcasts stay healthy
+      await pruneDeadTokens(uniqueTokens, response);
     }
 
     return NextResponse.json({
@@ -100,3 +112,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+

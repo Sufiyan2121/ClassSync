@@ -17,50 +17,18 @@ export const usePushNotifications = () => {
   }, [userData]);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/firebase-messaging-sw.js').then((reg) => {
-        reg.update();
-      });
-      
-      // Global foreground message listener
-      messaging().then(msg => {
-        if (msg) {
-          import('firebase/messaging').then(({ onMessage }) => {
-            onMessage(msg, (payload) => {
-              toast.success(`New: ${payload.data?.title}\n${payload.data?.body}`, {
-                duration: 6000,
-                icon: '🔔'
-              });
-            });
-          });
-        }
-      });
-    }
     if (typeof window !== 'undefined' && 'Notification' in window) {
       setPermission(Notification.permission);
-      
-      // Auto-refresh token on load if already granted and enabled
-      if (Notification.permission === 'granted' && (userData as any)?.remindersEnabled !== false && user) {
-        // We use a small timeout to let Firebase auth fully settle
-        setTimeout(() => {
-          messaging().then(msg => {
-            if (msg) {
-              getToken(msg, { vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY })
-                .then((token) => {
-                  if (token) {
-                    const userRef = doc(db, 'users', user.uid);
-                    updateDoc(userRef, { fcmTokens: arrayUnion(token) }).catch(console.error);
-                  }
-                }).catch(console.error);
-            }
-          });
-        }, 1000);
-      }
     }
-  }, [user, userData]);
+  }, []);
 
   const requestPermission = async () => {
     try {
+      if (typeof window === 'undefined' || !('Notification' in window)) {
+        toast.error('Push notifications are not supported on this browser.');
+        return;
+      }
+
       const msg = await messaging();
       if (!msg) {
         toast.error('Push notifications are not supported on this browser.');
@@ -71,24 +39,26 @@ export const usePushNotifications = () => {
       setPermission(currentPermission);
 
       if (currentPermission === 'granted' && user) {
+        const reg = await navigator.serviceWorker.ready;
         const token = await getToken(msg, {
-          vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY
+          vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
+          serviceWorkerRegistration: reg,
         });
-        
+
         if (token) {
           const userRef = doc(db, 'users', user.uid);
           await updateDoc(userRef, {
             fcmTokens: arrayUnion(token),
-            remindersEnabled: true
+            remindersEnabled: true,
           });
           setLocalEnabled(true);
           if (refreshUserData) {
             await refreshUserData();
           }
-          toast.success('Reminders enabled!');
+          toast.success('Alerts enabled! You will receive class broadcasts.');
         }
       } else {
-        toast.error('Notification permission denied.');
+        toast.error('Notification permission was not granted.');
       }
     } catch (error: any) {
       console.error('Error getting notification permission:', error);
@@ -105,20 +75,23 @@ export const usePushNotifications = () => {
     const userRef = doc(db, 'users', user.uid);
     try {
       await updateDoc(userRef, {
-        remindersEnabled: newState
+        remindersEnabled: newState,
       });
       if (refreshUserData) {
         await refreshUserData();
       }
+
       if (newState) {
-        toast.success('Reminders turned ON');
-        requestPermission();
+        toast.success('Alerts turned ON');
+        if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission !== 'granted') {
+          await requestPermission();
+        }
       } else {
-        toast.success('Reminders turned OFF');
+        toast.success('Alerts turned OFF');
       }
     } catch (error) {
       setLocalEnabled(current); // Rollback on error
-      toast.error('Failed to update reminder settings');
+      toast.error('Failed to update alert settings');
     }
   };
 
@@ -126,3 +99,4 @@ export const usePushNotifications = () => {
 
   return { permission, isEnabled, requestPermission, toggleReminders };
 };
+

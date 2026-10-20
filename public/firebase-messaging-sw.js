@@ -20,11 +20,25 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(clients.claim());
 });
-// The native FCM payload now automatically displays notifications in the background.
-// We no longer manually call showNotification to avoid duplicate banners.
+// The native FCM payload with `notification` automatically displays notifications in the background.
+// If payload is data-only (or if native display doesn't trigger), handle display gracefully:
 messaging.onBackgroundMessage((payload) => {
-  console.log('[firebase-messaging-sw.js] Received background message, native OS will handle display.');
+  console.log('[firebase-messaging-sw.js] Received background message:', payload);
+  if (!payload.notification) {
+    const title = payload.data?.title || 'ClassSync Announcement';
+    const options = {
+      body: payload.data?.body || '',
+      icon: payload.data?.icon || '/icons/icon-192x192.png',
+      badge: '/icons/icon-192x192.png',
+      data: {
+        url: payload.data?.url || '/student',
+        postId: payload.data?.postId,
+      },
+    };
+    self.registration.showNotification(title, options);
+  }
 });
+
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   
@@ -32,13 +46,16 @@ self.addEventListener('notificationclick', (event) => {
     return;
   }
 
-  const urlToOpen = event.notification.data?.url || '/';
+  const urlToOpen = event.notification.data?.url || '/student';
   
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
       for (let i = 0; i < windowClients.length; i++) {
         const client = windowClients[i];
         if (client.url.includes(self.location.origin) && 'focus' in client) {
+          if ('navigate' in client && urlToOpen) {
+            client.navigate(urlToOpen);
+          }
           return client.focus();
         }
       }
