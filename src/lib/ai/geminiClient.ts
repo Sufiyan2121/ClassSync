@@ -1,11 +1,11 @@
 /**
  * Google Gemini & LLM Client for ClassSync BYOK
- * Directly talks to Google Gemini API from the client's browser with streaming support.
- * Features automatic model discovery (via ModelService.ListModels) and multi-model fallbacks
- * so it never fails due to version or regional model naming differences.
+ * Features dynamic ModelService.ListModels checking, multi-model hot-swapping,
+ * and seamless fallback across all active Gemini models.
  */
 
 import { ChatMessage } from "./chatStorage";
+import { setCachedModels, getCachedModels } from "./byokStorage";
 
 export interface StreamOptions {
   apiKey: string;
@@ -15,10 +15,11 @@ export interface StreamOptions {
   onChunk: (chunk: string, accumulated: string) => void;
   onComplete: (fullText: string) => void;
   onError: (error: Error) => void;
+  onModelSwitched?: (modelName: string) => void;
 }
 
-// Preferred candidate models in order of quality, speed, and recency
-const CANDIDATE_MODELS = [
+// Built-in candidate priority list
+export const DEFAULT_CANDIDATE_MODELS = [
   "gemini-2.0-flash",
   "gemini-2.0-flash-exp",
   "gemini-1.5-flash-latest",
@@ -32,11 +33,25 @@ const CANDIDATE_MODELS = [
   "gemini-pro",
 ];
 
-// In-memory cache for the detected working model per session
-let cachedWorkingModel: { model: string; apiVersion: string } | null = null;
+let inMemoryWorkingModel: { model: string; apiVersion: string } | null = null;
 
 /**
- * Calls Google's ModelService.ListModels to see which models the user's specific key has access to.
+ * Strips leaked thinking scratchpads, chain-of-thought blocks, or XML thought tags.
+ */
+export function cleanAiOutput(text: string): string {
+  if (!text) return "";
+  let out = text;
+  // 1. Remove XML/HTML thought tags like <thought>...</thought>
+  out = out.replace(/<(thought|thinking)>[\s\S]*?<\/(thought|thinking)>/gi, "");
+
+  // 2. Remove planning scratchpad lines like "* User says: ... * Goal: ..."
+  out = out.replace(/^\s*\*\s*(User says|Context|Status|Role|Tone|Goal|Greeting|Personalization|Brief Alert|Call to Action|Status Check|Accuracy\?|Bold for emphasis\?):[\s\S]*?(?=(Hello|Hi|Hey|\n\n[A-Z]))/i, "");
+
+  return out.replace(/^\s+/, "");
+}
+
+/**
+ * Calls Google's ModelService.ListModels to query all models available for this specific API key.
  */
 export async function getAvailableModels(apiKey: string): Promise<{ models: string[]; apiVersion: string }> {
   const cleanKey = apiKey.trim();
@@ -48,11 +63,18 @@ export async function getAvailableModels(apiKey: string): Promise<{ models: stri
       if (res.ok) {
         const data = await res.json().catch(() => ({}));
         const rawModels: Array<{ name: string; supportedGenerationMethods?: string[] }> = data?.models || [];
+        
+        // Filter for text generation models
         const contentModels = rawModels
-          .filter((m) => m.supportedGenerationMethods?.includes("generateContent"))
+          .filter((m) => {
+            const hasMethod = m.supportedGenerationMethods?.includes("generateContent");
+            const isTextModel = !m.name.includes("embedding") && !m.name.includes("imagen") && !m.name.includes("aqa");
+            return hasMethod ?? isTextModel;
+          })
           .map((m) => m.name.replace(/^models\//, ""));
 
         if (contentModels.length > 0) {
+          setCachedModels(contentModels);
           return { models: contentModels, apiVersion: ver };
         }
       }
@@ -61,53 +83,19 @@ export async function getAvailableModels(apiKey: string): Promise<{ models: stri
     }
   }
 
-  return { models: [], apiVersion: "v1beta" };
+  const cached = getCachedModels();
+  return { 
+    models: cached.length > 0 ? cached : DEFAULT_CANDIDATE_MODELS, 
+    apiVersion: "v1beta" 
+  };
 }
 
 /**
- * Resolves the optimal available model for this specific key.
- */
-export async function resolveWorkingModel(
-  apiKey: string,
-  preferredModel?: string
-): Promise<{ model: string; apiVersion: string; allAvailable: string[] }> {
-  if (cachedWorkingModel && (!preferredModel || preferredModel === cachedWorkingModel.model)) {
-    return { ...cachedWorkingModel, allAvailable: [cachedWorkingModel.model] };
-  }
-
-  const { models: available, apiVersion } = await getAvailableModels(apiKey);
-
-  if (available.length > 0) {
-    // If preferred model is explicitly available
-    if (preferredModel && available.includes(preferredModel)) {
-      cachedWorkingModel = { model: preferredModel, apiVersion };
-      return { model: preferredModel, apiVersion, allAvailable: available };
-    }
-
-    // Check candidate priority
-    for (const cand of CANDIDATE_MODELS) {
-      if (available.includes(cand)) {
-        cachedWorkingModel = { model: cand, apiVersion };
-        return { model: cand, apiVersion, allAvailable: available };
-      }
-    }
-
-    // Pick the first available model that supports generateContent
-    cachedWorkingModel = { model: available[0], apiVersion };
-    return { model: available[0], apiVersion, allAvailable: available };
-  }
-
-  // Fallback if ListModels is restricted by CORS or network
-  const defaultModel = preferredModel || CANDIDATE_MODELS[0];
-  return { model: defaultModel, apiVersion: "v1beta", allAvailable: [] };
-}
-
-/**
- * Validates a Gemini API Key live and auto-detects the working model.
+ * Validates a Gemini API Key live, discovers supported models, and picks the best one.
  */
 export async function testGeminiApiKey(
   apiKey: string
-): Promise<{ success: boolean; message: string; detectedModel?: string }> {
+): Promise<{ success: boolean; message: string; detectedModel?: string; availableModels?: string[] }> {
   if (!apiKey || apiKey.trim().length < 10) {
     return { success: false, message: "Please enter a valid Google Gemini API key." };
   }
@@ -115,54 +103,44 @@ export async function testGeminiApiKey(
   const cleanKey = apiKey.trim();
 
   try {
-    const { model, apiVersion, allAvailable } = await resolveWorkingModel(cleanKey);
+    const { models: available, apiVersion } = await getAvailableModels(cleanKey);
+    const candidatePool = available.length > 0 ? available : DEFAULT_CANDIDATE_MODELS;
 
-    // Send a 1-token test prompt to confirm generateContent works
-    const testUrl = `https://generativelanguage.googleapis.com/${apiVersion}/models/${model}:generateContent?key=${cleanKey}`;
-    const res = await fetch(testUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: "hi" }] }],
-        generationConfig: { maxOutputTokens: 2 },
-      }),
+    // Sort pool by preference
+    const sortedPool = [...candidatePool].sort((a, b) => {
+      const idxA = DEFAULT_CANDIDATE_MODELS.indexOf(a);
+      const idxB = DEFAULT_CANDIDATE_MODELS.indexOf(b);
+      return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
     });
 
-    if (res.ok) {
-      cachedWorkingModel = { model, apiVersion };
-      return {
-        success: true,
-        message: `Connected successfully! Using ${model}.`,
-        detectedModel: model,
-      };
+    for (const testModel of sortedPool) {
+      const testUrl = `https://generativelanguage.googleapis.com/${apiVersion}/models/${testModel}:generateContent?key=${cleanKey}`;
+      try {
+        const res = await fetch(testUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ role: "user", parts: [{ text: "hi" }] }],
+            generationConfig: { maxOutputTokens: 2 },
+          }),
+        });
+
+        if (res.ok) {
+          inMemoryWorkingModel = { model: testModel, apiVersion };
+          return {
+            success: true,
+            message: `Connected successfully! Active model: ${testModel}`,
+            detectedModel: testModel,
+            availableModels: candidatePool,
+          };
+        }
+      } catch {}
     }
 
-    // If initial model failed, iterate through remaining available models
-    for (const altModel of (allAvailable.length > 0 ? allAvailable : CANDIDATE_MODELS)) {
-      if (altModel === model) continue;
-      const altUrl = `https://generativelanguage.googleapis.com/${apiVersion}/models/${altModel}:generateContent?key=${cleanKey}`;
-      const altRes = await fetch(altUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ role: "user", parts: [{ text: "hi" }] }],
-          generationConfig: { maxOutputTokens: 2 },
-        }),
-      });
-
-      if (altRes.ok) {
-        cachedWorkingModel = { model: altModel, apiVersion };
-        return {
-          success: true,
-          message: `Connected successfully! Using ${altModel}.`,
-          detectedModel: altModel,
-        };
-      }
-    }
-
-    const errData = await res.json().catch(() => ({}));
-    const errMsg = errData?.error?.message || `API error (${res.status}): ${res.statusText}`;
-    return { success: false, message: errMsg };
+    return { 
+      success: false, 
+      message: "API key received, but all tested models returned errors. Please verify API key permissions in Google AI Studio." 
+    };
   } catch (err: any) {
     return {
       success: false,
@@ -172,7 +150,7 @@ export async function testGeminiApiKey(
 }
 
 /**
- * Streams an AI response from Google Gemini with self-healing model fallback.
+ * Streams or generates an AI response, dynamically switching models if one fails.
  */
 export async function streamGeminiContent({
   apiKey,
@@ -182,17 +160,19 @@ export async function streamGeminiContent({
   onChunk,
   onComplete,
   onError,
+  onModelSwitched,
 }: StreamOptions): Promise<void> {
   const cleanKey = apiKey.trim();
 
-  // 1. Resolve the optimal working model
-  const resolved = await resolveWorkingModel(cleanKey, model);
-  const modelsToTry = [
-    resolved.model,
-    ...(resolved.allAvailable.length > 0 ? resolved.allAvailable : CANDIDATE_MODELS),
-  ].filter((v, i, arr) => arr.indexOf(v) === i); // deduplicate
+  // 1. Fetch available models for this key
+  const { models: available, apiVersion } = await getAvailableModels(cleanKey);
+  const pool = available.length > 0 ? available : DEFAULT_CANDIDATE_MODELS;
 
-  // Convert ChatMessage[] to Gemini payload format
+  // 2. Put preferred model first, then the rest
+  const preferred = model || inMemoryWorkingModel?.model || pool[0];
+  const modelsToTry = [preferred, ...pool].filter((v, i, arr) => arr.indexOf(v) === i);
+
+  // Convert ChatMessage[] to Gemini contents
   const contents = messages
     .filter((m) => m.role === "user" || m.role === "assistant")
     .map((m) => ({
@@ -200,21 +180,7 @@ export async function streamGeminiContent({
       parts: [{ text: m.content }],
     }));
 
-/**
- * Strips leaked thinking scratchpads, chain-of-thought blocks, or XML thought tags.
- */
-function cleanAiOutput(text: string): string {
-  if (!text) return "";
-  let out = text;
-  // 1. Remove XML/HTML thought tags like <thought>...</thought>
-  out = out.replace(/<(thought|thinking)>[\s\S]*?<\/(thought|thinking)>/gi, "");
-
-  // 2. Remove planning scratchpads like "* User says: ... * Goal: ..."
-  out = out.replace(/^\s*\*\s*(User says|Context|Status|Role|Tone|Goal|Greeting|Personalization|Brief Alert|Call to Action|Status Check|Accuracy\?|Bold for emphasis\?):[\s\S]*?(?=(Hello|Hi|Hey|\n\n[A-Z]))/i, "");
-
-  return out.replace(/^\s+/, "");
-}
-
+  // Clean, compatible generationConfig (DO NOT pass experimental thinkingConfig here to avoid 400 Bad Request)
   const payload: any = {
     contents,
     generationConfig: {
@@ -222,9 +188,6 @@ function cleanAiOutput(text: string): string {
       topK: 40,
       topP: 0.95,
       maxOutputTokens: 2048,
-      thinkingConfig: {
-        thinkingBudget: 0,
-      },
     },
   };
 
@@ -238,7 +201,7 @@ function cleanAiOutput(text: string): string {
 
   for (const currentModel of modelsToTry) {
     try {
-      const endpoint = `https://generativelanguage.googleapis.com/${resolved.apiVersion}/models/${currentModel}:streamGenerateContent?alt=sse&key=${cleanKey}`;
+      const endpoint = `https://generativelanguage.googleapis.com/${apiVersion}/models/${currentModel}:streamGenerateContent?alt=sse&key=${cleanKey}`;
 
       let response = await fetch(endpoint, {
         method: "POST",
@@ -246,9 +209,9 @@ function cleanAiOutput(text: string): string {
         body: JSON.stringify(payload),
       });
 
-      // If streamGenerateContent 404s, try non-streaming generateContent on the same model
-      if (!response.ok && response.status === 404) {
-        const nonStreamEndpoint = `https://generativelanguage.googleapis.com/${resolved.apiVersion}/models/${currentModel}:generateContent?key=${cleanKey}`;
+      // If streaming fails or 404s, try standard non-streaming generateContent on this model
+      if (!response.ok) {
+        const nonStreamEndpoint = `https://generativelanguage.googleapis.com/${apiVersion}/models/${currentModel}:generateContent?key=${cleanKey}`;
         const nonStreamRes = await fetch(nonStreamEndpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -263,23 +226,23 @@ function cleanAiOutput(text: string): string {
             .map((p: any) => p.text || "")
             .join("");
           const cleaned = cleanAiOutput(text);
-          cachedWorkingModel = { model: currentModel, apiVersion: resolved.apiVersion };
+
+          inMemoryWorkingModel = { model: currentModel, apiVersion };
+          if (currentModel !== preferred && onModelSwitched) {
+            onModelSwitched(currentModel);
+          }
           onChunk(cleaned, cleaned);
           onComplete(cleaned);
           return;
         }
 
-        continue;
-      }
-
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        const msg = errData?.error?.message || `Gemini returned status ${response.status}`;
-        throw new Error(msg);
+        // If non-streaming also returned error, move to next model
+        const errJson = await nonStreamRes.json().catch(() => ({}));
+        throw new Error(errJson?.error?.message || `Model ${currentModel} returned ${nonStreamRes.status}`);
       }
 
       if (!response.body) {
-        throw new Error("ReadableStream not supported by this browser.");
+        throw new Error("No readable stream body returned");
       }
 
       // Read SSE stream
@@ -309,7 +272,6 @@ function cleanAiOutput(text: string): string {
             if (candidates.length > 0) {
               const parts = candidates[0]?.content?.parts || [];
               for (const part of parts) {
-                // Skip internal reasoning/thought parts from Gemini thinking models
                 if ((part as any).thought) continue;
                 if (part?.text) {
                   accumulated += part.text;
@@ -320,13 +282,11 @@ function cleanAiOutput(text: string): string {
                 }
               }
             }
-          } catch {
-            // Ignore partial JSON chunks
-          }
+          } catch {}
         }
       }
 
-      // Flush trailing buffer
+      // Trailing chunk check
       if (buffer.trim().startsWith("data:")) {
         try {
           const parsed = JSON.parse(buffer.trim().slice(5).trim());
@@ -345,19 +305,21 @@ function cleanAiOutput(text: string): string {
       }
 
       const finalCleaned = cleanAiOutput(accumulated);
-      cachedWorkingModel = { model: currentModel, apiVersion: resolved.apiVersion };
+      inMemoryWorkingModel = { model: currentModel, apiVersion };
+      if (currentModel !== preferred && onModelSwitched) {
+        onModelSwitched(currentModel);
+      }
       onComplete(finalCleaned);
       return; // Succeeded!
     } catch (err: any) {
       lastError = err instanceof Error ? err : new Error(err?.message || "Generation error");
-      console.warn(`Model ${currentModel} failed:`, lastError.message);
-      // If error is not a 404 (e.g. rate limit or bad request), don't loop endlessly
-      if (lastError.message.includes("API key not valid") || lastError.message.includes("quota")) {
+      console.warn(`Model ${currentModel} failed, trying next candidate:`, lastError.message);
+      // If error is invalid API key itself, stop trying
+      if (lastError.message.includes("API key not valid") || lastError.message.includes("API_KEY_INVALID")) {
         break;
       }
     }
   }
 
-  // If all candidate models failed
-  onError(lastError || new Error("Failed to generate response. Please verify your Gemini API key in settings."));
+  onError(lastError || new Error("All available models failed. Please verify your Gemini API key."));
 }

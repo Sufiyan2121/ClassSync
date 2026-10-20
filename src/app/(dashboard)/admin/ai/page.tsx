@@ -40,11 +40,12 @@ import {
   getActiveSessionId, 
   setActiveSessionId 
 } from "@/lib/ai/chatStorage";
-import { getAiConfig, hasApiKey } from "@/lib/ai/byokStorage";
+import { getAiConfig, setAiConfig, hasApiKey } from "@/lib/ai/byokStorage";
 import { streamGeminiContent } from "@/lib/ai/geminiClient";
 import { buildSystemInstruction } from "@/lib/ai/buildAppContext";
 import { ByokSettingsModal } from "@/components/ai/ByokSettingsModal";
 import { ChatMessageItem } from "@/components/ai/ChatMessageItem";
+import { ModelSwitcherDropdown } from "@/components/ai/ModelSwitcherDropdown";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
@@ -238,6 +239,10 @@ function AdminAiChatContent() {
       model: aiConfig.model || "gemini-2.0-flash",
       systemInstruction,
       messages: updatedMessages,
+      onModelSwitched: (newModel) => {
+        setAiConfig({ model: newModel });
+        toast(`Active model: ${newModel}`, { icon: "🔄" });
+      },
       onChunk: (_chunk, accumulated) => {
         setStreamingText(accumulated);
       },
@@ -461,10 +466,12 @@ function AdminAiChatContent() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <ModelSwitcherDropdown />
+
             <button
               onClick={() => setIsByokModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#121c16] hover:bg-[#18261e] border border-[#1e3025] text-xs font-semibold text-stone-300 hover:text-white transition cursor-pointer"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-[#121c16] hover:bg-[#18261e] border border-[#1e3025] text-xs font-semibold text-stone-300 hover:text-white transition cursor-pointer"
             >
               <Key size={13} className={hasKey ? "text-emerald-400" : "text-amber-400"} />
               <span className="hidden sm:inline">{hasKey ? "Key Active" : "Setup Key"}</span>

@@ -14,8 +14,8 @@ import {
   Trash2,
   RefreshCw
 } from "lucide-react";
-import { getAiConfig, setAiConfig, clearAiConfig } from "@/lib/ai/byokStorage";
-import { testGeminiApiKey } from "@/lib/ai/geminiClient";
+import { getAiConfig, setAiConfig, clearAiConfig, getCachedModels } from "@/lib/ai/byokStorage";
+import { testGeminiApiKey, DEFAULT_CANDIDATE_MODELS } from "@/lib/ai/geminiClient";
 import toast from "react-hot-toast";
 
 interface ByokSettingsModalProps {
@@ -29,11 +29,18 @@ export function ByokSettingsModal({ isOpen, onClose, onSaved }: ByokSettingsModa
   const [showKey, setShowKey] = useState(false);
   const [isTesting, setIsTesting] = useState(false);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [selectedModel, setSelectedModel] = useState("gemini-2.0-flash");
+  const [modelsList, setModelsList] = useState<string[]>(DEFAULT_CANDIDATE_MODELS);
 
   useEffect(() => {
     if (isOpen) {
       const config = getAiConfig();
       setApiKey(config.apiKey || "");
+      setSelectedModel(config.model || "gemini-2.0-flash");
+      const cached = getCachedModels();
+      if (cached.length > 0) {
+        setModelsList(cached);
+      }
       setTestResult(null);
     }
   }, [isOpen]);
@@ -52,7 +59,11 @@ export function ByokSettingsModal({ isOpen, onClose, onSaved }: ByokSettingsModa
       setTestResult(res);
       if (res.success) {
         if (res.detectedModel) {
+          setSelectedModel(res.detectedModel);
           setAiConfig({ apiKey: apiKey.trim(), model: res.detectedModel });
+        }
+        if (res.availableModels && res.availableModels.length > 0) {
+          setModelsList(res.availableModels);
         }
         toast.success(res.message || "API Key is working perfectly!");
       } else {
@@ -70,12 +81,12 @@ export function ByokSettingsModal({ isOpen, onClose, onSaved }: ByokSettingsModa
       toast.error("API Key cannot be blank.");
       return;
     }
-    const current = getAiConfig();
     setAiConfig({ 
       apiKey: apiKey.trim(),
-      model: current.model || "gemini-2.0-flash",
+      model: selectedModel,
+      availableModels: modelsList,
     });
-    toast.success("AI Key saved securely on your device!");
+    toast.success(`Saved! Active model: ${selectedModel}`);
     if (onSaved) onSaved();
     onClose();
   };
@@ -195,6 +206,29 @@ export function ByokSettingsModal({ isOpen, onClose, onSaved }: ByokSettingsModa
                 </button>
               )}
             </div>
+          </div>
+
+          {/* Model Selection Dropdown */}
+          <div className="space-y-1.5 pt-1">
+            <label className="block text-xs font-bold text-stone-700 dark:text-stone-300">
+              Active Gemini Model
+            </label>
+            <div className="relative">
+              <select
+                value={selectedModel}
+                onChange={(e) => setSelectedModel(e.target.value)}
+                className="w-full px-3.5 py-2.5 rounded-2xl bg-stone-50 dark:bg-[#16231b] border border-stone-200/80 dark:border-[#243a2c] text-xs font-semibold text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+              >
+                {modelsList.map((m) => (
+                  <option key={m} value={m} className="bg-[#101a14] text-white py-1">
+                    {m} {m === "gemini-2.0-flash" ? "(Fastest / Recommended)" : ""}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <p className="text-[10px] text-stone-400">
+              You can switch between Gemini 2.0 Flash, 1.5 Flash, or 1.5 Pro anytime.
+            </p>
           </div>
         </div>
 
