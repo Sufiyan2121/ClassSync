@@ -20,6 +20,7 @@ import { ClassCodeManager } from "@/components/dashboard/ClassCodeManager";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 import { isDeveloperEmail } from "@/lib/developer";
 import { Clock, ShieldAlert } from "lucide-react";
+import { UniversalSearchBar } from "@/components/dashboard/UniversalSearchBar";
 
 export default function AdminDashboard() {
   const { userData, logout, loading: authLoading, updateUserProfile } = useAuth();
@@ -28,6 +29,7 @@ export default function AdminDashboard() {
   
   // Added filter state so Admins can preview the student view exactly as it is
   const [filter, setFilter] = useState<PostType | "ALL">("ALL");
+  const [feedSearchQuery, setFeedSearchQuery] = useState("");
   const [editingPost, setEditingPost] = useState<Post | null>(null);
 
   const isApprovedAdmin = Boolean(
@@ -48,9 +50,16 @@ export default function AdminDashboard() {
 
   const loading = authLoading || postsLoading;
 
-  const filteredPosts = posts.filter(
-    post => filter === "ALL" || post.type === filter
-  );
+  const filteredPosts = posts.filter(post => {
+    const typeMatch = filter === "ALL" || post.type === filter;
+    if (!typeMatch) return false;
+    if (!feedSearchQuery.trim()) return true;
+    const q = feedSearchQuery.toLowerCase().trim();
+    return (
+      post.title?.toLowerCase().includes(q) ||
+      post.description?.toLowerCase().includes(q)
+    );
+  });
 
   const handleEdit = (post: Post) => {
     setEditingPost(post);
@@ -244,7 +253,13 @@ export default function AdminDashboard() {
         
         {/* Right Column: Live Feed (Student Panel Preview) */}
         <div className="lg:col-span-7 xl:col-span-8">
-          <div className="mb-8">
+          <UniversalSearchBar 
+            posts={posts} 
+            basePath="/admin" 
+            onFilterChange={setFeedSearchQuery} 
+          />
+
+          <div className="mb-6">
             <CalendarWidget posts={posts} />
           </div>
           
@@ -271,6 +286,20 @@ export default function AdminDashboard() {
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
                 </span>
               </div>
+
+              {feedSearchQuery && (
+                <div className="flex items-center justify-between gap-2 px-3.5 py-2 mb-3 rounded-2xl bg-emerald-50 dark:bg-[#16231b] border border-emerald-300 dark:border-emerald-800 text-xs font-bold text-emerald-800 dark:text-emerald-300 animate-in fade-in duration-200">
+                  <span>Filtering feed for: "{feedSearchQuery}" ({filteredPosts.length} updates found)</span>
+                  <button 
+                    type="button"
+                    onClick={() => setFeedSearchQuery("")}
+                    className="text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 cursor-pointer"
+                  >
+                    ✕ Clear
+                  </button>
+                </div>
+              )}
+
               <div className="flex flex-wrap items-center gap-2 bg-white/50 dark:bg-[#121c16]/80 backdrop-blur p-2 rounded-3xl border border-stone-200/70 dark:border-[#1e3025] shadow-xs">
                 {(["ALL", "ANNOUNCEMENT", "ASSIGNMENT", "EXAM"] as const).map((type) => (
                   <button
@@ -313,12 +342,13 @@ export default function AdminDashboard() {
             ) : (
               <div className="grid gap-6 md:grid-cols-2">
                 {filteredPosts.map(post => (
-                  <PostCard 
-                    key={post.id} 
-                    post={post} 
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                  />
+                  <div key={post.id} id={`post-${post.id}`} className="transition-all duration-300 rounded-3xl">
+                    <PostCard 
+                      post={post} 
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                    />
+                  </div>
                 ))}
               </div>
             )}

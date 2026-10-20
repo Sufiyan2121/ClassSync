@@ -13,6 +13,7 @@ import { CalendarWidget } from "@/components/dashboard/CalendarWidget";
 import { StudentClassSwitcher } from "@/components/dashboard/StudentClassSwitcher";
 import { AppMenu } from "@/components/dashboard/AppMenu";
 import { useClassConfig } from "@/hooks/useClassConfig";
+import { UniversalSearchBar } from "@/components/dashboard/UniversalSearchBar";
 
 import { BrandLogo } from "@/components/ui/BrandLogo";
 
@@ -21,6 +22,7 @@ export default function StudentDashboard() {
   const { posts, loading: postsLoading } = usePosts();
   const { classes, classConfig } = useClassConfig();
   const [filter, setFilter] = useState<PostType | "ALL">("ALL");
+  const [feedSearchQuery, setFeedSearchQuery] = useState("");
   const router = useRouter();
 
   const currentClassName = classes.find(c => c.code.toUpperCase() === userData?.enrolledClassCode?.toUpperCase())?.name 
@@ -41,9 +43,16 @@ export default function StudentDashboard() {
 
   const loading = authLoading || postsLoading;
 
-  const filteredPosts = posts.filter(
-    post => filter === "ALL" || post.type === filter
-  );
+  const filteredPosts = posts.filter(post => {
+    const typeMatch = filter === "ALL" || post.type === filter;
+    if (!typeMatch) return false;
+    if (!feedSearchQuery.trim()) return true;
+    const q = feedSearchQuery.toLowerCase().trim();
+    return (
+      post.title?.toLowerCase().includes(q) ||
+      post.description?.toLowerCase().includes(q)
+    );
+  });
 
   return (
     <div className="p-3 md:p-8 max-w-5xl mx-auto min-h-screen overflow-x-hidden w-full">
@@ -154,6 +163,13 @@ export default function StudentDashboard() {
         </Link>
       </div>
 
+      {/* Universal Search Bar (between Quick Nav and Calendar Widget) */}
+      <UniversalSearchBar 
+        posts={posts} 
+        basePath="/student" 
+        onFilterChange={setFeedSearchQuery}
+      />
+
       <div className="mb-5">
         <CalendarWidget posts={posts} />
       </div>
@@ -167,6 +183,20 @@ export default function StudentDashboard() {
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
           </span>
         </div>
+
+        {feedSearchQuery && (
+          <div className="flex items-center justify-between gap-2 px-3.5 py-2 mb-3 rounded-2xl bg-emerald-50 dark:bg-[#16231b] border border-emerald-300 dark:border-emerald-800 text-xs font-bold text-emerald-800 dark:text-emerald-300 animate-in fade-in duration-200">
+            <span>Filtering feed for: "{feedSearchQuery}" ({filteredPosts.length} updates found)</span>
+            <button 
+              type="button"
+              onClick={() => setFeedSearchQuery("")}
+              className="text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 cursor-pointer"
+            >
+              ✕ Clear
+            </button>
+          </div>
+        )}
+
         <div className="flex flex-wrap items-center gap-2 bg-white/60 dark:bg-[#121c16]/80 backdrop-blur p-2 rounded-3xl border border-stone-200/70 dark:border-[#1e3025] shadow-sm">
           {(["ALL", "ANNOUNCEMENT", "ASSIGNMENT", "EXAM"] as const).map((type) => (
             <button
@@ -212,7 +242,9 @@ export default function StudentDashboard() {
         ) : (
           <div className="grid gap-6">
             {filteredPosts.map(post => (
-              <PostCard key={post.id} post={post} />
+              <div key={post.id} id={`post-${post.id}`} className="transition-all duration-300 rounded-3xl">
+                <PostCard post={post} />
+              </div>
             ))}
           </div>
         )}
