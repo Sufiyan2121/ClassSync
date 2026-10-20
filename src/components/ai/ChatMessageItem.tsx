@@ -24,10 +24,10 @@ export function ChatMessageItem({ message, userPhoto, userName, isStreaming }: C
   };
 
   return (
-    <div className={`flex gap-3 sm:gap-4 py-4 px-2 sm:px-4 rounded-2xl transition-all ${
+    <div className={`flex gap-3 sm:gap-4 py-4 px-3 sm:px-5 rounded-2xl sm:rounded-3xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 ${
       isUser 
-        ? "bg-stone-50/70 dark:bg-[#121c16]/70 border border-stone-200/50 dark:border-[#1e3025]" 
-        : "bg-white/80 dark:bg-[#101a14]/90 border border-emerald-500/20 shadow-xs"
+        ? "bg-stone-50/80 dark:bg-[#121c16]/80 border border-stone-200/60 dark:border-[#1e3025] shadow-xs" 
+        : "bg-white/90 dark:bg-[#101a14]/95 border border-emerald-500/20 shadow-md shadow-emerald-950/20"
     }`}>
       {/* Avatar */}
       <div className="shrink-0 pt-0.5">
@@ -36,10 +36,10 @@ export function ChatMessageItem({ message, userPhoto, userName, isStreaming }: C
             <img 
               src={userPhoto} 
               alt={userName || "User"} 
-              className="w-8 h-8 rounded-xl object-cover ring-1 ring-stone-200 dark:ring-stone-700" 
+              className="w-8 h-8 rounded-xl object-cover ring-1 ring-stone-200 dark:ring-stone-700 shadow-xs" 
             />
           ) : (
-            <div className="w-8 h-8 rounded-xl bg-stone-200 dark:bg-[#1a2c20] text-stone-700 dark:text-stone-300 flex items-center justify-center font-bold text-xs">
+            <div className="w-8 h-8 rounded-xl bg-stone-200 dark:bg-[#1a2c20] text-stone-700 dark:text-stone-300 flex items-center justify-center font-bold text-xs shadow-xs">
               {userName ? userName.charAt(0).toUpperCase() : <User size={15} />}
             </div>
           )
@@ -72,7 +72,10 @@ export function ChatMessageItem({ message, userPhoto, userName, isStreaming }: C
         <div className="text-xs sm:text-sm text-stone-800 dark:text-stone-200 leading-relaxed font-normal whitespace-pre-wrap break-words [overflow-wrap:anywhere]">
           {formatMessageContent(message.content)}
           {isStreaming && (
-            <span className="inline-block w-2 h-4 ml-1 bg-emerald-500 animate-pulse rounded-xs align-middle" />
+            <span className="inline-flex items-center gap-1 ml-1.5 align-baseline select-none">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping opacity-75" />
+              <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500" />
+            </span>
           )}
         </div>
       </div>

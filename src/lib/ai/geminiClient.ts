@@ -200,6 +200,21 @@ export async function streamGeminiContent({
       parts: [{ text: m.content }],
     }));
 
+/**
+ * Strips leaked thinking scratchpads, chain-of-thought blocks, or XML thought tags.
+ */
+function cleanAiOutput(text: string): string {
+  if (!text) return "";
+  let out = text;
+  // 1. Remove XML/HTML thought tags like <thought>...</thought>
+  out = out.replace(/<(thought|thinking)>[\s\S]*?<\/(thought|thinking)>/gi, "");
+
+  // 2. Remove planning scratchpads like "* User says: ... * Goal: ..."
+  out = out.replace(/^\s*\*\s*(User says|Context|Status|Role|Tone|Goal|Greeting|Personalization|Brief Alert|Call to Action|Status Check|Accuracy\?|Bold for emphasis\?):[\s\S]*?(?=(Hello|Hi|Hey|\n\n[A-Z]))/i, "");
+
+  return out.replace(/^\s+/, "");
+}
+
   const payload: any = {
     contents,
     generationConfig: {
@@ -207,6 +222,9 @@ export async function streamGeminiContent({
       topK: 40,
       topP: 0.95,
       maxOutputTokens: 2048,
+      thinkingConfig: {
+        thinkingBudget: 0,
+      },
     },
   };
 
@@ -239,14 +257,18 @@ export async function streamGeminiContent({
 
         if (nonStreamRes.ok) {
           const json = await nonStreamRes.json();
-          const text = json?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+          const rawParts = json?.candidates?.[0]?.content?.parts || [];
+          const text = rawParts
+            .filter((p: any) => !p.thought)
+            .map((p: any) => p.text || "")
+            .join("");
+          const cleaned = cleanAiOutput(text);
           cachedWorkingModel = { model: currentModel, apiVersion: resolved.apiVersion };
-          onChunk(text, text);
-          onComplete(text);
+          onChunk(cleaned, cleaned);
+          onComplete(cleaned);
           return;
         }
 
-        // If that also failed with 404, move to next model candidate
         continue;
       }
 
@@ -287,9 +309,14 @@ export async function streamGeminiContent({
             if (candidates.length > 0) {
               const parts = candidates[0]?.content?.parts || [];
               for (const part of parts) {
+                // Skip internal reasoning/thought parts from Gemini thinking models
+                if ((part as any).thought) continue;
                 if (part?.text) {
                   accumulated += part.text;
-                  onChunk(part.text, accumulated);
+                  const cleaned = cleanAiOutput(accumulated);
+                  if (cleaned) {
+                    onChunk(part.text, cleaned);
+                  }
                 }
               }
             }
@@ -303,16 +330,23 @@ export async function streamGeminiContent({
       if (buffer.trim().startsWith("data:")) {
         try {
           const parsed = JSON.parse(buffer.trim().slice(5).trim());
-          const text = parsed?.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (text) {
-            accumulated += text;
-            onChunk(text, accumulated);
+          const parts = parsed?.candidates?.[0]?.content?.parts || [];
+          for (const part of parts) {
+            if ((part as any).thought) continue;
+            if (part?.text) {
+              accumulated += part.text;
+              const cleaned = cleanAiOutput(accumulated);
+              if (cleaned) {
+                onChunk(part.text, cleaned);
+              }
+            }
           }
         } catch {}
       }
 
+      const finalCleaned = cleanAiOutput(accumulated);
       cachedWorkingModel = { model: currentModel, apiVersion: resolved.apiVersion };
-      onComplete(accumulated);
+      onComplete(finalCleaned);
       return; // Succeeded!
     } catch (err: any) {
       lastError = err instanceof Error ? err : new Error(err?.message || "Generation error");

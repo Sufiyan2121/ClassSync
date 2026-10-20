@@ -588,9 +588,18 @@ function AdminAiChatContent() {
           )}
 
           {isGenerating && !streamingText && (
-            <div className="flex items-center gap-2 p-3 rounded-2xl bg-[#101a14] border border-emerald-500/20 w-fit text-stone-400 text-xs animate-in fade-in">
-              <Sparkles size={14} className="text-emerald-400 animate-spin" />
-              <span>Analyzing curriculum & drafting response...</span>
+            <div className="flex items-center gap-3 p-3.5 px-4 rounded-2xl bg-[#101a14] border border-emerald-500/25 w-fit text-stone-300 text-xs shadow-md shadow-emerald-950/30 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="w-6 h-6 rounded-lg bg-emerald-600/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <Sparkles size={13} className="animate-spin" />
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-stone-300 font-medium text-xs">ClassSync AI is analyzing</span>
+                <span className="flex items-center gap-1 pt-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce [animation-delay:-0.3s]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce [animation-delay:-0.15s]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce" />
+                </span>
+              </div>
             </div>
           )}
 
