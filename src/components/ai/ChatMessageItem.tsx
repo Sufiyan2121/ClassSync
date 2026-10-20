@@ -44,8 +44,17 @@ export function ChatMessageItem({ message, userPhoto, userName, isStreaming }: C
             </div>
           )
         ) : (
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shadow-md shadow-emerald-900/30">
-            <Sparkles size={16} />
+          <div className="relative w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 p-0.5 shadow-md shadow-emerald-950/40 shrink-0">
+            <img 
+              src="/icons/icon-192x192.png" 
+              alt="ClassSync AI" 
+              className="w-full h-full rounded-[10px] object-cover ring-1 ring-emerald-400/40" 
+            />
+            {/* Live animated pulsing aura indicator */}
+            <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400 border border-[#101a14]" />
+            </span>
           </div>
         )}
       </div>
@@ -53,9 +62,16 @@ export function ChatMessageItem({ message, userPhoto, userName, isStreaming }: C
       {/* Message Content */}
       <div className="min-w-0 flex-1 space-y-1.5 overflow-hidden">
         <div className="flex items-center justify-between gap-2">
-          <span className="text-xs font-extrabold text-stone-900 dark:text-stone-200 truncate">
-            {isUser ? (userName || "You") : "ClassSync AI"}
-          </span>
+          <div className="flex items-center gap-1.5 min-w-0">
+            <span className={`text-xs font-black truncate ${isUser ? "text-stone-900 dark:text-stone-200" : "text-emerald-400"}`}>
+              {isUser ? (userName || "You") : "ClassSync AI"}
+            </span>
+            {!isUser && (
+              <span className="px-1.5 py-0.2 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-[9px] font-black uppercase text-emerald-300 tracking-wider">
+                Copilot
+              </span>
+            )}
+          </div>
           {!isUser && message.content && (
             <button
               onClick={handleCopy}

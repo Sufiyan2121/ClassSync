@@ -44,8 +44,25 @@ export function cleanAiOutput(text: string): string {
   // 1. Remove XML/HTML thought tags like <thought>...</thought>
   out = out.replace(/<(thought|thinking)>[\s\S]*?<\/(thought|thinking)>/gi, "");
 
-  // 2. Remove planning scratchpad lines like "* User says: ... * Goal: ..."
-  out = out.replace(/^\s*\*\s*(User says|Context|Status|Role|Tone|Goal|Greeting|Personalization|Brief Alert|Call to Action|Status Check|Accuracy\?|Bold for emphasis\?):[\s\S]*?(?=(Hello|Hi|Hey|\n\n[A-Z]))/i, "");
+  // 2. If response starts with bulleted/starred planning scratchpad (e.g. Gemma/open models)
+  if (/^\s*[•\*\-]?\s*(User says|Context:|Role:|Tone:|Goal:|Status:)/i.test(out)) {
+    const greetingMatch = out.match(/(?:\*Greeting:\*|Greeting:)\s*([^\n]+)/i);
+    const greetingText = greetingMatch ? greetingMatch[1].replace(/^["']|["']$/g, "").trim() : "";
+
+    const lines = out.split("\n");
+    const nonScratchpadLines = lines.filter((line) => {
+      const trimmed = line.trim();
+      if (!trimmed) return true;
+      return !/^[•\*\-]?\s*(User says|Context|User:|Class:|Current Time:|Status:|Role:|Tone:|Goal:|Greeting:|Personalization:|Quick Update|Mention the|Offer assistance|Accuracy\?|Bold for emphasis)/i.test(trimmed);
+    });
+
+    const cleanedRemaining = nonScratchpadLines.join("\n").trim();
+    if (cleanedRemaining.length > 10) {
+      out = cleanedRemaining;
+    } else if (greetingText) {
+      out = greetingText;
+    }
+  }
 
   return out.replace(/^\s+/, "");
 }

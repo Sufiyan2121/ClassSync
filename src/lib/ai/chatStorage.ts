@@ -11,16 +11,95 @@ export interface ChatMessage {
   status?: "pending" | "done" | "error";
 }
 
+export interface ChatFolder {
+  id: string;
+  name: string;
+  createdAt: number;
+  color?: string; // "emerald" | "teal" | "blue" | "purple" | "amber" | "rose"
+}
+
 export interface ChatSession {
   id: string;
   title: string;
   createdAt: number;
   updatedAt: number;
   messages: ChatMessage[];
+  folderId?: string | null;
 }
 
 const CHAT_SESSIONS_KEY = "classsync_ai_chat_sessions";
+const CHAT_FOLDERS_KEY = "classsync_ai_chat_folders";
 const ACTIVE_SESSION_ID_KEY = "classsync_ai_active_session_id";
+
+export function loadAllFolders(): ChatFolder[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(CHAT_FOLDERS_KEY);
+    if (!raw) return [];
+    const list: ChatFolder[] = JSON.parse(raw);
+    return Array.isArray(list) ? list.sort((a, b) => a.createdAt - b.createdAt) : [];
+  } catch (e) {
+    console.error("Failed to load chat folders:", e);
+    return [];
+  }
+}
+
+export function saveAllFolders(folders: ChatFolder[]): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(CHAT_FOLDERS_KEY, JSON.stringify(folders));
+    window.dispatchEvent(new CustomEvent("classsync_chats_updated"));
+  } catch (e) {
+    console.error("Failed to save chat folders:", e);
+  }
+}
+
+export function createFolder(name: string, color: string = "emerald"): ChatFolder {
+  const newFolder: ChatFolder = {
+    id: "folder_" + Math.random().toString(36).substring(2, 9) + "_" + Date.now(),
+    name: name.trim() || "New Folder",
+    color,
+    createdAt: Date.now(),
+  };
+  const folders = loadAllFolders();
+  folders.push(newFolder);
+  saveAllFolders(folders);
+  return newFolder;
+}
+
+export function renameFolder(id: string, newName: string, newColor?: string): void {
+  const folders = loadAllFolders();
+  const folder = folders.find((f) => f.id === id);
+  if (folder) {
+    folder.name = newName.trim() || folder.name;
+    if (newColor) folder.color = newColor;
+    saveAllFolders(folders);
+  }
+}
+
+export function deleteFolder(id: string): void {
+  const folders = loadAllFolders().filter((f) => f.id !== id);
+  saveAllFolders(folders);
+
+  // Unlink any chats in this folder back to uncategorized
+  const sessions = loadAllSessions().map((s) => {
+    if (s.folderId === id) {
+      return { ...s, folderId: null };
+    }
+    return s;
+  });
+  saveAllSessions(sessions);
+}
+
+export function moveSessionToFolder(sessionId: string, folderId: string | null): void {
+  const sessions = loadAllSessions();
+  const target = sessions.find((s) => s.id === sessionId);
+  if (target) {
+    target.folderId = folderId || null;
+    target.updatedAt = Date.now();
+    saveAllSessions(sessions);
+  }
+}
 
 export function loadAllSessions(): ChatSession[] {
   if (typeof window === "undefined") return [];
@@ -50,7 +129,7 @@ export function getSession(id: string): ChatSession | null {
   return sessions.find((s) => s.id === id) || null;
 }
 
-export function createNewSession(firstPrompt?: string): ChatSession {
+export function createNewSession(firstPrompt?: string, folderId?: string | null): ChatSession {
   const now = Date.now();
   let title = "New Conversation";
   if (firstPrompt) {
@@ -64,6 +143,7 @@ export function createNewSession(firstPrompt?: string): ChatSession {
     createdAt: now,
     updatedAt: now,
     messages: [],
+    folderId: folderId || null,
   };
 
   const sessions = loadAllSessions();

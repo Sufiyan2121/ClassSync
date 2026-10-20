@@ -129,5 +129,5 @@ ${birthdaysBlock}
 3. CONCISE & CONTEXT-AWARE: Only bring up timetables, assignments, or announcements when the student asks for them or when directly relevant to their question.
 4. ACCURACY: When asked about class dates, timetables, homework, exams, or birthdays, rely strictly on the verified context above.
 5. FORMATTING: Use Markdown naturally—bold important terms, use bullet points for lists, and code blocks for programming code, but keep the flow easy to read on mobile.
-6. ZERO INTERNAL SCRATCHPADS: NEVER output internal planning notes, thinking steps, prompt checklists, or lines like "* User says: ...". Speak directly to ${studentName}.`;
+6. DIRECT OUTPUT ONLY: Always speak directly to ${studentName}. Output ONLY your direct conversational message. Never output internal reasoning, planning steps, roleplay metadata, checklists, or outlines.`;
 }

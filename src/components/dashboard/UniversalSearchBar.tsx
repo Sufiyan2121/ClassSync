@@ -253,7 +253,7 @@ export function UniversalSearchBar({
           className="w-full bg-transparent text-xs sm:text-sm font-semibold text-stone-900 dark:text-stone-100 placeholder:text-stone-400 dark:placeholder:text-stone-500 focus:outline-none"
         />
 
-        {/* Ask AI Shortcut Button */}
+        {/* ClassSync AI Shortcut Button with Live Glow & Animation */}
         <button
           type="button"
           onClick={(e) => {
@@ -261,11 +261,30 @@ export function UniversalSearchBar({
             setIsOpen(false);
             router.push(`${basePath}/ai${queryText.trim() ? `?q=${encodeURIComponent(queryText.trim())}` : ""}`);
           }}
-          className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-gradient-to-r from-emerald-600/15 to-teal-600/15 hover:from-emerald-600/25 hover:to-teal-600/25 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 text-[11px] font-black transition cursor-pointer shrink-0 shadow-2xs"
-          title="Ask ClassSync AI"
+          className="relative group/ai flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-400 text-white font-extrabold text-[11px] sm:text-xs transition-all duration-300 cursor-pointer shrink-0 shadow-[0_0_12px_rgba(16,185,129,0.45)] hover:shadow-[0_0_20px_rgba(16,185,129,0.7)] hover:scale-[1.03] active:scale-95 border border-emerald-400/40"
+          title="Open ClassSync AI Academic Companion"
         >
-          <Sparkles size={12} className="text-emerald-500 animate-pulse" />
-          <span>Ask AI</span>
+          {/* Constant Animated Glowing Aura */}
+          <span className="absolute -inset-0.5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-500 opacity-70 blur-[3px] group-hover/ai:opacity-100 transition duration-300 animate-pulse -z-10" />
+
+          {/* App Logo with subtle continuous bounce/float animation */}
+          <div className="relative w-4 h-4 rounded-md overflow-hidden shrink-0 shadow-xs ring-1 ring-white/50 animate-bounce [animation-duration:2.5s]">
+            <img 
+              src="/icons/icon-192x192.png" 
+              alt="ClassSync AI" 
+              className="w-full h-full object-cover" 
+            />
+          </div>
+
+          <span className="tracking-tight text-white font-black drop-shadow-xs">
+            ClassSync AI
+          </span>
+
+          {/* Eye-catching pulsing live beacon */}
+          <span className="relative flex h-2 w-2 ml-0.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-200 opacity-90" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-100 shadow-xs shadow-white" />
+          </span>
         </button>
 
         {queryText ? (
@@ -298,19 +317,24 @@ export function UniversalSearchBar({
               setIsOpen(false);
               router.push(`${basePath}/ai?q=${encodeURIComponent(queryText.trim())}`);
             }}
-            className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-[#14261b] to-teal-950/30 hover:from-emerald-950/70 hover:to-teal-950/60 border border-emerald-500/35 hover:border-emerald-500/70 transition-all cursor-pointer group mb-3 shadow-xs"
+            className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-gradient-to-r from-emerald-950/60 via-[#14261b] to-teal-950/50 hover:from-emerald-950/80 hover:to-teal-950/70 border border-emerald-500/50 hover:border-emerald-400 transition-all cursor-pointer group mb-3 shadow-[0_0_15px_rgba(16,185,129,0.25)] hover:shadow-[0_0_22px_rgba(16,185,129,0.4)]"
           >
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-950">
-                <Sparkles size={16} className="group-hover:rotate-12 transition-transform" />
+              <div className="relative w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 p-0.5 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-950">
+                <img 
+                  src="/icons/icon-192x192.png" 
+                  alt="ClassSync AI" 
+                  className="w-full h-full rounded-[10px] object-cover group-hover:scale-105 transition-transform" 
+                />
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 border-2 border-[#14261b] animate-ping" />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs font-black text-white group-hover:text-emerald-300 transition-colors truncate">
                     Ask ClassSync AI: "{queryText}"
                   </span>
-                  <span className="hidden sm:inline-block px-1.5 py-0.2 rounded-md bg-emerald-500/20 text-emerald-300 text-[9px] font-black uppercase">
-                    Live Context
+                  <span className="px-1.5 py-0.2 rounded-md bg-emerald-500/25 text-emerald-300 text-[9px] font-black uppercase tracking-wider border border-emerald-500/30">
+                    Live
                   </span>
                 </div>
                 <p className="text-[10px] text-stone-400 truncate">
