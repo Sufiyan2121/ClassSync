@@ -461,42 +461,46 @@ function StudentAiChatContent() {
       <main className="flex-1 flex flex-col h-full bg-[#09130e] overflow-hidden relative">
         
         {/* Top Navbar */}
-        <header className="h-14 shrink-0 flex items-center justify-between px-4 sm:px-6 border-b border-[#1e3025] bg-[#09130e]/80 backdrop-blur-md z-10">
-          <div className="flex items-center gap-3">
+        <header className="h-14 shrink-0 flex items-center justify-between px-3 sm:px-6 border-b border-[#1e3025] bg-[#09130e]/80 backdrop-blur-md z-10 gap-2">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
             <button
               onClick={() => setIsSidebarOpen(true)}
-              className="md:hidden p-2 rounded-xl bg-[#121c16] border border-[#1e3025] text-stone-300 hover:text-white cursor-pointer"
+              className="md:hidden p-2 rounded-xl bg-[#121c16] border border-[#1e3025] text-stone-300 hover:text-white cursor-pointer shrink-0"
+              title="Open Sidebar"
             >
               <Menu size={16} />
             </button>
-            <div className="min-w-0">
-              <h2 className="text-xs sm:text-sm font-extrabold text-white truncate max-w-xs sm:max-w-md">
+            <div className="min-w-0 flex-1">
+              <h2 className="text-xs sm:text-sm font-extrabold text-white truncate">
                 {activeSession?.title || "New Conversation"}
               </h2>
-              <div className="flex items-center gap-2 text-[10px] text-stone-400">
-                <span className="flex items-center gap-1 text-emerald-400 font-semibold">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Gemini Flash AI
+              <div className="flex items-center gap-1.5 text-[10px] text-stone-400 truncate whitespace-nowrap">
+                <span className="flex items-center gap-1 text-emerald-400 font-medium shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                  ClassSync AI
                 </span>
-                <span>•</span>
-                <span>{userData?.enrolledClassCode || "Class"} Context Live</span>
+                <span className="text-stone-600 shrink-0">•</span>
+                <span className="truncate text-stone-400 font-medium">
+                  {userData?.enrolledClassCode || "Class"}
+                </span>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <ModelSwitcherDropdown />
 
             <button
               onClick={() => setIsByokModalOpen(true)}
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-[#121c16] hover:bg-[#18261e] border border-[#1e3025] text-xs font-semibold text-stone-300 hover:text-white transition cursor-pointer"
+              className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl bg-[#121c16] hover:bg-[#18261e] border border-[#1e3025] text-xs font-semibold text-stone-300 hover:text-white transition cursor-pointer shrink-0 flex items-center gap-1.5"
+              title={hasKey ? "Gemini Key Active" : "Connect Gemini Key"}
             >
               <Key size={13} className={hasKey ? "text-emerald-400" : "text-amber-400"} />
-              <span className="hidden sm:inline">{hasKey ? "Key Active" : "Setup Key"}</span>
+              <span className="hidden md:inline">{hasKey ? "Key Active" : "Setup Key"}</span>
             </button>
             <button
               onClick={handleNewChat}
-              className="p-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 transition cursor-pointer"
+              className="p-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 transition cursor-pointer shrink-0"
               title="New Chat"
             >
               <Plus size={16} />

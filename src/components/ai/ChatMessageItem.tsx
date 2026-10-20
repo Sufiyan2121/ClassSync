@@ -24,7 +24,7 @@ export function ChatMessageItem({ message, userPhoto, userName, isStreaming }: C
   };
 
   return (
-    <div className={`flex gap-3 sm:gap-4 py-4 px-3 sm:px-5 rounded-2xl sm:rounded-3xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 ${
+    <div className={`flex gap-2.5 sm:gap-4 py-3 sm:py-4 px-3 sm:px-5 rounded-2xl sm:rounded-3xl max-w-full overflow-hidden transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 ${
       isUser 
         ? "bg-stone-50/80 dark:bg-[#121c16]/80 border border-stone-200/60 dark:border-[#1e3025] shadow-xs" 
         : "bg-white/90 dark:bg-[#101a14]/95 border border-emerald-500/20 shadow-md shadow-emerald-950/20"
@@ -51,15 +51,15 @@ export function ChatMessageItem({ message, userPhoto, userName, isStreaming }: C
       </div>
 
       {/* Message Content */}
-      <div className="min-w-0 flex-1 space-y-1.5">
+      <div className="min-w-0 flex-1 space-y-1.5 overflow-hidden">
         <div className="flex items-center justify-between gap-2">
-          <span className="text-xs font-extrabold text-stone-900 dark:text-stone-200">
+          <span className="text-xs font-extrabold text-stone-900 dark:text-stone-200 truncate">
             {isUser ? (userName || "You") : "ClassSync AI"}
           </span>
           {!isUser && message.content && (
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1 text-[10px] text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-1 rounded-lg transition cursor-pointer"
+              className="flex items-center gap-1 text-[10px] text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-1 rounded-lg transition cursor-pointer shrink-0"
               title="Copy message"
             >
               {copied ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
@@ -69,7 +69,7 @@ export function ChatMessageItem({ message, userPhoto, userName, isStreaming }: C
         </div>
 
         {/* Content Body with Markdown formatting */}
-        <div className="text-xs sm:text-sm text-stone-800 dark:text-stone-200 leading-relaxed font-normal whitespace-pre-wrap break-words [overflow-wrap:anywhere]">
+        <div className="text-xs sm:text-sm text-stone-800 dark:text-stone-200 leading-relaxed font-normal whitespace-pre-wrap break-words [overflow-wrap:anywhere] max-w-full overflow-hidden">
           {formatMessageContent(message.content)}
           {isStreaming && (
             <span className="inline-flex items-center gap-1 ml-1.5 align-baseline select-none">
@@ -177,15 +177,15 @@ function renderFormattedText(text: string) {
     if (line.trim().startsWith("• ") || line.trim().startsWith("- ") || line.trim().startsWith("* ")) {
       const clean = line.trim().slice(2);
       return (
-        <div key={idx} className="flex items-start gap-2 ml-1 my-0.5">
-          <span className="text-emerald-500 font-bold shrink-0">•</span>
-          <span>{formatInline(clean)}</span>
+        <div key={idx} className="flex items-start gap-2 ml-1 my-0.5 min-w-0">
+          <span className="text-emerald-500 font-bold shrink-0 mt-0.5">•</span>
+          <span className="min-w-0 flex-1 break-words [overflow-wrap:anywhere]">{formatInline(clean)}</span>
         </div>
       );
     }
 
     return (
-      <span key={idx}>
+      <span key={idx} className="break-words [overflow-wrap:anywhere]">
         {formatInline(line)}
         {idx < lines.length - 1 && <br />}
       </span>
@@ -194,14 +194,21 @@ function renderFormattedText(text: string) {
 }
 
 function formatInline(str: string) {
-  // Bold formatting **bold**
-  const parts = str.split(/(\*\*.*?\*\*)/g);
+  // Bold formatting **bold** and inline code `code`
+  const parts = str.split(/(\*\*.*?\*\*|`[^`]+`)/g);
   return parts.map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) {
       return (
         <strong key={i} className="font-bold text-stone-900 dark:text-white">
           {part.slice(2, -2)}
         </strong>
+      );
+    }
+    if (part.startsWith("`") && part.endsWith("`") && part.length > 2) {
+      return (
+        <code key={i} className="px-1.5 py-0.5 rounded bg-stone-200/60 dark:bg-[#1e3025] text-emerald-400 font-mono text-[11px] sm:text-xs break-all">
+          {part.slice(1, -1)}
+        </code>
       );
     }
     return part;

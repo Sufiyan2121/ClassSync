@@ -79,6 +79,22 @@ export function ModelSwitcherDropdown({ onModelChanged, className = "" }: ModelS
     }
   };
 
+  const getShortModelName = (m: string) => {
+    if (m.includes("2.0-flash")) return "Gemini 2.0";
+    if (m.includes("1.5-flash")) return "Gemini 1.5";
+    if (m.includes("1.5-pro")) return "Gemini Pro";
+    if (m.startsWith("gemma")) {
+      const parts = m.split("-");
+      return parts.length >= 2 ? `Gemma ${parts[1]}` : "Gemma";
+    }
+    const clean = m.replace(/^models\//, "");
+    const segments = clean.split("-");
+    if (segments.length >= 2) {
+      return `${segments[0].charAt(0).toUpperCase() + segments[0].slice(1)} ${segments[1]}`;
+    }
+    return clean;
+  };
+
   const formatModelLabel = (m: string) => {
     if (m === "gemini-2.0-flash") return "Gemini 2.0 Flash (Fastest)";
     if (m === "gemini-2.0-flash-exp") return "Gemini 2.0 Flash Exp";
@@ -86,28 +102,29 @@ export function ModelSwitcherDropdown({ onModelChanged, className = "" }: ModelS
     if (m === "gemini-1.5-flash-latest") return "Gemini 1.5 Flash Latest";
     if (m === "gemini-1.5-pro") return "Gemini 1.5 Pro (Reasoning)";
     if (m === "gemini-1.5-pro-latest") return "Gemini 1.5 Pro Latest";
+    if (m.startsWith("gemma")) return `Gemma (${m.split("-").slice(1, 3).join(" ")})`;
     return m;
   };
 
   return (
-    <div ref={dropdownRef} className={`relative z-20 ${className}`}>
+    <div ref={dropdownRef} className={`relative z-20 shrink-0 ${className}`}>
       {/* Trigger Button */}
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#121c16] hover:bg-[#18261e] border border-[#1e3025] hover:border-emerald-600/50 text-xs font-semibold text-stone-200 transition-all cursor-pointer shadow-xs group"
-        title="Switch AI Model"
+        className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-xl bg-[#121c16] hover:bg-[#18261e] border border-[#1e3025] hover:border-emerald-600/50 text-xs font-semibold text-stone-200 transition-all cursor-pointer shadow-xs group"
+        title={`Active Model: ${currentModel} (Click to switch)`}
       >
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-        <span className="text-[11px] font-bold text-emerald-400 truncate max-w-[140px] sm:max-w-none">
-          {currentModel}
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+        <span className="text-[11px] font-bold text-emerald-400 truncate max-w-[70px] sm:max-w-[130px]">
+          {getShortModelName(currentModel)}
         </span>
-        <ChevronDown size={12} className={`text-stone-400 group-hover:text-white transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDown size={11} className={`text-stone-400 group-hover:text-white transition-transform duration-200 shrink-0 ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
-      {/* Dropdown Menu */}
+      {/* Dropdown Menu - Aligned right-0 to prevent overflowing screen */}
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-64 sm:w-72 rounded-2xl bg-[#101a14]/98 backdrop-blur-xl border border-[#1e3025] shadow-2xl p-2 animate-in fade-in zoom-in-95 duration-150 text-stone-100">
+        <div className="absolute top-full right-0 mt-2 w-64 sm:w-72 rounded-2xl bg-[#101a14]/98 backdrop-blur-xl border border-[#1e3025] shadow-2xl p-2 animate-in fade-in zoom-in-95 duration-150 text-stone-100 z-50">
           
           <div className="flex items-center justify-between px-2 py-1.5 mb-1 border-b border-[#1e3025] text-[10px] font-black uppercase tracking-wider text-stone-400">
             <span className="flex items-center gap-1">
