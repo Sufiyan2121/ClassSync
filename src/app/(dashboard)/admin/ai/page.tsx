@@ -235,7 +235,7 @@ function AdminAiChatContent() {
 
     await streamGeminiContent({
       apiKey: aiConfig.apiKey,
-      model: aiConfig.model || "gemini-2.5-flash",
+      model: aiConfig.model || "gemini-2.0-flash",
       systemInstruction,
       messages: updatedMessages,
       onChunk: (_chunk, accumulated) => {
@@ -453,7 +453,7 @@ function AdminAiChatContent() {
               <div className="flex items-center gap-2 text-[10px] text-stone-400">
                 <span className="flex items-center gap-1 text-emerald-400 font-semibold">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Gemini 2.5 Flash
+                  Gemini Flash AI
                 </span>
                 <span>•</span>
                 <span>Admin Copilot</span>

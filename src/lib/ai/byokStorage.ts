@@ -18,7 +18,7 @@ const STORAGE_KEY = "classsync_byok_ai_config";
 export const DEFAULT_AI_CONFIG: AiConfig = {
   provider: "gemini",
   apiKey: "",
-  model: "gemini-2.5-flash",
+  model: "gemini-2.0-flash",
   temperature: 0.7,
 };
 
@@ -31,7 +31,7 @@ export function getAiConfig(): AiConfig {
     return {
       provider: parsed.provider || "gemini",
       apiKey: parsed.apiKey || "",
-      model: parsed.model || "gemini-2.5-flash",
+      model: parsed.model || "gemini-2.0-flash",
       temperature: typeof parsed.temperature === "number" ? parsed.temperature : 0.7,
     };
   } catch (e) {

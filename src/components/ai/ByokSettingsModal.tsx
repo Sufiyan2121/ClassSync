@@ -51,7 +51,10 @@ export function ByokSettingsModal({ isOpen, onClose, onSaved }: ByokSettingsModa
       const res = await testGeminiApiKey(apiKey.trim());
       setTestResult(res);
       if (res.success) {
-        toast.success("API Key is working perfectly!");
+        if (res.detectedModel) {
+          setAiConfig({ apiKey: apiKey.trim(), model: res.detectedModel });
+        }
+        toast.success(res.message || "API Key is working perfectly!");
       } else {
         toast.error(res.message);
       }
@@ -67,7 +70,11 @@ export function ByokSettingsModal({ isOpen, onClose, onSaved }: ByokSettingsModa
       toast.error("API Key cannot be blank.");
       return;
     }
-    setAiConfig({ apiKey: apiKey.trim() });
+    const current = getAiConfig();
+    setAiConfig({ 
+      apiKey: apiKey.trim(),
+      model: current.model || "gemini-2.0-flash",
+    });
     toast.success("AI Key saved securely on your device!");
     if (onSaved) onSaved();
     onClose();
