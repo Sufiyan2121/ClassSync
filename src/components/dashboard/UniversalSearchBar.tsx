@@ -217,13 +217,21 @@ export function UniversalSearchBar({
 
   const monthsShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && queryText.trim()) {
+      e.preventDefault();
+      setIsOpen(false);
+      router.push(`${basePath}/ai?q=${encodeURIComponent(queryText.trim())}`);
+    }
+  };
+
   return (
     <div ref={containerRef} className={`relative z-30 mb-3 sm:mb-4 ${className}`}>
       
       {/* The Search Bar Box */}
       <div 
         onClick={() => inputRef.current?.focus()}
-        className={`group relative flex items-center gap-2.5 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-2xl sm:rounded-3xl bg-white/85 dark:bg-[#121c16] backdrop-blur-md border transition-all duration-200 shadow-2xs cursor-text ${
+        className={`group relative flex items-center gap-2 sm:gap-2.5 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl sm:rounded-3xl bg-white/85 dark:bg-[#121c16] backdrop-blur-md border transition-all duration-200 shadow-2xs cursor-text ${
           isOpen && queryText.trim()
             ? "border-emerald-600 dark:border-emerald-500 ring-2 ring-emerald-500/20 shadow-md"
             : "border-stone-200/80 dark:border-[#1e3025] hover:border-stone-300 dark:hover:border-[#2a4434]"
@@ -239,10 +247,26 @@ export function UniversalSearchBar({
           type="text"
           value={queryText}
           onChange={handleInputChange}
+          onKeyDown={handleInputKeyDown}
           onFocus={() => setIsOpen(true)}
-          placeholder="Search announcements, timetable, notes, birthdays..."
+          placeholder="Search updates, schedule, or ask AI..."
           className="w-full bg-transparent text-xs sm:text-sm font-semibold text-stone-900 dark:text-stone-100 placeholder:text-stone-400 dark:placeholder:text-stone-500 focus:outline-none"
         />
+
+        {/* Ask AI Shortcut Button */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen(false);
+            router.push(`${basePath}/ai${queryText.trim() ? `?q=${encodeURIComponent(queryText.trim())}` : ""}`);
+          }}
+          className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-gradient-to-r from-emerald-600/15 to-teal-600/15 hover:from-emerald-600/25 hover:to-teal-600/25 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 text-[11px] font-black transition cursor-pointer shrink-0 shadow-2xs"
+          title="Ask ClassSync AI"
+        >
+          <Sparkles size={12} className="text-emerald-500 animate-pulse" />
+          <span>Ask AI</span>
+        </button>
 
         {queryText ? (
           <button
@@ -251,13 +275,13 @@ export function UniversalSearchBar({
               e.stopPropagation();
               handleClear();
             }}
-            className="p-1 rounded-full text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-[#1e3025] transition cursor-pointer"
+            className="p-1 rounded-full text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-[#1e3025] transition cursor-pointer shrink-0"
             title="Clear search"
           >
             <X size={15} />
           </button>
         ) : (
-          <div className="hidden sm:flex items-center gap-1 px-2 py-0.5 rounded-lg bg-stone-100 dark:bg-[#18261e] border border-stone-200/60 dark:border-[#243a2c] text-[10px] font-mono font-bold text-stone-400 dark:text-stone-400 select-none">
+          <div className="hidden sm:flex items-center gap-1 px-1.5 py-0.5 rounded-lg bg-stone-100 dark:bg-[#18261e] border border-stone-200/60 dark:border-[#243a2c] text-[10px] font-mono font-bold text-stone-400 dark:text-stone-400 select-none shrink-0">
             <span>{isMac ? "⌘" : "Ctrl"}</span>
             <span>K</span>
           </div>
@@ -266,18 +290,47 @@ export function UniversalSearchBar({
 
       {/* Floating Universal Results Dropdown */}
       {isOpen && queryText.trim().length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 p-2 sm:p-3 rounded-2xl sm:rounded-3xl bg-white/95 dark:bg-[#101a14]/95 backdrop-blur-xl border border-stone-200/90 dark:border-[#1e3025] shadow-2xl overflow-hidden max-h-[75vh] sm:max-h-[460px] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+        <div className="absolute top-full left-0 right-0 mt-2 p-2 sm:p-3 rounded-2xl sm:rounded-3xl bg-white/95 dark:bg-[#101a14]/95 backdrop-blur-xl border border-stone-200/90 dark:border-[#1e3025] shadow-2xl overflow-hidden max-h-[75vh] sm:max-h-[480px] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200 z-50">
           
-          {results.total === 0 ? (
-            <div className="py-8 px-4 text-center">
-              <div className="w-10 h-10 rounded-2xl bg-stone-100 dark:bg-[#18261e] text-stone-400 flex items-center justify-center mx-auto mb-2.5">
-                <Search size={18} />
+          {/* Prominent AI Suggestion Card at Top */}
+          <div
+            onClick={() => {
+              setIsOpen(false);
+              router.push(`${basePath}/ai?q=${encodeURIComponent(queryText.trim())}`);
+            }}
+            className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-[#14261b] to-teal-950/30 hover:from-emerald-950/70 hover:to-teal-950/60 border border-emerald-500/35 hover:border-emerald-500/70 transition-all cursor-pointer group mb-3 shadow-xs"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-950">
+                <Sparkles size={16} className="group-hover:rotate-12 transition-transform" />
               </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-black text-white group-hover:text-emerald-300 transition-colors truncate">
+                    Ask ClassSync AI: "{queryText}"
+                  </span>
+                  <span className="hidden sm:inline-block px-1.5 py-0.2 rounded-md bg-emerald-500/20 text-emerald-300 text-[9px] font-black uppercase">
+                    Live Context
+                  </span>
+                </div>
+                <p className="text-[10px] text-stone-400 truncate">
+                  Consult timetable, homework deadlines, syllabus & birthdays
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-1 text-[11px] font-bold text-emerald-400 shrink-0">
+              <span className="hidden xs:inline">Press Enter</span>
+              <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </div>
+
+          {results.total === 0 ? (
+            <div className="py-6 px-4 text-center">
               <p className="text-xs font-bold text-stone-800 dark:text-stone-200 mb-1">
-                No matching results found for "{queryText}"
+                No direct database matches for "{queryText}"
               </p>
               <p className="text-[11px] text-stone-400 dark:text-stone-400 max-w-xs mx-auto">
-                Try searching by subject name, assignment topic, professor, or a classmate's birthday.
+                Click <strong>"Ask ClassSync AI"</strong> above to let AI synthesize timetable and curriculum answers!
               </p>
             </div>
           ) : (

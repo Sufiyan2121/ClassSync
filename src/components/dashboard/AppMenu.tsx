@@ -274,10 +274,32 @@ export function AppMenu() {
             {/* Quick Navigation Shortcuts */}
             <div className="space-y-2">
               <label className="text-xs font-bold text-stone-600 dark:text-stone-400 tracking-tight">
-                Shortcuts
+                AI & Shortcuts
               </label>
 
-              <div className="grid grid-cols-2 gap-2">
+              {/* Dedicated AI Assistant Banner */}
+              <Link
+                href={`${basePath}/ai`}
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-between p-3 rounded-2xl bg-gradient-to-r from-emerald-950/50 via-[#13241a] to-teal-950/40 hover:from-emerald-950/70 hover:to-teal-950/60 border border-emerald-500/30 hover:border-emerald-500/60 transition-all group shadow-sm"
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-950 group-hover:scale-105 transition-transform">
+                    <Sparkles size={16} />
+                  </div>
+                  <div>
+                    <h5 className="font-extrabold text-xs text-white group-hover:text-emerald-300 transition-colors">
+                      ClassSync AI Assistant
+                    </h5>
+                    <p className="text-[10px] text-stone-400">Timetable, homework & study tutor</p>
+                  </div>
+                </div>
+                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  BYOK
+                </span>
+              </Link>
+
+              <div className="grid grid-cols-2 gap-2 pt-1">
                 <Link
                   href={`${basePath}/resources`}
                   onClick={() => setIsOpen(false)}
