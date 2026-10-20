@@ -39,12 +39,30 @@ export default function StudentBirthdaysPage() {
     setTimeout(() => setCopiedId(null), 2500);
   };
 
-  const studentClass = userData?.enrolledClassCode?.toUpperCase();
+  const studentClass = userData?.enrolledClassCode;
+  const enrolledList = userData?.enrolledClasses || (studentClass ? [studentClass] : []);
+
+  // Robust class code matching: handles case-insensitivity, spaces, and punctuation (e.g. "MCA@2026" vs "MCA2026")
+  const isClassMatch = (targetCode?: string | null) => {
+    if (!targetCode || targetCode === "ALL") return true;
+    if (!studentClass && enrolledList.length === 0) return true;
+
+    const norm = (c: string) => c.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+    const cleanTarget = norm(targetCode);
+
+    if (studentClass && norm(studentClass) === cleanTarget) return true;
+    if (enrolledList.some((c) => norm(c) === cleanTarget)) return true;
+
+    return false;
+  };
+
+  const filteredToday = todaysBirthdays.filter((b) => isClassMatch(b.classCode));
+  const filteredTomorrow = tomorrowsBirthdays.filter((b) => isClassMatch(b.classCode));
 
   // Filter to upcoming birthdays relevant to student
   const filteredUpcoming = upcomingBirthdays.filter((b) => {
     const matchesSearch = b.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesClass = !studentClass || b.classCode === "ALL" || b.classCode?.toUpperCase() === studentClass;
+    const matchesClass = isClassMatch(b.classCode);
     return matchesSearch && matchesClass;
   });
 
@@ -72,7 +90,7 @@ export default function StudentBirthdaysPage() {
       </header>
 
       {/* TODAY'S CELEBRATION SPOTLIGHT */}
-      {todaysBirthdays.length > 0 && (
+      {filteredToday.length > 0 && (
         <div className="mb-6 rounded-3xl bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 p-5 sm:p-7 text-white shadow-xl shadow-pink-500/20 relative overflow-hidden animate-in fade-in zoom-in-95 duration-300">
           <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -84,7 +102,7 @@ export default function StudentBirthdaysPage() {
                   <Sparkles size={12} /> Today&apos;s Special Celebration!
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-black">
-                  Happy Birthday, {todaysBirthdays.map((b) => b.name).join(" & ")}! 🎂
+                  Happy Birthday, {filteredToday.map((b) => b.name).join(" & ")}! 🎂
                 </h2>
                 <p className="text-xs sm:text-sm text-pink-100 mt-1 font-medium">
                   Wish them an amazing birthday filled with joy, laughter, and success!
@@ -93,7 +111,7 @@ export default function StudentBirthdaysPage() {
             </div>
 
             <div className="flex flex-wrap gap-2">
-              {todaysBirthdays.map((b) => (
+              {filteredToday.map((b) => (
                 <button
                   key={b.id}
                   onClick={() => handleCopyWish(b.name, b.id)}
@@ -109,7 +127,7 @@ export default function StudentBirthdaysPage() {
       )}
 
       {/* TOMORROW'S REMINDER */}
-      {tomorrowsBirthdays.length > 0 && (
+      {filteredTomorrow.length > 0 && (
         <div className="mb-6 rounded-2xl bg-indigo-50/80 dark:bg-indigo-950/30 p-4 border border-indigo-200/80 dark:border-indigo-800/50 flex items-center justify-between gap-3 shadow-2xs">
           <div className="flex items-center gap-3 min-w-0">
             <span className="text-2xl">🎈</span>
@@ -118,7 +136,7 @@ export default function StudentBirthdaysPage() {
                 Tomorrow&apos;s Birthday
               </span>
               <p className="text-sm font-extrabold text-stone-900 dark:text-white truncate mt-1">
-                It&apos;s {tomorrowsBirthdays.map((b) => b.name).join(" & ")}&apos;s birthday tomorrow! 🎂
+                It&apos;s {filteredTomorrow.map((b) => b.name).join(" & ")}&apos;s birthday tomorrow! 🎂
               </p>
               <p className="text-xs text-stone-500 dark:text-stone-400 font-medium">
                 Get ready to surprise and wish them on their special day!

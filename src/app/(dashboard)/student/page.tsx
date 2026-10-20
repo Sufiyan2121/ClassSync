@@ -13,6 +13,7 @@ import { CalendarWidget } from "@/components/dashboard/CalendarWidget";
 import { StudentClassSwitcher } from "@/components/dashboard/StudentClassSwitcher";
 import { AppMenu } from "@/components/dashboard/AppMenu";
 import { useClassConfig } from "@/hooks/useClassConfig";
+import { useBirthdays } from "@/hooks/useBirthdays";
 import { UniversalSearchBar } from "@/components/dashboard/UniversalSearchBar";
 
 import { BrandLogo } from "@/components/ui/BrandLogo";
@@ -21,9 +22,30 @@ export default function StudentDashboard() {
   const { userData, logout, loading: authLoading } = useAuth();
   const { posts, loading: postsLoading } = usePosts();
   const { classes, classConfig } = useClassConfig();
+  const { todaysBirthdays, upcomingBirthdays } = useBirthdays();
   const [filter, setFilter] = useState<PostType | "ALL">("ALL");
   const [feedSearchQuery, setFeedSearchQuery] = useState("");
   const router = useRouter();
+
+  const studentClass = userData?.enrolledClassCode;
+  const enrolledList = userData?.enrolledClasses || (studentClass ? [studentClass] : []);
+
+  const isClassMatch = (targetCode?: string | null) => {
+    if (!targetCode || targetCode === "ALL") return true;
+    if (!studentClass && enrolledList.length === 0) return true;
+
+    const norm = (c: string) => c.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+    const cleanTarget = norm(targetCode);
+
+    if (studentClass && norm(studentClass) === cleanTarget) return true;
+    if (enrolledList.some((c) => norm(c) === cleanTarget)) return true;
+
+    return false;
+  };
+
+  const classTodaysBirthdays = todaysBirthdays.filter((b) => isClassMatch(b.classCode));
+  const classUpcomingBirthdays = upcomingBirthdays.filter((b) => isClassMatch(b.classCode));
+  const nextBirthday = classUpcomingBirthdays[0] || null;
 
   const currentClassName = classes.find(c => c.code.toUpperCase() === userData?.enrolledClassCode?.toUpperCase())?.name 
     || (classConfig.classCode.toUpperCase() === userData?.enrolledClassCode?.toUpperCase() ? classConfig.className : null) 
@@ -149,16 +171,35 @@ export default function StudentDashboard() {
 
         <Link 
           href="/student/birthdays" 
-          className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-white/85 dark:bg-[#121c16] hover:bg-rose-50/70 dark:hover:bg-[#18261d] border border-stone-200/80 dark:border-[#1e3025] hover:border-rose-300 dark:hover:border-rose-700 shadow-2xs hover:shadow-xs transition-all group min-w-0 text-center sm:text-left"
+          className="relative flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-white/85 dark:bg-[#121c16] hover:bg-rose-50/70 dark:hover:bg-[#18261d] border border-stone-200/80 dark:border-[#1e3025] hover:border-rose-300 dark:hover:border-rose-700 shadow-2xs hover:shadow-xs transition-all group min-w-0 text-center sm:text-left"
         >
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-rose-100 dark:bg-rose-950/70 text-rose-800 dark:text-rose-300 border border-rose-200/60 dark:border-rose-800/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-rose-100 dark:bg-rose-950/70 text-rose-800 dark:text-rose-300 border border-rose-200/60 dark:border-rose-800/40 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
             <Cake size={14} />
+            {classTodaysBirthdays.length > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-90" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-pink-500" />
+              </span>
+            )}
           </div>
           <div className="min-w-0 flex-1">
-            <h4 className="font-extrabold text-[11px] sm:text-xs text-stone-900 dark:text-stone-100 group-hover:text-rose-800 dark:group-hover:text-rose-300 truncate">
-              Birthdays
-            </h4>
-            <p className="text-[9px] text-stone-400 font-medium truncate hidden sm:block">Wishes & Dates</p>
+            <div className="flex items-center justify-center sm:justify-start gap-1">
+              <h4 className="font-extrabold text-[11px] sm:text-xs text-stone-900 dark:text-stone-100 group-hover:text-rose-800 dark:group-hover:text-rose-300 truncate">
+                Birthdays
+              </h4>
+              {classTodaysBirthdays.length > 0 && (
+                <span className="text-[9px] font-black text-pink-600 dark:text-pink-400 animate-pulse">
+                  🎉
+                </span>
+              )}
+            </div>
+            <p className="text-[9px] text-stone-400 font-medium truncate hidden sm:block">
+              {classTodaysBirthdays.length > 0 
+                ? "Today! 🎂" 
+                : nextBirthday 
+                ? `${nextBirthday.name.split(" ")[0]} in ${nextBirthday.daysUntil}d` 
+                : "Wishes & Dates"}
+            </p>
           </div>
         </Link>
       </div>
@@ -169,6 +210,31 @@ export default function StudentDashboard() {
         basePath="/student" 
         onFilterChange={setFeedSearchQuery}
       />
+
+      {/* Today's Birthday Celebration Spotlight for Student */}
+      {classTodaysBirthdays.length > 0 && (
+        <div className="mb-3.5 sm:mb-4 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 p-3.5 sm:p-5 text-white shadow-lg shadow-pink-500/20 flex items-center justify-between gap-3 animate-in fade-in">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-xl sm:text-2xl shrink-0">
+              🎉
+            </div>
+            <div className="min-w-0">
+              <span className="text-[10px] font-black uppercase tracking-wider bg-white/25 px-2 py-0.5 rounded-full inline-block">
+                Today&apos;s Celebration!
+              </span>
+              <p className="text-xs sm:text-base font-black truncate mt-0.5">
+                Happy Birthday, {classTodaysBirthdays.map((b) => b.name).join(" & ")}! 🎂
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/student/birthdays"
+            className="px-3 py-1.5 sm:px-4 sm:py-2 bg-white text-pink-600 hover:bg-pink-50 text-xs font-black rounded-xl shadow-xs transition shrink-0"
+          >
+            Wish them
+          </Link>
+        </div>
+      )}
 
       <div className="mb-5">
         <CalendarWidget posts={posts} />

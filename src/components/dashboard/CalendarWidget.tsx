@@ -27,7 +27,34 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
   const [currentMonth, setCurrentMonth] = useState<Date | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const { userData } = useAuth();
-  const { todaysBirthdays, tomorrowsBirthdays, getBirthdaysForDate } = useBirthdays();
+  const { todaysBirthdays, tomorrowsBirthdays, upcomingBirthdays, getBirthdaysForDate } = useBirthdays();
+
+  const studentClass = userData?.enrolledClassCode;
+  const enrolledList = userData?.enrolledClasses || (studentClass ? [studentClass] : []);
+
+  // Robust class code matching (case, whitespace, symbols normalized)
+  const isClassMatch = (targetCode?: string | null) => {
+    if (!targetCode || targetCode === "ALL") return true;
+    if (!studentClass && enrolledList.length === 0) return true;
+
+    const norm = (c: string) => c.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+    const cleanTarget = norm(targetCode);
+
+    if (studentClass && norm(studentClass) === cleanTarget) return true;
+    if (enrolledList.some((c) => norm(c) === cleanTarget)) return true;
+
+    return false;
+  };
+
+  const filteredTodaysBirthdays = todaysBirthdays.filter((b) => isClassMatch(b.classCode));
+  const filteredTomorrowsBirthdays = tomorrowsBirthdays.filter((b) => isClassMatch(b.classCode));
+  const filteredUpcomingBirthdays = upcomingBirthdays.filter((b) => isClassMatch(b.classCode));
+  const nextUpcomingBirthday = filteredUpcomingBirthdays[0] || null;
+
+  const monthNames = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
 
   useEffect(() => {
     const now = new Date();
@@ -60,7 +87,7 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
       return isSameDay(date, day);
     });
 
-    const dayBirthdays = getBirthdaysForDate(day);
+    const dayBirthdays = getBirthdaysForDate(day).filter((b) => isClassMatch(b.classCode));
 
     return {
       hasExam: dayPosts.some(p => p.type === "EXAM"),
@@ -181,7 +208,7 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
       </div>
 
       {/* SPECIAL BIRTHDAY SECTION WITHIN CALENDAR */}
-      {todaysBirthdays.length > 0 && (
+      {filteredTodaysBirthdays.length > 0 && (
         <div className="p-3 sm:p-3.5 rounded-2xl bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-amber-500/10 dark:from-pink-950/30 dark:via-purple-950/30 dark:to-amber-950/30 border border-pink-200/80 dark:border-pink-800/40 shadow-2xs animate-in fade-in duration-300">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 min-w-0">
@@ -193,9 +220,9 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
                   <Sparkles size={11} /> Birthday Celebration Today!
                 </p>
                 <p className="text-xs sm:text-sm font-black text-stone-900 dark:text-white truncate">
-                  {todaysBirthdays.length === 1 
-                    ? `It's ${todaysBirthdays[0].name}'s birthday today! 🎉` 
-                    : `It's ${todaysBirthdays.map(b => b.name).join(" & ")}'s birthday today! 🎉`}
+                  {filteredTodaysBirthdays.length === 1 
+                    ? `It's ${filteredTodaysBirthdays[0].name}'s birthday today! 🎉` 
+                    : `It's ${filteredTodaysBirthdays.map(b => b.name).join(" & ")}'s birthday today! 🎉`}
                 </p>
               </div>
             </div>
@@ -238,14 +265,14 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
       )}
 
       {/* Tomorrow Birthday Heads-Up (If no birthday today, but tomorrow has one) */}
-      {todaysBirthdays.length === 0 && tomorrowsBirthdays.length > 0 && (
+      {filteredTodaysBirthdays.length === 0 && filteredTomorrowsBirthdays.length > 0 && (
         <div className="p-2.5 sm:p-3 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/50 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <span className="text-base">🎈</span>
             <div className="min-w-0">
               <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Tomorrow&apos;s Birthday</span>
               <p className="text-xs font-bold text-stone-800 dark:text-stone-200 truncate">
-                It&apos;s {tomorrowsBirthdays.map(b => b.name).join(" & ")}&apos;s birthday tomorrow! 🎂
+                It&apos;s {filteredTomorrowsBirthdays.map(b => b.name).join(" & ")}&apos;s birthday tomorrow! 🎂
               </p>
             </div>
           </div>
@@ -254,6 +281,32 @@ export function CalendarWidget({ posts }: CalendarWidgetProps) {
             className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 hover:text-emerald-900 shrink-0"
           >
             View
+          </Link>
+        </div>
+      )}
+
+      {/* Upcoming Classroom Birthday Alert (If neither today nor tomorrow has birthday) */}
+      {filteredTodaysBirthdays.length === 0 && filteredTomorrowsBirthdays.length === 0 && nextUpcomingBirthday && (
+        <div className="p-2.5 sm:p-3 rounded-2xl bg-gradient-to-r from-rose-50/80 via-pink-50/50 to-stone-50/40 dark:from-rose-950/25 dark:via-pink-950/15 dark:to-stone-900/30 border border-rose-200/70 dark:border-rose-800/40 flex items-center justify-between gap-2 animate-in fade-in">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <span className="text-base sm:text-lg">🎂</span>
+            <div className="min-w-0">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-rose-700 dark:text-rose-400 flex items-center gap-1">
+                Upcoming Class Birthday
+              </span>
+              <p className="text-xs font-bold text-stone-800 dark:text-stone-200 truncate">
+                {nextUpcomingBirthday.name} &bull; {monthNames[nextUpcomingBirthday.month - 1]} {nextUpcomingBirthday.day} 
+                <span className="text-rose-600 dark:text-rose-400 font-extrabold ml-1.5">
+                  ({nextUpcomingBirthday.daysUntil === 1 ? "Tomorrow!" : `in ${nextUpcomingBirthday.daysUntil} days`})
+                </span>
+              </p>
+            </div>
+          </div>
+          <Link
+            href={birthdaysPath}
+            className="text-[10px] font-bold text-rose-700 dark:text-rose-400 hover:text-rose-900 bg-white dark:bg-stone-800 hover:bg-stone-50 dark:hover:bg-stone-700 px-2.5 py-1.5 rounded-xl border border-rose-200/70 dark:border-rose-800/50 shadow-2xs shrink-0 transition-all"
+          >
+            View All
           </Link>
         </div>
       )}

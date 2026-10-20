@@ -160,6 +160,25 @@ export function useClassConfig() {
       } catch (err) {
         console.warn("Could not migrate students:", err);
       }
+
+      // 5. Migrate birthdays from cleanOld to cleanNew
+      try {
+        const bSnap = await getDocs(collection(db, "birthdays"));
+        const bBatch = writeBatch(db);
+        let bCount = 0;
+        bSnap.forEach((bDoc) => {
+          const b = bDoc.data();
+          if (b.classCode && (b.classCode === rawOld || b.classCode.toUpperCase() === cleanOld)) {
+            bBatch.update(bDoc.ref, { classCode: cleanNew });
+            bCount++;
+          }
+        });
+        if (bCount > 0) {
+          await bBatch.commit();
+        }
+      } catch (err) {
+        console.warn("Could not migrate birthdays:", err);
+      }
     } else {
       // Same code, just updating the name
       await setDoc(doc(db, "classes", cleanNew), {
