@@ -20,23 +20,43 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(clients.claim());
 });
-// The native FCM payload with `notification` automatically displays notifications in the background.
-// If payload is data-only (or if native display doesn't trigger), handle display gracefully:
+// Unconditionally show the native OS notification in background / when app is closed:
 messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] Received background message:', payload);
-  if (!payload.notification) {
-    const title = payload.data?.title || 'ClassSync Announcement';
-    const options = {
-      body: payload.data?.body || '',
-      icon: payload.data?.icon || '/icons/icon-192x192.png',
-      badge: '/icons/icon-192x192.png',
-      data: {
-        url: payload.data?.url || '/student',
-        postId: payload.data?.postId,
-      },
-    };
-    self.registration.showNotification(title, options);
-  }
+
+  const title =
+    payload.notification?.title ||
+    payload.data?.title ||
+    'ClassSync Announcement';
+
+  const body =
+    payload.notification?.body ||
+    payload.data?.body ||
+    '';
+
+  const targetUrl =
+    payload.data?.url ||
+    payload.fcmOptions?.link ||
+    '/student';
+
+  const icon =
+    payload.notification?.icon ||
+    payload.data?.icon ||
+    '/icons/icon-192x192.png';
+
+  const options = {
+    body: body,
+    icon: icon,
+    badge: '/icons/icon-192x192.png',
+    data: {
+      url: targetUrl,
+      postId: payload.data?.postId,
+    },
+    tag: payload.data?.postId || 'classsync-notification',
+    renotify: true,
+  };
+
+  return self.registration.showNotification(title, options);
 });
 
 self.addEventListener('notificationclick', (event) => {
