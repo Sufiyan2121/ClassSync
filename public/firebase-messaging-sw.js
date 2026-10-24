@@ -1,16 +1,25 @@
 importScripts('https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js');
 
-firebase.initializeApp({
-  apiKey: "AIzaSyBRSXCVM4TnWJVmEZ5GyiYPxcOR_Io7tMQ",
-  authDomain: "classsync-83f62.firebaseapp.com",
-  projectId: "classsync-83f62",
-  storageBucket: "classsync-83f62.firebasestorage.app",
-  messagingSenderId: "639926257766",
-  appId: "1:639926257766:web:408d6f1fe385aed11c05a7"
-});
+// Parse client configuration from registration query parameters
+const params = new URLSearchParams(self.location.search);
+const apiKey = params.get('apiKey');
+const projectId = params.get('projectId');
+const messagingSenderId = params.get('messagingSenderId');
+const appId = params.get('appId');
+const authDomain = params.get('authDomain') || (projectId ? `${projectId}.firebaseapp.com` : '');
+const storageBucket = params.get('storageBucket') || (projectId ? `${projectId}.firebasestorage.app` : '');
 
-const messaging = firebase.messaging();
+if (apiKey && projectId && !firebase.apps.length) {
+  firebase.initializeApp({
+    apiKey,
+    authDomain,
+    projectId,
+    storageBucket,
+    messagingSenderId,
+    appId,
+  });
+}
 
 // Force the service worker to activate immediately so updates apply instantly
 self.addEventListener('install', (event) => {
@@ -20,9 +29,12 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(clients.claim());
 });
-// Unconditionally show the native OS notification in background / when app is closed:
-messaging.onBackgroundMessage((payload) => {
-  console.log('[firebase-messaging-sw.js] Received background message:', payload);
+
+if (firebase.apps.length) {
+  const messaging = firebase.messaging();
+
+  messaging.onBackgroundMessage((payload) => {
+    console.log('[firebase-messaging-sw.js] Received background message:', payload);
 
   const title =
     payload.notification?.title ||
@@ -57,7 +69,8 @@ messaging.onBackgroundMessage((payload) => {
   };
 
   return self.registration.showNotification(title, options);
-});
+  });
+}
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
