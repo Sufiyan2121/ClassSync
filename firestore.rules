@@ -16,13 +16,25 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return isAuthenticated() && getUserData().role == 'ADMIN';
+      return isAuthenticated() && 
+        getUserData().role == 'ADMIN' && 
+        getUserData().adminApprovalStatus == 'APPROVED';
     }
 
     // USERS COLLECTION
     match /users/{userId} {
+      // Authenticated users can read directory / student lists
       allow read: if isAuthenticated();
-      allow create, update: if isOwner(userId) || isAdmin();
+      
+      // New user can create their own document (cannot self-assign ADMIN role)
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      
+      // User can update their own profile, but CANNOT self-elevate role or approval status
+      allow update: if (isOwner(userId) && 
+                       (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'adminApprovalStatus']) || isAdmin()))
+                    || isAdmin();
+                    
+      // Only approved ADMIN can delete user accounts
       allow delete: if isAdmin();
     }
 

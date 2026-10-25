@@ -94,12 +94,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           } else if (intendedRole === 'ADMIN') {
             // User explicitly logged in through Teacher/Admin Portal!
             const isApproved = isDev || current.adminApprovalStatus === 'APPROVED';
-            await setDoc(userRef, {
-              role: 'ADMIN',
-              requestedRole: 'ADMIN',
-              adminApprovalStatus: isApproved ? 'APPROVED' : (current.adminApprovalStatus || 'PENDING'),
-              isDeveloper: isDev || Boolean(current.isDeveloper),
-            }, { merge: true });
+            if (isApproved) {
+              await setDoc(userRef, {
+                role: 'ADMIN',
+                requestedRole: 'ADMIN',
+                adminApprovalStatus: 'APPROVED',
+                isDeveloper: isDev || Boolean(current.isDeveloper),
+              }, { merge: true });
+            } else {
+              // Not approved yet! Keep role strictly as STUDENT with PENDING request
+              await setDoc(userRef, {
+                role: 'STUDENT',
+                requestedRole: 'ADMIN',
+                adminApprovalStatus: current.adminApprovalStatus || 'PENDING',
+                isDeveloper: false,
+              }, { merge: true });
+            }
           } else {
             // Regular session restore (no explicit portal clicked)
             // If they are an active ADMIN and recognized developer, ensure dev status is kept
@@ -114,14 +124,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           // New User Registration
           if (intendedRole === 'ADMIN') {
             // Registering as Teacher/Admin
+            const isApproved = isDev;
             const newUserData: UserData = { 
               uid: firebaseUser.uid,
-              role: 'ADMIN',
+              role: isApproved ? 'ADMIN' : 'STUDENT',
               requestedRole: 'ADMIN',
-              adminApprovalStatus: isDev ? 'APPROVED' : 'PENDING',
+              adminApprovalStatus: isApproved ? 'APPROVED' : 'PENDING',
               isDeveloper: isDev,
               email: firebaseUser.email!,
-              displayName: firebaseUser.displayName || (isDev ? 'Developer' : 'Teacher'),
+              displayName: firebaseUser.displayName || (isDev ? 'Developer' : 'Teacher (Pending)'),
               createdAt: serverTimestamp() as any,
               fcmTokens: [],
               remindersEnabled: true
@@ -255,7 +266,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const isDev = isDeveloperEmail(user.email);
       await updateDoc(doc(db, 'users', user.uid), {
         requestedRole: 'ADMIN',
-        role: 'ADMIN',
+        role: isDev ? 'ADMIN' : 'STUDENT',
         adminApprovalStatus: isDev ? 'APPROVED' : 'PENDING',
         isDeveloper: isDev,
       });
