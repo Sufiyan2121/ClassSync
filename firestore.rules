@@ -1,0 +1,109 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && getUserData().role == 'ADMIN';
+    }
+
+    // USERS COLLECTION
+    match /users/{userId} {
+      // Authenticated users can read member profiles in their class/system
+      allow read: if isAuthenticated();
+      
+      // New user can create their own document upon signup
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      
+      // User can update their own data (cannot elevate role to ADMIN unless already ADMIN), or ADMIN can update any user
+      allow update: if (isOwner(userId) && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']) || isAdmin()))
+                    || isAdmin();
+                    
+      // Only ADMIN can delete user accounts
+      allow delete: if isAdmin();
+    }
+
+    // POSTS / BROADCASTS COLLECTION
+    match /posts/{postId} {
+      // All authenticated students & teachers can read posts
+      allow read: if isAuthenticated();
+      // Only ADMIN can create, update, or delete broadcasts
+      allow write: if isAdmin();
+    }
+
+    // SUBJECTS COLLECTION
+    match /subjects/{subjectId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // MATERIALS COLLECTION
+    match /materials/{materialId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // BIRTHDAYS COLLECTION
+    match /birthdays/{birthdayId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // JOIN REQUESTS COLLECTION
+    match /join_requests/{requestId} {
+      // Admin can read all requests; students can read their own request
+      allow read: if isAuthenticated() && (isAdmin() || resource.data.studentUid == request.auth.uid);
+      
+      // Students can create a join request for themselves
+      allow create: if isAuthenticated() && request.resource.data.studentUid == request.auth.uid;
+      
+      // Admin can approve/reject, or student can modify/cancel their pending request
+      allow update: if isAuthenticated() && (isAdmin() || resource.data.studentUid == request.auth.uid);
+      
+      // Admin or the student who created it can delete
+      allow delete: if isAuthenticated() && (isAdmin() || resource.data.studentUid == request.auth.uid);
+    }
+
+    // CLASSES COLLECTION
+    match /classes/{classId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // SETTINGS COLLECTION (e.g. class_config)
+    match /settings/{settingId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // EVENT MEDIA COLLECTION
+    match /event_media/{mediaId} {
+      allow read: if isAuthenticated();
+      // Only ADMIN can publish or delete media drives
+      allow write: if isAdmin();
+    }
+
+    // TIMETABLES COLLECTION
+    match /timetables/{timetableId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Default deny for anything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
